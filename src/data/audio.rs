@@ -1,6 +1,7 @@
 use std::fmt;
+use std::sync::mpsc::Sender;
 
-use super::Init;
+use super::{Feature, Message};
 
 #[derive(Debug)]
 pub enum Audio {
@@ -17,9 +18,13 @@ impl fmt::Display for Audio {
     }
 }
 
-impl Init for Audio {
+impl Feature for Audio {
     fn init() -> Self {
         // TODO: replace mock
         Audio::Mute
+    }
+
+    fn wait_for_update(tx: &Sender<Message>) {
+        // TODO
     }
 }

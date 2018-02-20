@@ -1,7 +1,10 @@
 use chrono::{DateTime, Local};
 use std::fmt;
+use std::sync::mpsc::Sender;
+use std::thread;
+use std::time::Duration;
 
-use super::Init;
+use super::{Feature, Message};
 
 #[derive(Debug)]
 pub struct Time(DateTime<Local>);
@@ -12,8 +15,17 @@ impl fmt::Display for Time {
     }
 }
 
-impl Init for Time {
+impl Feature for Time {
     fn init() -> Self {
         Time(Local::now())
+    }
+
+    fn wait_for_update(tx: &Sender<Message>) {
+        loop {
+            thread::sleep(Duration::from_secs(60));
+
+            let message = Message::Time(Self::init());
+            tx.send(message).unwrap();
+        }
     }
 }

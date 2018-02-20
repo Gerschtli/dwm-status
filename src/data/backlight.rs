@@ -1,6 +1,7 @@
 use std::fmt;
+use std::sync::mpsc::Sender;
 
-use super::{Init, OptionalFeature};
+use super::{Feature, Message};
 
 #[derive(Debug)]
 pub struct Backlight(u8);
@@ -11,16 +12,13 @@ impl fmt::Display for Backlight {
     }
 }
 
-impl Init for Backlight {
+impl Feature for Backlight {
     fn init() -> Self {
         // TODO: replace mock
         Backlight(20)
     }
-}
 
-impl OptionalFeature for Backlight {
-    fn has_feature() -> bool {
-        // TODO: replace mock
-        true
+    fn wait_for_update(tx: &Sender<Message>) {
+        // TODO
     }
 }

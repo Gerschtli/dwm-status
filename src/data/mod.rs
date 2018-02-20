@@ -4,6 +4,9 @@ pub mod battery;
 pub mod time;
 
 use std::fmt;
+use std::process::Command;
+use std::sync::mpsc::{channel, Sender};
+use std::thread;
 
 use self::audio::Audio;
 use self::backlight::Backlight;
@@ -12,45 +15,104 @@ use self::time::Time;
 
 const STATUS_SEPARATOR: &str = " / ";
 
-pub trait Init {
+pub trait Feature {
+    fn is_enabled() -> bool {
+        true
+    }
+
     fn init() -> Self;
+
+    fn wait_for_update(tx: &Sender<Message>);
 }
 
-pub trait OptionalFeature {
-    fn has_feature() -> bool;
+#[derive(Debug)]
+pub enum Message {
+    Audio(Audio),
+    Backlight(Backlight),
+    Battery(Battery),
+    Time(Time),
 }
 
 #[derive(Debug)]
 pub struct SystemInfo {
-    audio: Audio,
+    audio: Option<Audio>,
     backlight: Option<Backlight>,
     battery: Option<Battery>,
-    time: Time,
+    time: Option<Time>,
 }
 
 impl fmt::Display for SystemInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if let Some(ref backlight) = self.backlight {
-            try!(write!(f, "{}{}", backlight, STATUS_SEPARATOR));
+        fn write_feature<T: Feature + fmt::Display>(
+            f: &mut fmt::Formatter,
+            feature: &Option<T>,
+            with_separator: bool
+        ) -> fmt::Result {
+            if let &Some(ref value) = feature {
+                let sep = if with_separator { STATUS_SEPARATOR } else { "" };
+                try!(write!(f, "{}{}", value, sep));
+            }
+
+            Ok(())
         }
 
-        try!(write!(f, "{}{}", self.audio, STATUS_SEPARATOR));
-
-        if let Some(ref battery) = self.battery {
-            try!(write!(f, "{}{}", battery, STATUS_SEPARATOR));
-        }
-
-        write!(f, "{}", self.time)
+        try!(write_feature(f, &self.backlight, true));
+        try!(write_feature(f, &self.audio, true));
+        try!(write_feature(f, &self.battery, true));
+        write_feature(f, &self.time, false)
     }
 }
 
-impl Init for SystemInfo {
-    fn init() -> Self {
-        SystemInfo {
-            audio: Audio::init(),
-            backlight: if Backlight::has_feature() { Some(Backlight::init()) } else { None },
-            battery: if Battery::has_feature() { Some(Battery::init()) } else { None },
-            time: Time::init(),
+
+impl SystemInfo {
+    pub fn init() -> Self {
+        fn init_feature<T: Feature>() -> Option<T> {
+            if T::is_enabled() {
+                Some(T::init())
+            } else {
+                None
+            }
         }
+
+        SystemInfo {
+            audio:     init_feature(),
+            backlight: init_feature(),
+            battery:   init_feature(),
+            time:      init_feature(),
+        }
+    }
+
+    pub fn listen(&mut self) {
+        fn listen_for_changes<T: Feature>(tx: Sender<Message>, feature: &Option<T>) {
+            if feature.is_some() {
+                thread::spawn(move || {
+                    T::wait_for_update(&tx);
+                });
+            }
+        }
+
+        let (tx, rx) = channel();
+
+        listen_for_changes(tx.clone(), &self.audio);
+        listen_for_changes(tx.clone(), &self.backlight);
+        listen_for_changes(tx.clone(), &self.battery);
+        listen_for_changes(tx.clone(), &self.time);
+
+        for message in rx {
+            println!("Message: {:?}", message);
+
+            match message {
+                Message::Audio(audio)         => { self.audio     = Some(audio); },
+                Message::Backlight(backlight) => { self.backlight = Some(backlight); },
+                Message::Battery(battery)     => { self.battery   = Some(battery); },
+                Message::Time(time)           => { self.time      = Some(time); },
+            }
+
+            self.render();
+        }
+    }
+
+    pub fn render(&self) {
+        Command::new("xsetroot").arg("-name").arg(format!("{}", &self)).output().unwrap();
     }
 }

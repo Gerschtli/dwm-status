@@ -1,6 +1,7 @@
 use std::fmt;
+use std::sync::mpsc::Sender;
 
-use super::{Init, OptionalFeature};
+use super::{Feature, Message};
 
 #[derive(Debug)]
 pub struct BatteryInfo {
@@ -34,16 +35,13 @@ impl fmt::Display for Battery {
     }
 }
 
-impl Init for Battery {
+impl Feature for Battery {
     fn init() -> Self {
         // TODO: replace mock
         Battery::NoBattery
     }
-}
 
-impl OptionalFeature for Battery {
-    fn has_feature() -> bool {
-        // TODO: replace mock
-        true
+    fn wait_for_update(tx: &Sender<Message>) {
+        // TODO
     }
 }
