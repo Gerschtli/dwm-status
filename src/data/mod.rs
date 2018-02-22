@@ -113,6 +113,7 @@ impl SystemInfo {
     }
 
     pub fn render(&self) {
+        println!("{:#?}", &self);
         Command::new("xsetroot").arg("-name").arg(format!("{}", &self)).output().unwrap();
     }
 }
