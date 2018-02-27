@@ -4,9 +4,10 @@ pub mod battery;
 pub mod time;
 
 use std::fmt;
-use std::process::Command;
 use std::sync::mpsc::{channel, Sender};
 use std::thread;
+
+use io::render_status;
 
 use self::audio::Audio;
 use self::backlight::Backlight;
@@ -114,6 +115,6 @@ impl SystemInfo {
 
     pub fn render(&self) {
         println!("{:#?}", &self);
-        Command::new("xsetroot").arg("-name").arg(format!("{}", &self)).output().unwrap();
+        render_status(&format!("{}", &self));
     }
 }
