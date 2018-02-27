@@ -5,10 +5,11 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cargo-edit
-    glib
     gdk_pixbuf
+    glib
     latest.rustChannels.stable.cargo
     latest.rustChannels.stable.rust
+    libnotify
     pkgconfig
   ];
 }
