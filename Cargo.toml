@@ -5,4 +5,4 @@ version = "0.1.0"
 
 [dependencies]
 chrono = "0.4.0"
-dbus = "0.6.1"
+libnotify = "1.0.3"
