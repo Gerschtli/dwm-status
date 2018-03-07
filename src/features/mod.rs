@@ -7,7 +7,6 @@ pub use self::audio::Audio;
 pub use self::backlight::Backlight;
 pub use self::battery::Battery;
 pub use self::time::Time;
-
 use async;
 use error::*;
 use feature;
@@ -24,12 +23,18 @@ macro_rules! feature {
     }
 }
 
-pub fn create_feature(name: &str, tx: &mpsc::Sender<async::Message>) -> Result<Box<feature::Feature>> {
+pub fn create_feature(
+    name: &str,
+    tx: &mpsc::Sender<async::Message>,
+) -> Result<Box<feature::Feature>> {
     match name {
-        "audio"     => feature!(Audio, tx),
+        "audio" => feature!(Audio, tx),
         "backlight" => feature!(Backlight, tx),
-        "battery"   => feature!(Battery, tx),
-        "time"      => feature!(Time, tx),
-        _           => Err(Error::new_custom("create feature", &format!("feature {} doas not exist", name))),
+        "battery" => feature!(Battery, tx),
+        "time" => feature!(Time, tx),
+        _ => Err(Error::new_custom(
+            "create feature",
+            &format!("feature {} doas not exist", name),
+        )),
     }
 }

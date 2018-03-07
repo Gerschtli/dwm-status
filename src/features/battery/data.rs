@@ -30,10 +30,10 @@ pub enum BatteryData {
 impl fmt::Display for BatteryData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            BatteryData::Charging(ref info)    => write!(f, "+ {}", info),
+            BatteryData::Charging(ref info) => write!(f, "+ {}", info),
             BatteryData::Discharging(ref info) => write!(f, "- {}", info),
-            BatteryData::Full                  => write!(f, "= 100%"),
-            BatteryData::NoBattery             => write!(f, "NO BATT"),
+            BatteryData::Full => write!(f, "= 100%"),
+            BatteryData::NoBattery => write!(f, "NO BATT"),
         }
     }
 }

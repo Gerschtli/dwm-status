@@ -1,3 +1,4 @@
+use super::BacklightData;
 use async;
 use error::*;
 use feature;
@@ -5,13 +6,12 @@ use io;
 use std::sync::mpsc;
 use std::time;
 use uuid;
-use super::BacklightData;
 
 #[derive(Debug)]
 pub struct Backlight {
     data: BacklightData,
     id: String,
-    tx: mpsc::Sender<async::Message>
+    tx: mpsc::Sender<async::Message>,
 }
 
 impl feature::FeatureConfig for Backlight {
@@ -19,7 +19,7 @@ impl feature::FeatureConfig for Backlight {
         Ok(Backlight {
             data: BacklightData(0.),
             id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone()
+            tx: tx.clone(),
         })
     }
 }
@@ -34,7 +34,7 @@ impl feature::Feature for Backlight {
             "backlight".to_owned(),
             self.id.to_owned(),
             time::Duration::from_secs(60),
-            self.tx.clone()
+            self.tx.clone(),
         )
     }
 
@@ -43,8 +43,11 @@ impl feature::Feature for Backlight {
     }
 
     fn update(&mut self) -> Result<()> {
-        let max     = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/max_brightness").unwrap();
-        let current = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/actual_brightness").unwrap();
+        let max = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/max_brightness")
+            .unwrap();
+        let current = io::value_from_file::<i32>(
+            "/sys/class/backlight/intel_backlight/actual_brightness",
+        ).unwrap();
 
         self.data = BacklightData(current as f32 / max as f32);
 

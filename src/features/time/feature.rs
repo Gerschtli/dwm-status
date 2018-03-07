@@ -1,3 +1,4 @@
+use super::TimeData;
 use async;
 use chrono;
 use error::*;
@@ -5,13 +6,12 @@ use feature;
 use std::sync::mpsc;
 use std::time;
 use uuid;
-use super::TimeData;
 
 #[derive(Debug)]
 pub struct Time {
     data: TimeData,
     id: String,
-    tx: mpsc::Sender<async::Message>
+    tx: mpsc::Sender<async::Message>,
 }
 
 impl feature::FeatureConfig for Time {
@@ -19,7 +19,7 @@ impl feature::FeatureConfig for Time {
         Ok(Time {
             data: TimeData(chrono::Local::now()),
             id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone()
+            tx: tx.clone(),
         })
     }
 }
@@ -34,7 +34,7 @@ impl feature::Feature for Time {
             "time".to_owned(),
             self.id.to_owned(),
             time::Duration::from_secs(60),
-            self.tx.clone()
+            self.tx.clone(),
         )
     }
 

@@ -42,7 +42,8 @@ fn run() -> Result<()> {
 
     let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();
 
-    let mut feature_map: collections::HashMap<String, &mut feature::Feature> = collections::HashMap::new();
+    let mut feature_map: collections::HashMap<String, &mut feature::Feature> =
+        collections::HashMap::new();
     for feature in &mut features {
         feature_map.insert(String::from(feature.id()), (*feature).deref_mut());
     }
@@ -54,12 +55,12 @@ fn run() -> Result<()> {
 
         match feature_map.get_mut(&message.id) {
             Some(ref mut feature) => feature.update()?,
-            None                  => return Err(
-                Error::new_custom(
+            None => {
+                return Err(Error::new_custom(
                     "invalid message",
-                    &format!("message id {} does not exist", message.id)
-                )
-            ),
+                    &format!("message id {} does not exist", message.id),
+                ))
+            }
         }
 
         io::render_features(&order, &feature_map);

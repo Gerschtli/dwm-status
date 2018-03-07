@@ -5,20 +5,23 @@ use std::time;
 
 #[derive(Debug)]
 pub struct Message {
-    pub id: String
+    pub id: String,
 }
 
-pub fn schedule_update(feature: String, id: String, interval: time::Duration, tx: mpsc::Sender<Message>) -> Result<()> {
-    thread::spawn(move || {
-        loop {
-            thread::sleep(interval);
+pub fn schedule_update(
+    feature: String,
+    id: String,
+    interval: time::Duration,
+    tx: mpsc::Sender<Message>,
+) -> Result<()> {
+    thread::spawn(move || loop {
+        thread::sleep(interval);
 
-            let message = Message { id: id.clone() };
-            tx.send(message)
-                .feature_error(&feature, "notify thread killed")
-                .show_error()
-                .unwrap();
-        }
+        let message = Message { id: id.clone() };
+        tx.send(message)
+            .feature_error(&feature, "notify thread killed")
+            .show_error()
+            .unwrap();
     });
 
     Ok(())

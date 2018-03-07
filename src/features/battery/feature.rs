@@ -1,3 +1,5 @@
+use super::BatteryData;
+use super::BatteryInfo;
 use async;
 use error::*;
 use feature;
@@ -6,14 +8,12 @@ use std::path;
 use std::sync::mpsc;
 use std::time;
 use uuid;
-use super::BatteryData;
-use super::BatteryInfo;
 
 #[derive(Debug)]
 pub struct Battery {
     data: BatteryData,
     id: String,
-    tx: mpsc::Sender<async::Message>
+    tx: mpsc::Sender<async::Message>,
 }
 
 impl feature::FeatureConfig for Battery {
@@ -21,7 +21,7 @@ impl feature::FeatureConfig for Battery {
         Ok(Battery {
             data: BatteryData::NoBattery,
             id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone()
+            tx: tx.clone(),
         })
     }
 }
@@ -36,7 +36,7 @@ impl feature::Feature for Battery {
             "battery".to_owned(),
             self.id.to_owned(),
             time::Duration::from_secs(60),
-            self.tx.clone()
+            self.tx.clone(),
         )
     }
 
@@ -50,16 +50,21 @@ impl feature::Feature for Battery {
             return Ok(());
         }
 
-        let current_now = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/current_now").unwrap();
+        let current_now =
+            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/current_now").unwrap();
 
         if current_now == 0 {
             self.data = BatteryData::Full;
             return Ok(());
         }
 
-        let ac_online   = io::value_from_file::<i32>("/sys/class/power_supply/ACAD/online").map(|v| v == 1).unwrap();
-        let charge_full = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_full").unwrap();
-        let charge_now  = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_now").unwrap();
+        let ac_online = io::value_from_file::<i32>("/sys/class/power_supply/ACAD/online")
+            .map(|v| v == 1)
+            .unwrap();
+        let charge_full =
+            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_full").unwrap();
+        let charge_now =
+            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_now").unwrap();
 
         let info = BatteryInfo {
             estimation: time(ac_online, charge_full, charge_now, current_now),
@@ -67,7 +72,7 @@ impl feature::Feature for Battery {
         };
 
         self.data = match ac_online {
-            true  => BatteryData::Charging(info),
+            true => BatteryData::Charging(info),
             false => BatteryData::Discharging(info),
         };
 
@@ -82,9 +87,10 @@ fn capacity(charge_full: i32, charge_now: i32) -> f32 {
 fn time(on_ac: bool, charge_full: i32, charge_now: i32, current_now: i32) -> time::Duration {
     if on_ac {
         // Charge time
-        time::Duration::from_secs((charge_full - charge_now).abs() as u64 * 3600u64 / current_now as u64)
-    }
-    else {
+        time::Duration::from_secs(
+            (charge_full - charge_now).abs() as u64 * 3600u64 / current_now as u64,
+        )
+    } else {
         // Discharge time
         time::Duration::from_secs(charge_now as u64 * 3600u64 / current_now as u64)
     }

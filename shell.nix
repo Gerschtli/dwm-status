@@ -7,8 +7,8 @@ stdenv.mkDerivation {
     cargo-edit
     gdk_pixbuf
     glib
-    latest.rustChannels.stable.cargo
-    latest.rustChannels.stable.rust
+    latest.rustChannels.nightly.cargo
+    latest.rustChannels.nightly.rust
     libnotify
     pkgconfig
   ];

@@ -1,3 +1,4 @@
+use super::AudioData;
 use async;
 use error::*;
 use feature;
@@ -5,7 +6,6 @@ use std::process;
 use std::sync::mpsc;
 use std::time;
 use uuid;
-use super::AudioData;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
@@ -13,7 +13,7 @@ const FILTER: &[char] = &['[', ']', '%'];
 pub struct Audio {
     data: AudioData,
     id: String,
-    tx: mpsc::Sender<async::Message>
+    tx: mpsc::Sender<async::Message>,
 }
 
 impl feature::FeatureConfig for Audio {
@@ -21,7 +21,7 @@ impl feature::FeatureConfig for Audio {
         Ok(Audio {
             data: AudioData::Mute,
             id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone()
+            tx: tx.clone(),
         })
     }
 }
@@ -36,7 +36,7 @@ impl feature::Feature for Audio {
             "audio".to_owned(),
             self.id.to_owned(),
             time::Duration::from_secs(60),
-            self.tx.clone()
+            self.tx.clone(),
         )
     }
 
@@ -53,11 +53,7 @@ impl feature::Feature for Audio {
             .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
             .unwrap();
 
-        let last_line = &output
-            .lines()
-            .into_iter()
-            .last()
-            .unwrap();
+        let last_line = &output.lines().into_iter().last().unwrap();
 
         let last = last_line
             .split_whitespace()
@@ -71,10 +67,7 @@ impl feature::Feature for Audio {
             return Ok(());
         }
 
-        let volume = last.get(0)
-            .unwrap()
-            .parse::<u32>()
-            .unwrap();
+        let volume = last.get(0).unwrap().parse::<u32>().unwrap();
 
         self.data = AudioData::Volume(volume);
         Ok(())

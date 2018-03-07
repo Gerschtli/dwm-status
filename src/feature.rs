@@ -14,5 +14,6 @@ pub trait Feature {
 
 pub trait FeatureConfig: Feature {
     fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self>
-        where Self: Sized;
+    where
+        Self: Sized;
 }
