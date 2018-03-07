@@ -1,10 +1,10 @@
 use async;
 use error::*;
 use feature;
+use io;
 use std::path;
 use std::sync::mpsc;
 use std::time;
-use system;
 use uuid;
 use super::BatteryData;
 use super::BatteryInfo;
@@ -50,16 +50,16 @@ impl feature::Feature for Battery {
             return Ok(());
         }
 
-        let current_now = system::value_from_file::<i32>("/sys/class/power_supply/BAT1/current_now").unwrap();
+        let current_now = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/current_now").unwrap();
 
         if current_now == 0 {
             self.data = BatteryData::Full;
             return Ok(());
         }
 
-        let ac_online   = system::value_from_file::<i32>("/sys/class/power_supply/ACAD/online").map(|v| v == 1).unwrap();
-        let charge_full = system::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_full").unwrap();
-        let charge_now  = system::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_now").unwrap();
+        let ac_online   = io::value_from_file::<i32>("/sys/class/power_supply/ACAD/online").map(|v| v == 1).unwrap();
+        let charge_full = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_full").unwrap();
+        let charge_now  = io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_now").unwrap();
 
         let info = BatteryInfo {
             estimation: time(ac_online, charge_full, charge_now, current_now),

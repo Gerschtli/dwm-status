@@ -4,10 +4,9 @@ extern crate uuid;
 
 mod async;
 mod error;
-mod io;
 mod feature;
 mod features;
-mod system;
+mod io;
 
 use error::*;
 use std::collections;

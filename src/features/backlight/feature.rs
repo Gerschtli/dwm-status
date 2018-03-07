@@ -1,9 +1,9 @@
 use async;
 use error::*;
 use feature;
+use io;
 use std::sync::mpsc;
 use std::time;
-use system;
 use uuid;
 use super::BacklightData;
 
@@ -43,8 +43,8 @@ impl feature::Feature for Backlight {
     }
 
     fn update(&mut self) -> Result<()> {
-        let max     = system::value_from_file::<i32>("/sys/class/backlight/intel_backlight/max_brightness").unwrap();
-        let current = system::value_from_file::<i32>("/sys/class/backlight/intel_backlight/actual_brightness").unwrap();
+        let max     = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/max_brightness").unwrap();
+        let current = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/actual_brightness").unwrap();
 
         self.data = BacklightData(current as f32 / max as f32);
 
