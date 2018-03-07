@@ -18,7 +18,6 @@ macro_rules! feature {
             Box::new(
                 <$type as feature::FeatureConfig>::new($tx)?
             )
-            as Box<feature::Feature>
         )
     }
 }

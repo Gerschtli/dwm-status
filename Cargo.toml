@@ -7,4 +7,15 @@ version = "0.1.0"
 [dependencies]
 chrono = "0.4.0"
 libnotify = "1.0.3"
-uuid = { version = "0.6.1", features = ["v4"] }
+
+[dependencies.clippy]
+optional = true
+version = "0.0.187"
+
+[dependencies.uuid]
+features = ["v4"]
+version = "0.6.1"
+
+[features]
+default = []
+dev = ["clippy"]

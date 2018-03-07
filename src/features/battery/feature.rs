@@ -71,9 +71,10 @@ impl feature::Feature for Battery {
             percentage: capacity(charge_full, charge_now),
         };
 
-        self.data = match ac_online {
-            true => BatteryData::Charging(info),
-            false => BatteryData::Discharging(info),
+        self.data = if ac_online {
+            BatteryData::Charging(info)
+        } else {
+            BatteryData::Discharging(info)
         };
 
         Ok(())

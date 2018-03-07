@@ -47,9 +47,8 @@ pub fn show_notification(summary: &str, body: &str, urgency: libnotify::Urgency)
 
 pub fn value_from_file<T: str::FromStr>(path: &str) -> io::Result<T> {
     try!(read_file(path))
-        .trim_right_matches("\n")
+        .trim_right_matches('\n')
         .parse()
-        .and_then(|n| Ok(n))
         .or_else(|_| {
             Err(io::Error::new(
                 io::ErrorKind::Other,
