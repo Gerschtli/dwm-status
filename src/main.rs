@@ -12,11 +12,13 @@ use error::*;
 use std::collections;
 use std::env;
 use std::ops::DerefMut;
+use std::process;
 use std::sync::mpsc;
 
 fn main() {
     if let Err(error) = run() {
         error.show_error();
+        process::exit(1);
     }
 }
 
@@ -27,6 +29,10 @@ fn run() -> Result<()> {
 
     for arg in args.skip(1) {
         features.push(features::create_feature(&arg, &tx)?);
+    }
+
+    if features.is_empty() {
+        return Err(Error::new_custom("no args", "no features enabled"));
     }
 
     for mut feature in &mut features {
