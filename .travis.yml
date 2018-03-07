@@ -5,14 +5,14 @@ rust:
   - beta
   - stable
 before_script:
-  - |
-    pip install 'travis-cargo<0.2' --user &&
-    export PATH=$HOME/.local/bin:$PATH
+  - pip install 'travis-cargo<0.2' --user
+  - export PATH=$HOME/.local/bin:$PATH
+  - rustup component add rustfmt-preview
 script:
   - cargo fmt -- --write-mode=diff
-  - travis-cargo build &&
-    travis-cargo test &&
-    travis-cargo bench
+  - travis-cargo build
+  - travis-cargo test
+  - travis-cargo bench
 addons:
   apt:
     packages:
