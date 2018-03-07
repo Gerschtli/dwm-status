@@ -7,7 +7,7 @@ pub type Result<T> = StdResult<T, Error>;
 pub struct Error {
     feature: String,
     description: String,
-    cause: String,
+    cause: Option<String>,
 }
 
 impl Error {
@@ -15,7 +15,7 @@ impl Error {
         Error {
             feature: feature.to_owned(),
             description: description.to_owned(),
-            cause: format!("{:?}", cause),
+            cause: Some(format!("{:?}", cause)),
         }
     }
 
@@ -23,7 +23,7 @@ impl Error {
         Error {
             feature: feature.to_owned(),
             description: description.to_owned(),
-            cause: "".to_owned(),
+            cause: None,
         }
     }
 
@@ -36,10 +36,13 @@ impl Error {
 impl fmt::Debug for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,
-            "Error => {}: {} ({})",
+            "Error => {}: {}{}",
             self.feature,
             self.description,
-            self.cause
+            match self.cause {
+                Some(ref cause) => format!(" ({})", cause),
+                None => "".to_owned(),
+            }
         )
     }
 }
