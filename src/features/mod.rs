@@ -3,21 +3,33 @@ pub mod backlight;
 pub mod battery;
 pub mod time;
 
-use error::*;
-use std::sync::mpsc::Sender;
+pub use self::audio::Audio;
+pub use self::backlight::Backlight;
+pub use self::battery::Battery;
+pub use self::time::Time;
 
-#[derive(Debug)]
-pub enum Feature {
-    Audio(Option<audio::Audio>),
-    Backlight(Option<backlight::Backlight>),
-    Battery(Option<battery::Battery>),
-    Time(Option<time::Time>),
+use async;
+use error::*;
+use feature;
+use std::sync::mpsc;
+
+macro_rules! feature {
+    ($type:ident, $tx:expr) => {
+        Ok(
+            Box::new(
+                <$type as feature::FeatureConfig>::new($tx)?
+            )
+            as Box<feature::Feature>
+        )
+    }
 }
 
-pub trait FeatureBuilder {
-    type Data;
-
-    fn build(&self) -> Result<Self::Data>;
-
-    fn wait_for_update(&self, tx: &Sender<Feature>) -> Result<()>;
+pub fn create_feature(name: &str, tx: &mpsc::Sender<async::Message>) -> Result<Box<feature::Feature>> {
+    match name {
+        "audio"     => feature!(Audio, tx),
+        "backlight" => feature!(Backlight, tx),
+        "battery"   => feature!(Battery, tx),
+        "time"      => feature!(Time, tx),
+        _           => Err(Error::new_custom("create feature", &format!("feature {} doas not exist", name))),
+    }
 }

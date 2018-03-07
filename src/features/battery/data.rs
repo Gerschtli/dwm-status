@@ -1,9 +1,9 @@
 use std::fmt;
-use std::time::Duration;
+use std::time;
 
 #[derive(Debug)]
 pub struct BatteryInfo {
-    pub estimation: Duration,
+    pub estimation: time::Duration,
     pub percentage: f32,
 }
 
@@ -20,20 +20,20 @@ impl fmt::Display for BatteryInfo {
 }
 
 #[derive(Debug)]
-pub enum Battery {
+pub enum BatteryData {
     Charging(BatteryInfo),
     Discharging(BatteryInfo),
     Full,
     NoBattery,
 }
 
-impl fmt::Display for Battery {
+impl fmt::Display for BatteryData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Battery::Charging(ref info)    => write!(f, "+ {}", info),
-            Battery::Discharging(ref info) => write!(f, "- {}", info),
-            Battery::Full                  => write!(f, "= 100%"),
-            Battery::NoBattery             => write!(f, "NO BATT"),
+            BatteryData::Charging(ref info)    => write!(f, "+ {}", info),
+            BatteryData::Discharging(ref info) => write!(f, "- {}", info),
+            BatteryData::Full                  => write!(f, "= 100%"),
+            BatteryData::NoBattery             => write!(f, "NO BATT"),
         }
     }
 }

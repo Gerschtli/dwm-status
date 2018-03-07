@@ -1,10 +1,10 @@
 [package]
 authors = ["Tobias Happ <tobias.happ@gmx.de>"]
+description = "Displays system information for dwm status bar."
 name = "dwm-status"
 version = "0.1.0"
-description = "Displays system information for dwm status bar."
 
 [dependencies]
 chrono = "0.4.0"
-clap = "2.30.0"
 libnotify = "1.0.3"
+uuid = { version = "0.6.1", features = ["v4"] }

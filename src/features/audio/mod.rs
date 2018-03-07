@@ -1,5 +1,5 @@
-pub mod builder;
 pub mod data;
+pub mod feature;
 
-pub use self::builder::AudioBuilder;
-pub use self::data::Audio;
+pub use self::data::AudioData;
+pub use self::feature::Audio;

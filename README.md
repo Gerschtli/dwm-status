@@ -1,19 +1,16 @@
 # dwm-status
 
 DWM status service which dynamically updates on DBus messages.
+Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
 Build and run with:
 ```sh
-$ cargo run
+$ cargo run -- <features>+
 ```
 
-Sets status via `xsetroot` in this pattern:
-```
-[ <backlight> / ] <sound> / [ <battery> / ] <time>
-```
+With `features` of list:
 
-E.g.:
-```
-L: 20% / S: 50% / - 87% (03:50) / 2018-01-01 13:37
-MUTE / NO BATT / 2018-01-01 13:37
-```
+ * `audio` (e.g. `MUTE` / `S 52%`)
+ * `backlight` (e.g. `L 23%`)
+ * `battery` (e.g. `+ 10% (01:23)` / `- 50% (02:03)` / `= 100%` / `NO BATT`)
+ * `time` (e.g. `2018-01-01 13:37`)

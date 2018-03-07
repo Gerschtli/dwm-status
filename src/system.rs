@@ -16,7 +16,11 @@ pub fn value_from_file<T: str::FromStr>(path: &str) -> io::Result<T> {
         .parse()
         .and_then(|n| Ok(n))
         .or_else(|_| {
-            Err(io::Error::new(io::ErrorKind::Other,
-                               format!("File: \"{}\" doesn't contain an int value", &path)))
+            Err(
+                io::Error::new(
+                    io::ErrorKind::Other,
+                   format!("File: \"{}\" doesn't contain an int value", &path)
+               )
+           )
         })
 }

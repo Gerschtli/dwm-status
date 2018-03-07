@@ -1,5 +1,5 @@
-pub mod builder;
 pub mod data;
+pub mod feature;
 
-pub use self::builder::TimeBuilder;
-pub use self::data::Time;
+pub use self::data::TimeData;
+pub use self::feature::Time;
