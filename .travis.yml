@@ -16,7 +16,7 @@ script:
 addons:
   apt:
     packages:
-      - gdk-pixbuf-dev
+      - libgdk-pixbuf2.0-dev
       - libglib2.0-dev
       - libnotify-dev
 env:
