@@ -1,4 +1,4 @@
-# dwm-status
+# dwm-status [![Build Status](https://travis-ci.org/Gerschtli/dwm-status.svg?branch=master)](https://travis-ci.org/Gerschtli/dwm-status)
 
 DWM status service which dynamically updates on DBus messages.
 Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
