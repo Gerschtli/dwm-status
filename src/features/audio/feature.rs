@@ -67,7 +67,6 @@ impl feature::Feature for Audio {
             return Ok(());
         }
 
-        #[cfg_attr(feature = "dev", allow(get_unwrap))]
         let volume = last.get(0).unwrap().parse::<u32>().unwrap();
 
         self.data = AudioData::Volume(volume);
