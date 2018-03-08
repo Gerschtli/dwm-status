@@ -31,16 +31,26 @@ fn main() {
 }
 
 fn run() -> Result<()> {
-    let args = env::args();
+    let args: Vec<_> = env::args().collect();
+
+    if args.len() != 2 {
+        return Err(Error::new_custom("wrong usage", "dwm-status <config-file>"));
+    }
+
+    let path = &args[1];
+    let content =
+        io::read_file(path).wrap_error("config file error", &format!("{} not readable", path))?;
+    let lines = content.lines();
+
     let mut features = Vec::new();
     let (tx, rx) = mpsc::channel();
 
-    for arg in args.skip(1) {
-        features.push(features::create_feature(&arg, &tx)?);
+    for line in lines {
+        features.push(features::create_feature(line, &tx)?);
     }
 
     if features.is_empty() {
-        return Err(Error::new_custom("no args", "no features enabled"));
+        return Err(Error::new_custom("empty config", "no features enabled"));
     }
 
     for mut feature in &mut features {
@@ -59,17 +69,18 @@ fn run() -> Result<()> {
     io::render_features(&order, &feature_map);
 
     for message in rx {
-        println!("Message: {:?}", message);
-
         match feature_map.get_mut(&message.id) {
-            Some(ref mut feature) => feature.update()?,
+            Some(ref mut feature) => {
+                feature.update()?;
+                println!("update {}", feature.render());
+            }
             None => {
                 return Err(Error::new_custom(
                     "invalid message",
                     &format!("message id {} does not exist", message.id),
                 ))
             }
-        }
+        };
 
         io::render_features(&order, &feature_map);
     }

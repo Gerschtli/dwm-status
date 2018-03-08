@@ -5,8 +5,10 @@ Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
 Build and run with:
 ```sh
-$ cargo run -- <features>+
+$ cargo run -- <config-file>
 ```
+
+The `config-file` contains one `feature` per line.
 
 With `features` of list:
 

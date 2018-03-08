@@ -6,23 +6,23 @@ use std::result::Result as StdResult;
 pub type Result<T> = StdResult<T, Error>;
 
 pub struct Error {
-    feature: String,
+    name: String,
     description: String,
     cause: Option<String>,
 }
 
 impl Error {
-    fn new<E: fmt::Debug>(feature: &str, description: &str, cause: E) -> Self {
+    fn new<E: fmt::Debug>(name: &str, description: &str, cause: E) -> Self {
         Error {
-            feature: feature.to_owned(),
+            name: name.to_owned(),
             description: description.to_owned(),
             cause: Some(format!("{:?}", cause)),
         }
     }
 
-    pub fn new_custom(feature: &str, description: &str) -> Self {
+    pub fn new_custom(name: &str, description: &str) -> Self {
         Error {
-            feature: feature.to_owned(),
+            name: name.to_owned(),
             description: description.to_owned(),
             cause: None,
         }
@@ -30,8 +30,9 @@ impl Error {
 
     pub fn show_error(self) {
         eprintln!("{:?}", self);
+
         io::show_notification(
-            &format!("DWM-Status Error: {}", self.feature),
+            &format!("dwm-status: {}", self.name),
             &self.description,
             libnotify::Urgency::Critical,
         );
@@ -43,7 +44,7 @@ impl fmt::Debug for Error {
         write!(
             f,
             "Error => {}: {}{}",
-            self.feature,
+            self.name,
             self.description,
             match self.cause {
                 Some(ref cause) => format!(" ({})", cause),
@@ -54,12 +55,12 @@ impl fmt::Debug for Error {
 }
 
 pub trait StdResultExt<T> {
-    fn feature_error(self, feature: &str, description: &str) -> Result<T>;
+    fn wrap_error(self, name: &str, description: &str) -> Result<T>;
 }
 
 impl<T, E: fmt::Debug> StdResultExt<T> for StdResult<T, E> {
-    fn feature_error(self, feature: &str, description: &str) -> Result<T> {
-        self.map_err(|error| Error::new(feature, description, error))
+    fn wrap_error(self, name: &str, description: &str) -> Result<T> {
+        self.map_err(|error| Error::new(name, description, error))
     }
 }
 

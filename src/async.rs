@@ -19,7 +19,7 @@ pub fn schedule_update(
 
         let message = Message { id: id.clone() };
         tx.send(message)
-            .feature_error(&feature, "notify thread killed")
+            .wrap_error(&feature, "notify thread killed")
             .show_error()
             .unwrap();
     });

@@ -7,7 +7,7 @@ use std::io::Read;
 use std::process;
 use std::str;
 
-fn read_file(path: &str) -> io::Result<String> {
+pub fn read_file(path: &str) -> io::Result<String> {
     let mut s = String::new();
     fs::File::open(path)
         .and_then(|mut f| f.read_to_string(&mut s))
