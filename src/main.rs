@@ -25,7 +25,7 @@ use std::sync::mpsc;
 
 fn main() {
     if let Err(error) = run() {
-            error.show_error();
+        error.show_error();
         process::exit(1);
     }
 }
