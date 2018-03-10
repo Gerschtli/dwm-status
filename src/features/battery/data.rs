@@ -3,8 +3,8 @@ use std::time;
 
 #[derive(Debug)]
 pub struct BatteryInfo {
+    pub capacity: f32,
     pub estimation: time::Duration,
-    pub percentage: f32,
 }
 
 impl fmt::Display for BatteryInfo {
@@ -12,7 +12,7 @@ impl fmt::Display for BatteryInfo {
         write!(
             f,
             "{:.0}% ({:02}:{:02})",
-            self.percentage * 100.0,
+            self.capacity * 100.0,
             self.estimation.as_secs() / 3600,
             self.estimation.as_secs() % 60
         )
