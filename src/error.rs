@@ -54,13 +54,19 @@ impl fmt::Debug for Error {
     }
 }
 
-pub trait StdResultExt<T> {
+pub trait WrapErrorExt<T> {
     fn wrap_error(self, name: &str, description: &str) -> Result<T>;
 }
 
-impl<T, E: fmt::Debug> StdResultExt<T> for StdResult<T, E> {
+impl<T, E: fmt::Debug> WrapErrorExt<T> for StdResult<T, E> {
     fn wrap_error(self, name: &str, description: &str) -> Result<T> {
         self.map_err(|error| Error::new(name, description, error))
+    }
+}
+
+impl<T> WrapErrorExt<T> for Option<T> {
+    fn wrap_error(self, name: &str, description: &str) -> Result<T> {
+        self.ok_or_else(|| Error::new_custom(name, description))
     }
 }
 

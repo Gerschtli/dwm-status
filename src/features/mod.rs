@@ -11,15 +11,17 @@ use async;
 use error::*;
 use feature;
 use std::sync::mpsc;
+use uuid;
 
 macro_rules! feature {
-    ($type:ident, $tx:expr) => {
+    ($type:ident, $tx:expr) => {{
+        let id = uuid::Uuid::new_v4().simple().to_string();
         Ok(
             Box::new(
-                <$type as feature::FeatureConfig>::new($tx)?
+                <$type as feature::FeatureConfig>::new(id, $tx.clone())?
             )
         )
-    }
+    }}
 }
 
 pub fn create_feature(
@@ -33,7 +35,7 @@ pub fn create_feature(
         "time" => feature!(Time, tx),
         _ => Err(Error::new_custom(
             "create feature",
-            &format!("feature {} doas not exist", name),
+            &format!("feature {} does not exist", name),
         )),
     }
 }

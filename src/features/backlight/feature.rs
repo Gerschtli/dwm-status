@@ -5,7 +5,6 @@ use feature;
 use io;
 use std::sync::mpsc;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub struct Backlight {
@@ -15,11 +14,11 @@ pub struct Backlight {
 }
 
 impl feature::FeatureConfig for Backlight {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Backlight {
             data: BacklightData(0.),
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }
@@ -43,11 +42,12 @@ impl feature::Feature for Backlight {
     }
 
     fn update(&mut self) -> Result<()> {
-        let max = io::value_from_file::<i32>("/sys/class/backlight/intel_backlight/max_brightness")
-            .unwrap();
-        let current = io::value_from_file::<i32>(
+        let max = io::read_int_from_file("/sys/class/backlight/intel_backlight/max_brightness")
+            .wrap_error("backlight", "error reading max brightness")?;
+
+        let current = io::read_int_from_file(
             "/sys/class/backlight/intel_backlight/actual_brightness",
-        ).unwrap();
+        ).wrap_error("backlight", "error reading actual brightness")?;
 
         self.data = BacklightData(current as f32 / max as f32);
 

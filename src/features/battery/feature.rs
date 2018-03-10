@@ -7,7 +7,6 @@ use io;
 use std::path;
 use std::sync::mpsc;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub struct Battery {
@@ -17,11 +16,11 @@ pub struct Battery {
 }
 
 impl feature::FeatureConfig for Battery {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Battery {
             data: BatteryData::NoBattery,
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }
@@ -50,21 +49,21 @@ impl feature::Feature for Battery {
             return Ok(());
         }
 
-        let current_now =
-            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/current_now").unwrap();
+        let current_now = io::read_int_from_file("/sys/class/power_supply/BAT1/current_now")
+            .wrap_error("battery", "error in reading current_now")?;
 
         if current_now == 0 {
             self.data = BatteryData::Full;
             return Ok(());
         }
 
-        let ac_online = io::value_from_file::<i32>("/sys/class/power_supply/ACAD/online")
+        let ac_online = io::read_int_from_file("/sys/class/power_supply/ACAD/online")
             .map(|v| v == 1)
-            .unwrap();
-        let charge_full =
-            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_full").unwrap();
-        let charge_now =
-            io::value_from_file::<i32>("/sys/class/power_supply/BAT1/charge_now").unwrap();
+            .wrap_error("battery", "error in reading ac online")?;
+        let charge_full = io::read_int_from_file("/sys/class/power_supply/BAT1/charge_full")
+            .wrap_error("battery", "error in reading charge_full")?;
+        let charge_now = io::read_int_from_file("/sys/class/power_supply/BAT1/charge_now")
+            .wrap_error("battery", "error in reading charge_now")?;
 
         let info = BatteryInfo {
             estimation: time(ac_online, charge_full, charge_now, current_now),

@@ -5,7 +5,6 @@ use feature;
 use std::process;
 use std::sync::mpsc;
 use std::time;
-use uuid;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
@@ -17,11 +16,11 @@ pub struct Audio {
 }
 
 impl feature::FeatureConfig for Audio {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Audio {
             data: AudioData::Mute,
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }
@@ -51,9 +50,13 @@ impl feature::Feature for Audio {
             .arg("Master")
             .output()
             .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-            .unwrap();
+            .wrap_error("audio", "getting amixer info failed")?;
 
-        let last_line = &output.lines().into_iter().last().unwrap();
+        let last_line = &output
+            .lines()
+            .into_iter()
+            .last()
+            .wrap_error("audio", "empty amixer output")?;
 
         let last = last_line
             .split_whitespace()
@@ -67,8 +70,10 @@ impl feature::Feature for Audio {
             return Ok(());
         }
 
-        #[cfg_attr(feature = "dev", allow(get_unwrap))]
-        let volume = last.get(0).unwrap().parse::<u32>().unwrap();
+        let volume = last.get(0)
+            .wrap_error("audio", "no volume part found")?
+            .parse::<u32>()
+            .wrap_error("audio", "volume not parsable")?;
 
         self.data = AudioData::Volume(volume);
         Ok(())

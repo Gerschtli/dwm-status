@@ -17,7 +17,7 @@ mod features;
 mod io;
 
 use error::*;
-use std::collections;
+use std::collections::HashMap;
 use std::env;
 use std::ops::DerefMut;
 use std::process;
@@ -31,37 +31,32 @@ fn main() {
 }
 
 fn run() -> Result<()> {
-    let args: Vec<_> = env::args().collect();
+    let args = env::args();
 
-    if args.len() != 2 {
-        return Err(Error::new_custom("wrong usage", "dwm-status <config-file>"));
-    }
-
-    let path = &args[1];
+    let path = args.skip(1)
+        .next()
+        .wrap_error("usage", "first parameter config file")?;
     let content =
-        io::read_file(path).wrap_error("config file error", &format!("{} not readable", path))?;
+        io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))?;
     let lines = content.lines();
 
     let mut features = Vec::new();
     let (tx, rx) = mpsc::channel();
 
     for line in lines {
-        features.push(features::create_feature(line, &tx)?);
+        let mut feature = features::create_feature(line, &tx)?;
+        feature.update()?;
+        feature.init_notifier()?;
+        features.push(feature);
     }
 
     if features.is_empty() {
         return Err(Error::new_custom("empty config", "no features enabled"));
     }
 
-    for mut feature in &mut features {
-        feature.update()?;
-        feature.init_notifier()?;
-    }
-
     let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();
 
-    let mut feature_map: collections::HashMap<String, &mut feature::Feature> =
-        collections::HashMap::new();
+    let mut feature_map: HashMap<String, &mut feature::Feature> = HashMap::new();
     for feature in &mut features {
         feature_map.insert(String::from(feature.id()), (*feature).deref_mut());
     }

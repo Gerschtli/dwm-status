@@ -5,7 +5,6 @@ use error::*;
 use feature;
 use std::sync::mpsc;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub struct Time {
@@ -15,11 +14,11 @@ pub struct Time {
 }
 
 impl feature::FeatureConfig for Time {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Time {
             data: TimeData(chrono::Local::now()),
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }

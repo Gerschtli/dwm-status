@@ -13,7 +13,7 @@ pub trait Feature {
 }
 
 pub trait FeatureConfig: Feature {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self>
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self>
     where
         Self: Sized;
 }
