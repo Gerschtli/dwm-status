@@ -40,7 +40,7 @@ impl feature::Feature for Battery {
     }
 
     fn render(&self) -> String {
-        format!("{}", self.data).clone()
+        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {

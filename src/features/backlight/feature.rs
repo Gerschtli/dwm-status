@@ -38,7 +38,7 @@ impl feature::Feature for Backlight {
     }
 
     fn render(&self) -> String {
-        format!("{}", self.data).clone()
+        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {
