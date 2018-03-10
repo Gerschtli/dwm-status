@@ -23,10 +23,9 @@ use std::ops::DerefMut;
 use std::sync::mpsc;
 
 pub fn run() -> Result<()> {
-    let args = env::args();
+    let mut args = env::args();
 
-    let path = args.skip(1)
-        .next()
+    let path = args.nth(1)
         .wrap_error("usage", "first parameter config file")?;
     let content =
         io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))?;
