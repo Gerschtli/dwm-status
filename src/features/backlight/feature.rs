@@ -1,14 +1,15 @@
 use super::BacklightData;
+use super::BacklightDevice;
 use async;
 use error::*;
 use feature;
-use io;
 use std::sync::mpsc;
 use std::time;
 
 #[derive(Debug)]
 pub struct Backlight {
     data: BacklightData,
+    device: BacklightDevice,
     id: String,
     tx: mpsc::Sender<async::Message>,
 }
@@ -17,6 +18,7 @@ impl feature::FeatureConfig for Backlight {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Backlight {
             data: BacklightData(0.),
+            device: BacklightDevice::new()?,
             id,
             tx,
         })
@@ -42,14 +44,7 @@ impl feature::Feature for Backlight {
     }
 
     fn update(&mut self) -> Result<()> {
-        let max = io::read_int_from_file("/sys/class/backlight/intel_backlight/max_brightness")
-            .wrap_error("backlight", "error reading max brightness")?;
-
-        let current = io::read_int_from_file(
-            "/sys/class/backlight/intel_backlight/actual_brightness",
-        ).wrap_error("backlight", "error reading actual brightness")?;
-
-        self.data = BacklightData(current as f32 / max as f32);
+        self.data = BacklightData(self.device.value()?);
 
         Ok(())
     }
