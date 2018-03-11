@@ -7,6 +7,8 @@ pub trait Feature {
 
     fn init_notifier(&self) -> Result<()>;
 
+    fn name(&self) -> &str;
+
     fn render(&self) -> String;
 
     fn update(&mut self) -> Result<()>;

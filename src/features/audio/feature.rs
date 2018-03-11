@@ -60,6 +60,10 @@ impl feature::Feature for Audio {
         Ok(())
     }
 
+    fn name(&self) -> &str {
+        FEATURE_NAME
+    }
+
     fn render(&self) -> String {
         format!("{}", self.data)
     }

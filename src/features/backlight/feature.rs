@@ -64,6 +64,10 @@ impl feature::Feature for Backlight {
         Ok(())
     }
 
+    fn name(&self) -> &str {
+        FEATURE_NAME
+    }
+
     fn render(&self) -> String {
         format!("{}", self.data)
     }

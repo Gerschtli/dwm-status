@@ -60,7 +60,7 @@ pub fn run() -> Result<()> {
         match feature_map.get_mut(&message.id) {
             Some(ref mut feature) => {
                 feature.update()?;
-                println!("update {}", feature.render());
+                println!("update {}: {}", feature.name(), feature.render());
             }
             None => {
                 return Err(Error::new_custom(

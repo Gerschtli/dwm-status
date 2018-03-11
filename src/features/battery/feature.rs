@@ -59,6 +59,10 @@ impl feature::Feature for Battery {
         Ok(())
     }
 
+    fn name(&self) -> &str {
+        FEATURE_NAME
+    }
+
     fn render(&self) -> String {
         format!("{}", self.data)
     }
