@@ -6,6 +6,7 @@ use error::*;
 use feature;
 use std::sync::mpsc;
 use std::time;
+use std::thread;
 
 #[derive(Debug)]
 pub struct Time {
@@ -30,12 +31,16 @@ impl feature::Feature for Time {
     }
 
     fn init_notifier(&self) -> Result<()> {
-        async::schedule_update(
-            FEATURE_NAME.to_owned(),
-            self.id.to_owned(),
-            time::Duration::from_secs(60),
-            self.tx.clone(),
-        )
+        let tx = self.tx.clone();
+        let id = self.id.clone();
+
+        thread::spawn(move || loop {
+            thread::sleep(time::Duration::from_secs(60));
+
+            async::send_message(FEATURE_NAME, &id, &tx);
+        });
+
+        Ok(())
     }
 
     fn render(&self) -> String {
