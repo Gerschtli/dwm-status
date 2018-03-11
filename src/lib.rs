@@ -7,6 +7,7 @@
 #![cfg_attr(feature = "dev", deny(warnings))]
 
 extern crate chrono;
+extern crate inotify;
 extern crate libnotify;
 extern crate uuid;
 

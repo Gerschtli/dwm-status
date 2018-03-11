@@ -15,6 +15,10 @@ impl BacklightDevice {
         })
     }
 
+    pub fn brightness_file(&self) -> String {
+        build_path("actual")
+    }
+
     pub fn value(&self) -> Result<f32> {
         let current = get_brightness("actual")?;
         let value = current as f32 / self.max as f32;
@@ -23,8 +27,12 @@ impl BacklightDevice {
     }
 }
 
+fn build_path(name: &str) -> String {
+    format!("{}/{}_brightness", PATH, name)
+}
+
 fn get_brightness(name: &str) -> Result<i32> {
-    let brightness = io::read_int_from_file(&format!("{}/{}_brightness", PATH, name))
+    let brightness = io::read_int_from_file(&build_path(name))
         .wrap_error("backlight", &format!("error reading {} brightness", name))?;
 
     Ok(brightness)
