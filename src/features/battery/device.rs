@@ -17,6 +17,15 @@ impl BatteryDevice {
         Ok(BatteryDevice { charge_full: None })
     }
 
+    pub fn build_dbus_match(&self) -> String {
+        format!(
+            "path='{}',interface='{}',member='{}'",
+            format!("/org/freedesktop/UPower/devices/battery_{}", DEVICE_BAT),
+            "org.freedesktop.DBus.Properties",
+            "PropertiesChanged",
+        )
+    }
+
     pub fn capacity(&mut self) -> Result<f32> {
         let charge_now = get_value(DEVICE_BAT, "charge_now")?;
         let charge_full = self.charge_full()?;
