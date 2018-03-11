@@ -17,12 +17,15 @@ pub fn schedule_update(
     thread::spawn(move || loop {
         thread::sleep(interval);
 
-        let message = Message { id: id.clone() };
-        tx.send(message)
-            .wrap_error(&feature, "notify thread killed")
-            .show_error()
-            .unwrap();
+        send_message(&feature, &id, &tx);
     });
 
     Ok(())
+}
+
+pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
+    let message = Message { id: id.to_owned() };
+
+    tx.send(message)
+        .wrap_error_kill(&feature, "notify thread killed");
 }

@@ -2,10 +2,13 @@ use super::AudioData;
 use async;
 use error::*;
 use feature;
+use std::io::Read;
 use std::process;
 use std::sync::mpsc;
+use std::thread;
 use std::time;
 
+const FEATURE_NAME: &str = "audio";
 const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
@@ -31,12 +34,30 @@ impl feature::Feature for Audio {
     }
 
     fn init_notifier(&self) -> Result<()> {
-        async::schedule_update(
-            "audio".to_owned(),
-            self.id.to_owned(),
-            time::Duration::from_secs(60),
-            self.tx.clone(),
-        )
+        let tx = self.tx.clone();
+        let id = self.id.clone();
+
+        thread::spawn(move || {
+            let mut monitor = process::Command::new("sh")
+                .args(&["-c", "stdbuf -oL alsactl monitor"])
+                .stdout(process::Stdio::piped())
+                .spawn()
+                .wrap_error_kill(FEATURE_NAME, "failed to start alsactl monitor")
+                .stdout
+                .wrap_error_kill(FEATURE_NAME, "failed to pipe alsactl monitor output");
+
+            let mut buffer = [0; 1024];
+            loop {
+                if let Ok(_) = monitor.read(&mut buffer) {
+                    async::send_message(FEATURE_NAME, &id, &tx);
+                }
+
+                // prevent event spamming
+                thread::sleep(time::Duration::new(0, 250_000_000));
+            }
+        });
+
+        Ok(())
     }
 
     fn render(&self) -> String {
@@ -50,13 +71,13 @@ impl feature::Feature for Audio {
             .arg("Master")
             .output()
             .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-            .wrap_error("audio", "getting amixer info failed")?;
+            .wrap_error(FEATURE_NAME, "getting amixer info failed")?;
 
         let last_line = &output
             .lines()
             .into_iter()
             .last()
-            .wrap_error("audio", "empty amixer output")?;
+            .wrap_error(FEATURE_NAME, "empty amixer output")?;
 
         let last = last_line
             .split_whitespace()
@@ -71,9 +92,9 @@ impl feature::Feature for Audio {
         }
 
         let volume = last.get(0)
-            .wrap_error("audio", "no volume part found")?
+            .wrap_error(FEATURE_NAME, "no volume part found")?
             .parse::<u32>()
-            .wrap_error("audio", "volume not parsable")?;
+            .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
         self.data = AudioData::Volume(volume);
         Ok(())
