@@ -1,6 +1,6 @@
 # dwm-status
 
-DWM status service which dynamically updates on DBus messages.
+DWM status service which dynamically updates when needed.
 Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
 Build and run with:
