@@ -53,7 +53,7 @@ impl feature::Feature for Audio {
                 }
 
                 // prevent event spamming
-                thread::sleep(time::Duration::new(0, 250_000_000));
+                thread::sleep(time::Duration::from_millis(250));
             }
         });
 
