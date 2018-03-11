@@ -1,5 +1,6 @@
 use super::BacklightData;
 use super::BacklightDevice;
+use super::FEATURE_NAME;
 use async;
 use error::*;
 use feature;
@@ -7,8 +8,6 @@ use inotify;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-
-const FEATURE_NAME: &str = "backlight";
 
 #[derive(Debug)]
 pub struct Backlight {

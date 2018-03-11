@@ -1,3 +1,4 @@
+use super::FEATURE_NAME;
 use super::TimeData;
 use async;
 use chrono;
@@ -30,7 +31,7 @@ impl feature::Feature for Time {
 
     fn init_notifier(&self) -> Result<()> {
         async::schedule_update(
-            "time".to_owned(),
+            FEATURE_NAME.to_owned(),
             self.id.to_owned(),
             time::Duration::from_secs(60),
             self.tx.clone(),

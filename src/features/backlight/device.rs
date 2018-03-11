@@ -1,3 +1,4 @@
+use super::FEATURE_NAME;
 use error::*;
 use io;
 
@@ -33,7 +34,7 @@ fn build_path(name: &str) -> String {
 
 fn get_brightness(name: &str) -> Result<i32> {
     let brightness = io::read_int_from_file(&build_path(name))
-        .wrap_error("backlight", &format!("error reading {} brightness", name))?;
+        .wrap_error(FEATURE_NAME, &format!("error reading {} brightness", name))?;
 
     Ok(brightness)
 }

@@ -1,4 +1,5 @@
 use super::AudioData;
+use super::FEATURE_NAME;
 use async;
 use error::*;
 use feature;
@@ -8,7 +9,6 @@ use std::sync::mpsc;
 use std::thread;
 use std::time;
 
-const FEATURE_NAME: &str = "audio";
 const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
