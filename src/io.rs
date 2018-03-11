@@ -1,6 +1,6 @@
 use feature;
 use libnotify;
-use std::collections;
+use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::io::Read;
@@ -9,15 +9,12 @@ use std::str;
 
 pub fn read_file(path: &str) -> io::Result<String> {
     let mut s = String::new();
-    fs::File::open(path)
-        .and_then(|mut f| f.read_to_string(&mut s))
-        .map(|_| s)
+    let mut file = fs::File::open(path)?;
+    file.read_to_string(&mut s)?;
+    Ok(s)
 }
 
-pub fn render_features(
-    order: &[String],
-    feature_map: &collections::HashMap<String, &mut feature::Feature>,
-) {
+pub fn render_features(order: &[String], feature_map: &HashMap<String, &mut feature::Feature>) {
     let status = order
         .iter()
         .map(|id| feature_map.get(id).unwrap().render())
@@ -25,6 +22,18 @@ pub fn render_features(
         .join(" / ");
 
     render_status(&status);
+}
+
+pub fn read_int_from_file(path: &str) -> io::Result<i32> {
+    try!(read_file(path))
+        .trim_right_matches('\n')
+        .parse()
+        .or_else(|_| {
+            Err(io::Error::new(
+                io::ErrorKind::Other,
+                format!("file \"{}\" doesn't contain an int value", &path),
+            ))
+        })
 }
 
 fn render_status(message: &str) {
@@ -43,16 +52,4 @@ pub fn show_notification(summary: &str, body: &str, urgency: libnotify::Urgency)
     notification.show().expect("show notification failed");
 
     libnotify::uninit();
-}
-
-pub fn value_from_file<T: str::FromStr>(path: &str) -> io::Result<T> {
-    try!(read_file(path))
-        .trim_right_matches('\n')
-        .parse()
-        .or_else(|_| {
-            Err(io::Error::new(
-                io::ErrorKind::Other,
-                format!("File: \"{}\" doesn't contain an int value", &path),
-            ))
-        })
 }

@@ -7,13 +7,15 @@ pub trait Feature {
 
     fn init_notifier(&self) -> Result<()>;
 
+    fn name(&self) -> &str;
+
     fn render(&self) -> String;
 
     fn update(&mut self) -> Result<()>;
 }
 
 pub trait FeatureConfig: Feature {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self>
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self>
     where
         Self: Sized;
 }

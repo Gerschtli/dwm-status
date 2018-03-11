@@ -14,3 +14,15 @@ impl fmt::Display for AudioData {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_display() {
+        assert_eq!(format!("{}", AudioData::Mute), "MUTE");
+        assert_eq!(format!("{}", AudioData::Volume(0)), "S 0%");
+        assert_eq!(format!("{}", AudioData::Volume(85)), "S 85%");
+    }
+}

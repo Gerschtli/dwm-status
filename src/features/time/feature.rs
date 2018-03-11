@@ -1,11 +1,12 @@
+use super::FEATURE_NAME;
 use super::TimeData;
 use async;
 use chrono;
 use error::*;
 use feature;
 use std::sync::mpsc;
+use std::thread;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub struct Time {
@@ -15,11 +16,11 @@ pub struct Time {
 }
 
 impl feature::FeatureConfig for Time {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Time {
             data: TimeData(chrono::Local::now()),
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }
@@ -30,16 +31,24 @@ impl feature::Feature for Time {
     }
 
     fn init_notifier(&self) -> Result<()> {
-        async::schedule_update(
-            "time".to_owned(),
-            self.id.to_owned(),
-            time::Duration::from_secs(60),
-            self.tx.clone(),
-        )
+        let tx = self.tx.clone();
+        let id = self.id.clone();
+
+        thread::spawn(move || loop {
+            thread::sleep(time::Duration::from_secs(60));
+
+            async::send_message(FEATURE_NAME, &id, &tx);
+        });
+
+        Ok(())
+    }
+
+    fn name(&self) -> &str {
+        FEATURE_NAME
     }
 
     fn render(&self) -> String {
-        format!("{}", self.data).clone()
+        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {

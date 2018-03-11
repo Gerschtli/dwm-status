@@ -1,28 +1,14 @@
 use error::*;
 use std::sync::mpsc;
-use std::thread;
-use std::time;
 
 #[derive(Debug)]
 pub struct Message {
     pub id: String,
 }
 
-pub fn schedule_update(
-    feature: String,
-    id: String,
-    interval: time::Duration,
-    tx: mpsc::Sender<Message>,
-) -> Result<()> {
-    thread::spawn(move || loop {
-        thread::sleep(interval);
+pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
+    let message = Message { id: id.to_owned() };
 
-        let message = Message { id: id.clone() };
-        tx.send(message)
-            .wrap_error(&feature, "notify thread killed")
-            .show_error()
-            .unwrap();
-    });
-
-    Ok(())
+    tx.send(message)
+        .wrap_error_kill(feature, "notify thread killed");
 }

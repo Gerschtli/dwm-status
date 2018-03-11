@@ -1,11 +1,13 @@
 use super::AudioData;
+use super::FEATURE_NAME;
 use async;
 use error::*;
 use feature;
+use std::io::Read;
 use std::process;
 use std::sync::mpsc;
+use std::thread;
 use std::time;
-use uuid;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
@@ -17,11 +19,11 @@ pub struct Audio {
 }
 
 impl feature::FeatureConfig for Audio {
-    fn new(tx: &mpsc::Sender<async::Message>) -> Result<Self> {
+    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Audio {
             data: AudioData::Mute,
-            id: uuid::Uuid::new_v4().simple().to_string(),
-            tx: tx.clone(),
+            id,
+            tx,
         })
     }
 }
@@ -32,16 +34,38 @@ impl feature::Feature for Audio {
     }
 
     fn init_notifier(&self) -> Result<()> {
-        async::schedule_update(
-            "audio".to_owned(),
-            self.id.to_owned(),
-            time::Duration::from_secs(60),
-            self.tx.clone(),
-        )
+        let tx = self.tx.clone();
+        let id = self.id.clone();
+
+        thread::spawn(move || {
+            let mut monitor = process::Command::new("sh")
+                .args(&["-c", "stdbuf -oL alsactl monitor"])
+                .stdout(process::Stdio::piped())
+                .spawn()
+                .wrap_error_kill(FEATURE_NAME, "failed to start alsactl monitor")
+                .stdout
+                .wrap_error_kill(FEATURE_NAME, "failed to pipe alsactl monitor output");
+
+            let mut buffer = [0; 1024];
+            loop {
+                if monitor.read(&mut buffer).is_ok() {
+                    async::send_message(FEATURE_NAME, &id, &tx);
+                }
+
+                // prevent event spamming
+                thread::sleep(time::Duration::from_millis(250));
+            }
+        });
+
+        Ok(())
+    }
+
+    fn name(&self) -> &str {
+        FEATURE_NAME
     }
 
     fn render(&self) -> String {
-        format!("{}", self.data).clone()
+        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {
@@ -51,9 +75,13 @@ impl feature::Feature for Audio {
             .arg("Master")
             .output()
             .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-            .unwrap();
+            .wrap_error(FEATURE_NAME, "getting amixer info failed")?;
 
-        let last_line = &output.lines().into_iter().last().unwrap();
+        let last_line = &output
+            .lines()
+            .into_iter()
+            .last()
+            .wrap_error(FEATURE_NAME, "empty amixer output")?;
 
         let last = last_line
             .split_whitespace()
@@ -67,8 +95,10 @@ impl feature::Feature for Audio {
             return Ok(());
         }
 
-        #[cfg_attr(feature = "dev", allow(get_unwrap))]
-        let volume = last.get(0).unwrap().parse::<u32>().unwrap();
+        let volume = last.get(0)
+            .wrap_error(FEATURE_NAME, "no volume part found")?
+            .parse::<u32>()
+            .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
         self.data = AudioData::Volume(volume);
         Ok(())
