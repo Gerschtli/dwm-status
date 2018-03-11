@@ -10,5 +10,5 @@ pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
     let message = Message { id: id.to_owned() };
 
     tx.send(message)
-        .wrap_error_kill(&feature, "notify thread killed");
+        .wrap_error_kill(feature, "notify thread killed");
 }

@@ -5,8 +5,8 @@ use chrono;
 use error::*;
 use feature;
 use std::sync::mpsc;
-use std::time;
 use std::thread;
+use std::time;
 
 #[derive(Debug)]
 pub struct Time {

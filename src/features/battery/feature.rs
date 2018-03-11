@@ -42,7 +42,8 @@ impl feature::Feature for Battery {
         thread::spawn(move || {
             let connection = dbus::Connection::get_private(dbus::BusType::System)
                 .wrap_error_kill(FEATURE_NAME, "failed to connect to dbus");
-            connection.add_match(&dbus_match)
+            connection
+                .add_match(&dbus_match)
                 .wrap_error_kill(FEATURE_NAME, "failed to add interface");
 
             loop {

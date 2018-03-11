@@ -61,7 +61,7 @@ pub trait WrapErrorExt<T> {
     where
         Self: Sized,
     {
-        self.wrap_error(&name, &description).show_error().unwrap()
+        self.wrap_error(name, description).show_error().unwrap()
     }
 }
 

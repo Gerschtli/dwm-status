@@ -48,7 +48,7 @@ impl feature::Feature for Audio {
 
             let mut buffer = [0; 1024];
             loop {
-                if let Ok(_) = monitor.read(&mut buffer) {
+                if monitor.read(&mut buffer).is_ok() {
                     async::send_message(FEATURE_NAME, &id, &tx);
                 }
 
