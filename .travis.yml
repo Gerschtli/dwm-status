@@ -15,7 +15,7 @@ script:
 addons:
   apt:
     packages:
-      - libdbus-glib-dev
+      - libdbus-glib-1-2-dev
       - libgdk-pixbuf2.0-dev
       - libglib2.0-dev
       - libnotify-dev
