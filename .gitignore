@@ -1,2 +1,3 @@
+config.test
 target/
 **/*.rs.bk
