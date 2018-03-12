@@ -94,6 +94,7 @@ impl feature::Feature for Battery {
             self.notifier.reset();
             BatteryData::Charging(info)
         } else {
+            self.device.set_charge_full()?;
             self.notifier.update(info.capacity, &info.estimation);
             BatteryData::Discharging(info)
         };

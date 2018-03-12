@@ -26,9 +26,9 @@ impl BatteryDevice {
         )
     }
 
-    pub fn capacity(&mut self) -> Result<f32> {
+    pub fn capacity(&self) -> Result<f32> {
         let charge_now = get_value(DEVICE_BAT, "charge_now")?;
-        let charge_full = self.charge_full()?;
+        let charge_full = self.charge_full.unwrap();
 
         Ok(charge_now as f32 / charge_full as f32)
     }
@@ -37,12 +37,12 @@ impl BatteryDevice {
         self.charge_full = None;
     }
 
-    pub fn estimation(&mut self) -> Result<time::Duration> {
+    pub fn estimation(&self) -> Result<time::Duration> {
         let charge_now = get_value(DEVICE_BAT, "charge_now")?;
         let current_now = get_value(DEVICE_BAT, "current_now")?;
 
         let seconds = if self.is_ac_online()? {
-            let charge_full = self.charge_full()?;
+            let charge_full = self.charge_full.unwrap();
             (charge_full - charge_now).abs() as u64 * 3600u64 / current_now as u64
         } else {
             charge_now as u64 * 3600u64 / current_now as u64
@@ -60,18 +60,16 @@ impl BatteryDevice {
     }
 
     pub fn is_full(&self) -> Result<bool> {
-        Ok(get_value(DEVICE_BAT, "current_now")? == 0)
+        Ok(get_value(DEVICE_BAT, "charge_now")? == self.charge_full.unwrap())
     }
 
-    fn charge_full(&mut self) -> Result<i32> {
-        Ok(match self.charge_full {
-            Some(value) => value,
-            None => {
-                let value = get_value(DEVICE_BAT, "charge_full")?;
-                self.charge_full = Some(value);
-                value
-            }
-        })
+    pub fn set_charge_full(&mut self) -> Result<()> {
+        if self.charge_full.is_none() {
+            let value = get_value(DEVICE_BAT, "charge_full")?;
+            self.charge_full = Some(value);
+        }
+
+        Ok(())
     }
 }
 
