@@ -9,7 +9,7 @@ before_script:
   - export PATH=$HOME/.local/bin:$PATH
   - rustup component add rustfmt-preview
 script:
-  - cargo fmt -- --write-mode=diff
+  - if [[ $TRAVIS_RUST_VERSION == "nightly" ]]; do cargo fmt -- --write-mode=diff; done
   - travis-cargo build
   - travis-cargo test
 addons:
