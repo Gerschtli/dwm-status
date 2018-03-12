@@ -1,19 +1,3 @@
-macro_rules! feature_default {
-    () => {
-        fn id(&self) -> &str {
-            &self.id
-        }
-
-        fn name(&self) -> &str {
-            FEATURE_NAME
-        }
-
-        fn render(&self) -> String {
-            format!("{}", self.data)
-        }
-    }
-}
-
 mod audio;
 mod backlight;
 mod battery;

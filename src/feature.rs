@@ -2,6 +2,22 @@ use async;
 use error::*;
 use std::sync::mpsc;
 
+macro_rules! feature_default {
+    () => {
+        fn id(&self) -> &str {
+            &self.id
+        }
+
+        fn name(&self) -> &str {
+            FEATURE_NAME
+        }
+
+        fn render(&self) -> String {
+            format!("{}", self.data)
+        }
+    }
+}
+
 pub trait Feature {
     fn id(&self) -> &str;
 

@@ -14,6 +14,7 @@ extern crate uuid;
 
 mod async;
 mod error;
+#[macro_use]
 mod feature;
 mod features;
 mod io;
