@@ -14,15 +14,15 @@ macro_rules! feature_default {
     }
 }
 
-pub mod audio;
-pub mod backlight;
-pub mod battery;
-pub mod time;
+mod audio;
+mod backlight;
+mod battery;
+mod time;
 
-pub use self::audio::Audio;
-pub use self::backlight::Backlight;
-pub use self::battery::Battery;
-pub use self::time::Time;
+use self::audio::Audio;
+use self::backlight::Backlight;
+use self::battery::Battery;
+use self::time::Time;
 use async;
 use error::*;
 use feature;

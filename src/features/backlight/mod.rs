@@ -1,6 +1,6 @@
-pub mod data;
-pub mod device;
-pub mod feature;
+mod data;
+mod device;
+mod feature;
 
 pub use self::data::BacklightData;
 pub use self::device::BacklightDevice;

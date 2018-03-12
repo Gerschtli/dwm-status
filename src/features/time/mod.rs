@@ -1,5 +1,5 @@
-pub mod data;
-pub mod feature;
+mod data;
+mod feature;
 
 pub use self::data::TimeData;
 pub use self::feature::Time;

@@ -1,7 +1,7 @@
-pub mod data;
-pub mod device;
-pub mod feature;
-pub mod notifier;
+mod data;
+mod device;
+mod feature;
+mod notifier;
 
 pub use self::data::BatteryData;
 pub use self::data::BatteryInfo;
