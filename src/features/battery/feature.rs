@@ -1,6 +1,7 @@
 use super::BatteryData;
 use super::BatteryDevice;
 use super::BatteryInfo;
+use super::BatteryNotifier;
 use super::FEATURE_NAME;
 use async;
 use dbus;
@@ -15,6 +16,7 @@ pub struct Battery {
     data: BatteryData,
     device: BatteryDevice,
     id: String,
+    notifier: BatteryNotifier,
     tx: mpsc::Sender<async::Message>,
 }
 
@@ -24,6 +26,7 @@ impl feature::FeatureConfig for Battery {
             data: BatteryData::NoBattery,
             device: BatteryDevice::new()?,
             id,
+            notifier: BatteryNotifier::new(),
             tx,
         })
     }
@@ -71,11 +74,13 @@ impl feature::Feature for Battery {
     fn update(&mut self) -> Result<()> {
         if !self.device.has_battery() {
             self.device.clear_battery_data();
+            self.notifier.reset();
             self.data = BatteryData::NoBattery;
             return Ok(());
         }
 
         if self.device.is_full()? {
+            self.notifier.reset();
             self.data = BatteryData::Full;
             return Ok(());
         }
@@ -86,8 +91,10 @@ impl feature::Feature for Battery {
         };
 
         self.data = if self.device.is_ac_online()? {
+            self.notifier.reset();
             BatteryData::Charging(info)
         } else {
+            self.notifier.update(info.capacity, &info.estimation);
             BatteryData::Discharging(info)
         };
 
