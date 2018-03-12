@@ -19,24 +19,53 @@ mod features;
 mod io;
 
 use error::*;
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
-use std::ops::DerefMut;
 use std::sync::mpsc;
 
-pub fn run() -> Result<()> {
+fn get_config() -> Result<String> {
     let mut args = env::args();
 
     let path = args.nth(1)
         .wrap_error("usage", "first parameter config file")?;
-    let content =
-        io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))?;
-    let lines = content.lines();
 
-    let mut features = Vec::new();
+    io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))
+}
+
+fn render(
+    rx: &mpsc::Receiver<async::Message>,
+    order: &[String],
+    feature_map: &HashMap<String, RefCell<Box<feature::Feature>>>,
+) -> Result<()> {
+    io::render_features(order, feature_map);
+
+    for message in rx {
+        match feature_map.get(&message.id) {
+            Some(feature) => {
+                let mut mutable = feature.borrow_mut();
+                mutable.update()?;
+                println!("update {}: {}", mutable.name(), mutable.render());
+            }
+            None => {
+                return Err(Error::new_custom(
+                    "invalid message",
+                    &format!("message id {} does not exist", message.id),
+                ))
+            }
+        };
+
+        io::render_features(order, feature_map);
+    }
+
+    Ok(())
+}
+
+pub fn run() -> Result<()> {
     let (tx, rx) = mpsc::channel();
 
-    for line in lines {
+    let mut features = Vec::new();
+    for line in get_config()?.lines() {
         let mut feature = features::create_feature(line, &tx)?;
         feature.update()?;
         feature.init_notifier()?;
@@ -47,31 +76,12 @@ pub fn run() -> Result<()> {
         return Err(Error::new_custom("empty config", "no features enabled"));
     }
 
-    let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();
+    let order: Vec<_> = features.iter().map(|x| x.id().to_owned()).collect();
 
-    let mut feature_map: HashMap<String, &mut feature::Feature> = HashMap::new();
-    for feature in &mut features {
-        feature_map.insert(String::from(feature.id()), (*feature).deref_mut());
-    }
+    let feature_map: HashMap<_, _> = features
+        .into_iter()
+        .map(|feature| (feature.id().to_owned(), RefCell::new(feature)))
+        .collect();
 
-    io::render_features(&order, &feature_map);
-
-    for message in rx {
-        match feature_map.get_mut(&message.id) {
-            Some(ref mut feature) => {
-                feature.update()?;
-                println!("update {}: {}", feature.name(), feature.render());
-            }
-            None => {
-                return Err(Error::new_custom(
-                    "invalid message",
-                    &format!("message id {} does not exist", message.id),
-                ))
-            }
-        };
-
-        io::render_features(&order, &feature_map);
-    }
-
-    Ok(())
+    render(&rx, &order, &feature_map)
 }
