@@ -75,12 +75,16 @@ impl feature::Feature for Battery {
         if !self.device.has_battery() {
             self.device.clear_battery_data();
             self.notifier.reset();
+
             self.data = BatteryData::NoBattery;
             return Ok(());
         }
 
+        self.device.set_charge_full()?;
+
         if self.device.is_full()? {
             self.notifier.reset();
+
             self.data = BatteryData::Full;
             return Ok(());
         }
@@ -94,7 +98,6 @@ impl feature::Feature for Battery {
             self.notifier.reset();
             BatteryData::Charging(info)
         } else {
-            self.device.set_charge_full()?;
             self.notifier.update(info.capacity, &info.estimation);
             BatteryData::Discharging(info)
         };
