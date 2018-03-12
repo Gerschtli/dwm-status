@@ -29,7 +29,7 @@ pub fn render_features(
 }
 
 pub fn read_int_from_file(path: &str) -> io::Result<i32> {
-    try!(read_file(path))
+    read_file(path)?
         .trim_right_matches('\n')
         .parse()
         .or_else(|_| {

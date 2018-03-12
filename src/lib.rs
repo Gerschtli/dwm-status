@@ -47,13 +47,13 @@ fn render(
                 let mut mutable = feature.borrow_mut();
                 mutable.update()?;
                 println!("update {}: {}", mutable.name(), mutable.render());
-            }
+            },
             None => {
                 return Err(Error::new_custom(
                     "invalid message",
                     &format!("message id {} does not exist", message.id),
                 ))
-            }
+            },
         };
 
         io::render_features(order, feature_map);
