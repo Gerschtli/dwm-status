@@ -29,9 +29,7 @@ impl feature::FeatureConfig for Backlight {
 }
 
 impl feature::Feature for Backlight {
-    fn id(&self) -> &str {
-        &self.id
-    }
+    feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
         let tx = self.tx.clone();
@@ -62,14 +60,6 @@ impl feature::Feature for Backlight {
         });
 
         Ok(())
-    }
-
-    fn name(&self) -> &str {
-        FEATURE_NAME
-    }
-
-    fn render(&self) -> String {
-        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {

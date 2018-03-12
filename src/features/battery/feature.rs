@@ -33,9 +33,7 @@ impl feature::FeatureConfig for Battery {
 }
 
 impl feature::Feature for Battery {
-    fn id(&self) -> &str {
-        &self.id
-    }
+    feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
         let tx = self.tx.clone();
@@ -61,14 +59,6 @@ impl feature::Feature for Battery {
         });
 
         Ok(())
-    }
-
-    fn name(&self) -> &str {
-        FEATURE_NAME
-    }
-
-    fn render(&self) -> String {
-        format!("{}", self.data)
     }
 
     fn update(&mut self) -> Result<()> {
