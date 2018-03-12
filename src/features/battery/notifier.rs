@@ -31,7 +31,7 @@ impl BatteryNotifier {
                     io::show_notification(
                         &format!("Battery under {:.0}%", level * 100.),
                         &format!("{:02}:{:02} remaining", minutes / 60, minutes % 60),
-                        if level <= &&CRITICAL {
+                        if level <= &CRITICAL {
                             libnotify::Urgency::Critical
                         } else {
                             libnotify::Urgency::Normal
