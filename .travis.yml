@@ -5,7 +5,6 @@ rust:
   - nightly
   - beta
   - stable
-  - 1.0.0
 before_script:
   - export PATH=$HOME/.cargo/bin:$PATH
   - cargo install cargo-update || echo "cargo-update already installed"
@@ -23,7 +22,7 @@ script:
     else
       cargo build
     fi
-  - travis-cargo test
+  - cargo test
 after_success:
   - cargo coveralls
 addons:
