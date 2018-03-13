@@ -1,6 +1,5 @@
 use feature;
 use libnotify;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fs;
 use std::io;
@@ -15,13 +14,10 @@ pub fn read_file(path: &str) -> io::Result<String> {
     Ok(s)
 }
 
-pub fn render_features(
-    order: &[String],
-    feature_map: &HashMap<String, RefCell<Box<feature::Feature>>>,
-) {
+pub fn render_features(order: &[String], feature_map: &HashMap<String, Box<feature::Feature>>) {
     let status = order
         .iter()
-        .map(|id| feature_map.get(id).unwrap().borrow().render())
+        .map(|id| feature_map.get(id).unwrap().render())
         .collect::<Vec<_>>()
         .join(" / ");
 

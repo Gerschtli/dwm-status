@@ -20,7 +20,6 @@ mod features;
 mod io;
 
 use error::*;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
 use std::sync::mpsc;
@@ -37,16 +36,15 @@ fn get_config() -> Result<String> {
 fn render(
     rx: &mpsc::Receiver<async::Message>,
     order: &[String],
-    feature_map: &HashMap<String, RefCell<Box<feature::Feature>>>,
+    feature_map: &mut HashMap<String, Box<feature::Feature>>,
 ) -> Result<()> {
     io::render_features(order, feature_map);
 
     for message in rx {
-        match feature_map.get(&message.id) {
-            Some(feature) => {
-                let mut mutable = feature.borrow_mut();
-                mutable.update()?;
-                println!("update {}: {}", mutable.name(), mutable.render());
+        match feature_map.get_mut(&message.id) {
+            Some(ref mut feature) => {
+                feature.update()?;
+                println!("update {}: {}", feature.name(), feature.render());
             },
             None => {
                 return Err(Error::new_custom(
@@ -79,10 +77,10 @@ pub fn run() -> Result<()> {
 
     let order: Vec<_> = features.iter().map(|x| x.id().to_owned()).collect();
 
-    let feature_map: HashMap<_, _> = features
+    let mut feature_map: HashMap<_, _> = features
         .into_iter()
-        .map(|feature| (feature.id().to_owned(), RefCell::new(feature)))
+        .map(|feature| (feature.id().to_owned(), feature))
         .collect();
 
-    render(&rx, &order, &feature_map)
+    render(&rx, &order, &mut feature_map)
 }
