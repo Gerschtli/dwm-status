@@ -50,7 +50,6 @@ impl feature::Feature for Battery {
             loop {
                 for item in connection.iter(300) {
                     if let dbus::ConnectionItem::Signal(_) = item {
-                        async::send_message(FEATURE_NAME, &id, &tx);
                         // wait for /sys/class/power_supply files updates
                         thread::sleep(time::Duration::from_secs(5));
                         async::send_message(FEATURE_NAME, &id, &tx);
