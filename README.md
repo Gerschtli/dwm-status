@@ -3,16 +3,76 @@
 DWM status service which dynamically updates when needed.
 Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
-Build and run with:
-```sh
-$ cargo run -- <config-file>
+Example status bar:
+```
+L 30% / MUTE / - 25% (01:05) / 2018-03-16 21:25
 ```
 
-The `config-file` contains one `feature` per line.
+If an error occures, notifications via libnotify are sent.
 
-With `features` of list:
+## Requirements
 
- * `audio` (e.g. `MUTE` / `S 52%`)
- * `backlight` (e.g. `L 23%`)
- * `battery` (e.g. `+ 10% (01:23)` / `- 50% (02:03)` / `= 100%` / `NO BATT`)
- * `time` (e.g. `2018-01-01 13:37`)
+Cargo, rustc and lib{dbus,gdk-pixbuf,glib,notify}-dev are required to build the binary.
+To set the status text `xsetroot` is used.
+
+## Build and run
+
+```sh
+$ # dev mode
+$ cargo run -- <config-file>
+$ # release mode
+$ cargo build --release
+$ ./target/release/dwm-status <config-file>
+```
+Or install globally to `~/.cargo/bin`:
+```sh
+$ cargo install
+```
+
+## Configuration
+
+The `config-file` contains one `feature` per line, e.g.:
+```
+audio
+battery
+time
+```
+
+### Features
+
+#### Audio
+
+Shows either `MUTE` or the current volume like `S 52%`. Listens on `alsactl monitor` for changes.
+
+alsa-utils are required.
+
+#### Backlight
+
+Shows backlight value like `L 23%` and watches `/sys/class/backlight` for changes.
+
+#### Battery
+
+Shows following information:
+
+| status               | example         | notes                        |
+| -------------------- | --------------- | ---------------------------- |
+| charging             | `+ 10% (01:23)` | In parentheses time to full  |
+| discharging          | `- 50% (02:03)` | In parentheses time to empty |
+| full                 | `= 100%`        |                              |
+| no battery available | `NO BATT`       |                              |
+
+Watches `/org/freedesktop/UPower/devices/battery_BAT1` dbus signals for updates.
+
+If discharging and the capacity is under specific values, warning notifications with urgency normal or critical are sent.
+
+| capacity | urgency  |
+| -------- | -------- |
+| 2%       | critical |
+| 5%       | critical |
+| 10%      | critical |
+| 15%      | normal   |
+| 20%      | normal   |
+
+#### Time
+
+Shows time in format `YYYY-MM-DD HH:MM` and refreshes every minute.
