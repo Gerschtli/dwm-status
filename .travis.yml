@@ -6,10 +6,6 @@ rust:
   - beta
   - stable
 before_script:
-  # - export PATH=$HOME/.cargo/bin:$PATH
-  # - cargo install cargo-update || echo "cargo-update already installed"
-  # - cargo install cargo-travis || echo "cargo-travis already installed"
-  # - cargo install-update -a # update outdated cached binaries
   - rustup component add rustfmt-preview
 script:
   - |
@@ -23,8 +19,6 @@ script:
       cargo build
     fi
   - cargo test
-# after_success:
-#   - cargo coveralls
 addons:
   apt:
     packages:
@@ -32,14 +26,6 @@ addons:
       - libgdk-pixbuf2.0-dev
       - libglib2.0-dev
       - libnotify-dev
-    #   # for cargo-travis
-    #   - libcurl4-openssl-dev
-    #   - libelf-dev
-    #   - libdw-dev
-    #   - binutils-dev
-    #   - cmake # also required for cargo-update
-    # sources:
-    #   - kalakris-cmake
 notifications:
   email:
     on_success: never
