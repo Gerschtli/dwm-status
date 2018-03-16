@@ -48,16 +48,18 @@ impl feature::Feature for Battery {
                 .wrap_error_kill(FEATURE_NAME, "failed to add interface");
 
             loop {
-                for item in connection.iter(300) {
-                    if let dbus::ConnectionItem::Signal(_) = item {
-                        // wait for /sys/class/power_supply files updates
-                        thread::sleep(time::Duration::from_secs(5));
-                        async::send_message(FEATURE_NAME, &id, &tx);
+                // 60_000 ms = 1 min
+                for item in connection.iter(60_000) {
+                    match item {
+                        // ConnectionItem::Nothing is sent on timeout
+                        dbus::ConnectionItem::Nothing | dbus::ConnectionItem::Signal(_) => {
+                            // wait for /sys/class/power_supply files updates
+                            thread::sleep(time::Duration::from_secs(2));
+                            async::send_message(FEATURE_NAME, &id, &tx);
+                        },
+                        _ => {},
                     }
                 }
-
-                // send every 5 min if not messages incoming
-                async::send_message(FEATURE_NAME, &id, &tx);
             }
         });
 
