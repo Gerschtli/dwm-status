@@ -48,8 +48,8 @@ impl feature::Feature for Battery {
                 .wrap_error_kill(FEATURE_NAME, "failed to add interface");
 
             loop {
-                // 60_000 ms = 1 min
-                for item in connection.iter(60_000) {
+                // 300_000 ms = 5 min
+                for item in connection.iter(300_000) {
                     match item {
                         // ConnectionItem::Nothing is sent on timeout
                         dbus::ConnectionItem::Nothing | dbus::ConnectionItem::Signal(_) => {
