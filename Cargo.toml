@@ -3,6 +3,14 @@ authors = ["Tobias Happ <tobias.happ@gmx.de>"]
 description = "Displays system information for dwm status bar."
 name = "dwm-status"
 version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/Gerschtli/dwm-status"
+readme = "README.md"
+keywords = ["dwm", "dwm-status"]
+
+[badges.travis-ci]
+repository = "Gerschtli/dwm-status"
+branch = "master"
 
 [dependencies]
 chrono = "0.4.0"
