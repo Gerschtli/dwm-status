@@ -17,7 +17,7 @@ impl BatteryDevice {
     pub fn new(name: &str) -> Result<Self> {
         Ok(BatteryDevice {
             name: String::from(name),
-            notifier: BatteryNotifier::new(),
+            notifier: BatteryNotifier::new(name),
         })
     }
 
