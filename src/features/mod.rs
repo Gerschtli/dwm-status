@@ -14,7 +14,7 @@ use std::sync::mpsc;
 use uuid;
 
 macro_rules! feature {
-    ($name: ident, $tx: expr) => {{
+    ($name:ident, $tx:expr) => {{
         let id = uuid::Uuid::new_v4().simple().to_string();
         Ok(Box::new(<$name as feature::FeatureConfig>::new(
             id,
