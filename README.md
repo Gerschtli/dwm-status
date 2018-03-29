@@ -5,7 +5,7 @@ Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
 Example status bar:
 ```
-L 30% / MUTE / - 25% (01:05) / 2018-03-16 21:25
+L 30% / MUTE / ▼ 25% (01:05) / 2018-03-16 21:25
 ```
 
 If an error occures, notifications via libnotify are sent.
@@ -56,12 +56,16 @@ Shows following information:
 
 | status               | example         | notes                        |
 | -------------------- | --------------- | ---------------------------- |
-| charging             | `+ 10% (01:23)` | In parentheses time to full  |
-| discharging          | `- 50% (02:03)` | In parentheses time to empty |
-| full                 | `= 100%`        |                              |
-| no battery available | `NO BATT`       |                              |
+| charging             | `▲ 10% (01:23)` | In parentheses time to full  |
+| discharging          | `▼ 50% (02:03)` | In parentheses time to empty |
 
-Watches `/org/freedesktop/UPower/devices/battery_BAT1` dbus signals for updates.
+| battery count | example                       | notes                                    |
+| ------------- | ----------------------------- | ---------------------------------------- |
+| 0             | `NO BATT`                     |                                          |
+| 1             | `▼ 50% (02:03)`               |                                          |
+| 2             | `▼ 50% (02:03) · 50% (02:03)` | Batteries ordered alphabetically by name |
+
+Watches UPower DBus signals for added or removed batteries and changes of battery states.
 
 If discharging and the capacity is under specific values, warning notifications with urgency normal or critical are sent.
 
