@@ -1,33 +1,41 @@
 use super::BatteryData;
-use super::BatteryDevice;
 use super::BatteryInfo;
-use super::BatteryNotifier;
+use super::BatteryManager;
+use super::DbusWatcher;
+use super::DeviceMessage;
 use super::FEATURE_NAME;
 use async;
-use dbus;
 use error::*;
 use feature;
+use std::collections::HashMap;
 use std::sync::mpsc;
 use std::thread;
-use std::time;
 
 #[derive(Debug)]
 pub struct Battery {
     data: BatteryData,
-    device: BatteryDevice,
     id: String,
-    notifier: BatteryNotifier,
+    manager: BatteryManager,
     tx: mpsc::Sender<async::Message>,
+    tx_devices: mpsc::Sender<DeviceMessage>,
 }
 
 impl feature::FeatureConfig for Battery {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+        let (tx_devices, rx_devices) = mpsc::channel();
+
+        let mut manager = BatteryManager::new(rx_devices)?;
+        manager.update_devices_list()?;
+
         Ok(Battery {
-            data: BatteryData::NoBattery,
-            device: BatteryDevice::new()?,
+            data: BatteryData {
+                ac_online: true,
+                batteries: HashMap::new(),
+            },
             id,
-            notifier: BatteryNotifier::new(),
+            manager,
             tx,
+            tx_devices,
         })
     }
 }
@@ -36,66 +44,43 @@ impl feature::Feature for Battery {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        let tx = self.tx.clone();
         let id = self.id.clone();
-        let dbus_match = self.device.build_dbus_match();
+        let tx = self.tx.clone();
+        let tx_devices = self.tx_devices.clone();
 
         thread::spawn(move || {
-            let connection = dbus::Connection::get_private(dbus::BusType::System)
-                .wrap_error_kill(FEATURE_NAME, "failed to connect to dbus");
-            connection
-                .add_match(&dbus_match)
-                .wrap_error_kill(FEATURE_NAME, "failed to add interface");
-
-            loop {
-                // 300_000 ms = 5 min
-                for item in connection.iter(300_000) {
-                    match item {
-                        // ConnectionItem::Nothing is sent on timeout
-                        dbus::ConnectionItem::Nothing | dbus::ConnectionItem::Signal(_) => {
-                            // wait for /sys/class/power_supply files updates
-                            thread::sleep(time::Duration::from_secs(2));
-                            async::send_message(FEATURE_NAME, &id, &tx);
-                        },
-                        _ => {},
-                    }
-                }
-            }
+            DbusWatcher::new(id, tx, tx_devices)
+                .and_then(|dw| dw.start())
+                .show_error()
+                .unwrap();
         });
 
         Ok(())
     }
 
     fn update(&mut self) -> Result<()> {
-        if !self.device.has_battery() {
-            self.device.clear_battery_data();
-            self.notifier.reset();
+        self.manager.update_devices_list()?;
 
-            self.data = BatteryData::NoBattery;
-            return Ok(());
+        let ac_online = self.manager.is_ac_online()?;
+        let mut batteries = HashMap::new();
+
+        for (name, device) in self.manager.get_devices() {
+            let info = BatteryInfo {
+                capacity: device.capacity()?,
+                estimation: device.estimation(ac_online)?,
+            };
+
+            if ac_online {
+                device.notifier().reset();
+            } else {
+                device.notifier().update(info.capacity, &info.estimation);
+            }
+
+            batteries.insert((*name).to_owned(), info);
         }
 
-        self.device.set_charge_full()?;
-
-        if self.device.is_full()? {
-            self.notifier.reset();
-
-            self.data = BatteryData::Full;
-            return Ok(());
-        }
-
-        let info = BatteryInfo {
-            capacity: self.device.capacity()?,
-            estimation: self.device.estimation()?,
-        };
-
-        self.data = if self.device.is_ac_online()? {
-            self.notifier.reset();
-            BatteryData::Charging(info)
-        } else {
-            self.notifier.update(info.capacity, &info.estimation);
-            BatteryData::Discharging(info)
-        };
+        self.data.ac_online = ac_online;
+        self.data.batteries = batteries;
 
         Ok(())
     }

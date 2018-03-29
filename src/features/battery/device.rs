@@ -1,48 +1,39 @@
+use super::BatteryNotifier;
+use super::get_value;
 use error::*;
-use io;
-use std::path;
 use std::time;
 
-const DEVICE_AC: &str = "ACAD";
-const DEVICE_BAT: &str = "BAT1";
-const PATH: &str = "/sys/class/power_supply";
+const CHARGE_FULL: &str = "charge_full";
+const CHARGE_NOW: &str = "charge_now";
+const CURRENT_NOW: &str = "current_now";
 
 #[derive(Debug)]
 pub struct BatteryDevice {
-    charge_full: Option<i32>,
+    name: String,
+    notifier: BatteryNotifier,
 }
 
 impl BatteryDevice {
-    pub fn new() -> Result<Self> {
-        Ok(BatteryDevice { charge_full: None })
-    }
-
-    pub fn build_dbus_match(&self) -> String {
-        format!(
-            "path='{}',interface='{}',member='{}'",
-            format!("/org/freedesktop/UPower/devices/battery_{}", DEVICE_BAT),
-            "org.freedesktop.DBus.Properties",
-            "PropertiesChanged",
-        )
+    pub fn new(name: &str) -> Result<Self> {
+        Ok(BatteryDevice {
+            name: String::from(name),
+            notifier: BatteryNotifier::new(),
+        })
     }
 
     pub fn capacity(&self) -> Result<f32> {
-        let charge_now = get_value(DEVICE_BAT, "charge_now")?;
-        let charge_full = self.charge_full.unwrap();
+        let charge_now = get_value(&self.name, CHARGE_NOW)?;
+        let charge_full = get_value(&self.name, CHARGE_FULL)?;
 
         Ok(charge_now as f32 / charge_full as f32)
     }
 
-    pub fn clear_battery_data(&mut self) {
-        self.charge_full = None;
-    }
+    pub fn estimation(&self, is_ac_online: bool) -> Result<time::Duration> {
+        let charge_now = get_value(&self.name, CHARGE_NOW)?;
+        let current_now = get_value(&self.name, CURRENT_NOW)?;
 
-    pub fn estimation(&self) -> Result<time::Duration> {
-        let charge_now = get_value(DEVICE_BAT, "charge_now")?;
-        let current_now = get_value(DEVICE_BAT, "current_now")?;
-
-        let seconds = if self.is_ac_online()? {
-            let charge_full = self.charge_full.unwrap();
+        let seconds = if is_ac_online {
+            let charge_full = get_value(&self.name, CHARGE_FULL)?;
             (charge_full - charge_now).abs() as u64 * 3600u64 / current_now as u64
         } else {
             charge_now as u64 * 3600u64 / current_now as u64
@@ -51,31 +42,7 @@ impl BatteryDevice {
         Ok(time::Duration::from_secs(seconds))
     }
 
-    pub fn has_battery(&self) -> bool {
-        path::Path::new(&format!("{}/{}", PATH, DEVICE_BAT)).exists()
+    pub fn notifier(&mut self) -> &mut BatteryNotifier {
+        &mut self.notifier
     }
-
-    pub fn is_ac_online(&self) -> Result<bool> {
-        Ok(get_value(DEVICE_AC, "online")? == 1)
-    }
-
-    pub fn is_full(&self) -> Result<bool> {
-        Ok(get_value(DEVICE_BAT, "charge_now")? == self.charge_full.unwrap())
-    }
-
-    pub fn set_charge_full(&mut self) -> Result<()> {
-        if self.charge_full.is_none() {
-            let value = get_value(DEVICE_BAT, "charge_full")?;
-            self.charge_full = Some(value);
-        }
-
-        Ok(())
-    }
-}
-
-fn get_value(device: &str, name: &str) -> Result<i32> {
-    let value = io::read_int_from_file(&format!("{}/{}/{}", PATH, device, name))
-        .wrap_error("battery", &format!("error reading {}/{}", device, name))?;
-
-    Ok(value)
 }
