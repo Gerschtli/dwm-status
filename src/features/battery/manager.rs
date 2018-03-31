@@ -1,6 +1,7 @@
 use super::AcAdapter;
 use super::BatteryDevice;
 use super::DeviceMessage;
+use super::FEATURE_NAME;
 use super::get_value;
 use error::*;
 use std::collections::HashMap;
@@ -34,10 +35,12 @@ impl BatteryManager {
         while let Ok(message) = self.rx_devices.try_recv() {
             match message {
                 DeviceMessage::Added(name) => {
+                    println!("update {} add: {}", FEATURE_NAME, &name);
                     let device = BatteryDevice::new(&name)?;
                     self.devices.insert(name, device);
                 },
                 DeviceMessage::Removed(name) => {
+                    println!("update {} remove: {}", FEATURE_NAME, &name);
                     self.devices.remove(&name);
                 },
             }
