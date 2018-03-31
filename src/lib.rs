@@ -66,8 +66,8 @@ pub fn run() -> Result<()> {
     let mut features = Vec::new();
     for line in get_config()?.lines() {
         let mut feature = features::create_feature(line, &tx)?;
-        feature.update()?;
         feature.init_notifier()?;
+        feature.update()?;
         features.push(feature);
     }
 
