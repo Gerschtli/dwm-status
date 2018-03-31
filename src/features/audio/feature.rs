@@ -18,6 +18,8 @@ pub struct Audio {
     tx: mpsc::Sender<async::Message>,
 }
 
+renderable_impl!(Audio);
+
 impl feature::FeatureConfig for Audio {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Audio {

@@ -11,21 +11,29 @@ macro_rules! feature_default {
         fn name(&self) -> &str {
             FEATURE_NAME
         }
-
-        fn render(&self) -> String {
-            format!("{}", self.data)
-        }
     }
 }
 
-pub trait Feature {
+macro_rules! renderable_impl {
+    ($name:ident) => {
+        impl ::feature::Renderable for $name {
+            fn render(&self) -> String {
+                self.data.render()
+            }
+        }
+    };
+}
+
+pub trait Renderable {
+    fn render(&self) -> String;
+}
+
+pub trait Feature: Renderable {
     fn id(&self) -> &str;
 
     fn init_notifier(&self) -> Result<()>;
 
     fn name(&self) -> &str;
-
-    fn render(&self) -> String;
 
     fn update(&mut self) -> Result<()>;
 }

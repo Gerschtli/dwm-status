@@ -20,6 +20,8 @@ pub struct Battery {
     tx_devices: mpsc::Sender<DeviceMessage>,
 }
 
+renderable_impl!(Battery);
+
 impl feature::FeatureConfig for Battery {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         let (tx_devices, rx_devices) = mpsc::channel();

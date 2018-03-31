@@ -1,5 +1,5 @@
+use feature;
 use std::collections::HashMap;
-use std::fmt;
 use std::time;
 
 #[derive(Clone, Debug)]
@@ -8,12 +8,11 @@ pub struct BatteryInfo {
     pub estimation: time::Duration,
 }
 
-impl fmt::Display for BatteryInfo {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl feature::Renderable for BatteryInfo {
+    fn render(&self) -> String {
         let minutes = self.estimation.as_secs() / 60;
 
-        write!(
-            f,
+        format!(
             "{:.0}% ({:02}:{:02})",
             self.capacity * 100.,
             minutes / 60,
@@ -28,21 +27,20 @@ pub struct BatteryData {
     pub batteries: HashMap<String, BatteryInfo>,
 }
 
-impl fmt::Display for BatteryData {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl feature::Renderable for BatteryData {
+    fn render(&self) -> String {
         if self.batteries.is_empty() {
-            return write!(f, "NO BATT");
+            return String::from("NO BATT");
         }
 
         let mut keys = self.batteries.keys().collect::<Vec<_>>();
         keys.sort();
         let batteries = keys.into_iter()
-            .map(|key| format!("{}", &self.batteries[key]))
+            .map(|key| self.batteries[key].render())
             .collect::<Vec<_>>()
             .join(" · ");
 
-        write!(
-            f,
+        format!(
             "{} {}",
             if self.ac_online { '▲' } else { '▼' },
             batteries
@@ -53,6 +51,7 @@ impl fmt::Display for BatteryData {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use feature::Renderable;
 
     macro_rules! map {
         ($($k: expr => $v: expr),* $(,)*) => {{
@@ -78,85 +77,64 @@ mod tests {
         };
 
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: true,
-                    batteries: HashMap::new(),
-                }
-            ),
+            BatteryData {
+                ac_online: true,
+                batteries: HashMap::new(),
+            }.render(),
             "NO BATT"
         );
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: false,
-                    batteries: HashMap::new(),
-                },
-            ),
+            BatteryData {
+                ac_online: false,
+                batteries: HashMap::new(),
+            }.render(),
             "NO BATT"
         );
 
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: true,
-                    batteries: map!("BAT0".to_owned() => info1.clone()),
-                }
-            ),
+            BatteryData {
+                ac_online: true,
+                batteries: map!("BAT0".to_owned() => info1.clone()),
+            }.render(),
             "▲ 56% (00:10)"
         );
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: false,
-                    batteries: map!("BAT0".to_owned() => info1.clone()),
-                },
-            ),
+            BatteryData {
+                ac_online: false,
+                batteries: map!("BAT0".to_owned() => info1.clone()),
+            }.render(),
             "▼ 56% (00:10)"
         );
 
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: true,
-                    batteries: map!(
+            BatteryData {
+                ac_online: true,
+                batteries: map!(
                         "BAT0".to_owned() => info1.clone(),
                         "BAT1".to_owned() => info2.clone(),
                     ),
-                }
-            ),
+            }.render(),
             "▲ 56% (00:10) · 75% (00:12)"
         );
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: false,
-                    batteries: map!(
+            BatteryData {
+                ac_online: false,
+                batteries: map!(
                         "BAT0".to_owned() => info1.clone(),
                         "BAT1".to_owned() => info2.clone(),
                     ),
-                }
-            ),
+            }.render(),
             "▼ 56% (00:10) · 75% (00:12)"
         );
         assert_eq!(
-            format!(
-                "{}",
-                BatteryData {
-                    ac_online: false,
-                    batteries: map!(
+            BatteryData {
+                ac_online: false,
+                batteries: map!(
                         "BAT1".to_owned() => info2.clone(),
                         "BAT2".to_owned() => info3.clone(),
                         "BAT0".to_owned() => info1.clone(),
                     ),
-                }
-            ),
+            }.render(),
             "▼ 56% (00:10) · 75% (00:12) · 21% (00:25)"
         );
     }
@@ -164,23 +142,17 @@ mod tests {
     #[test]
     fn test_display_info() {
         assert_eq!(
-            format!(
-                "{}",
-                BatteryInfo {
-                    capacity: 0.,
-                    estimation: time::Duration::from_secs(0),
-                }
-            ),
+            BatteryInfo {
+                capacity: 0.,
+                estimation: time::Duration::from_secs(0),
+            }.render(),
             "0% (00:00)"
         );
         assert_eq!(
-            format!(
-                "{}",
-                BatteryInfo {
-                    capacity: 0.356,
-                    estimation: time::Duration::from_secs(3 * 60 * 60 + 15 * 60 + 59),
-                }
-            ),
+            BatteryInfo {
+                capacity: 0.356,
+                estimation: time::Duration::from_secs(3 * 60 * 60 + 15 * 60 + 59),
+            }.render(),
             "36% (03:15)"
         );
     }

@@ -17,6 +17,8 @@ pub struct Backlight {
     tx: mpsc::Sender<async::Message>,
 }
 
+renderable_impl!(Backlight);
+
 impl feature::FeatureConfig for Backlight {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Backlight {

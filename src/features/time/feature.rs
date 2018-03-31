@@ -15,6 +15,8 @@ pub struct Time {
     tx: mpsc::Sender<async::Message>,
 }
 
+renderable_impl!(Time);
+
 impl feature::FeatureConfig for Time {
     fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
         Ok(Time {
