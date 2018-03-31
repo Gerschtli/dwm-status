@@ -78,7 +78,7 @@ impl feature::Feature for Battery {
                 device.notifier().update(info.capacity, &info.estimation);
             }
 
-            batteries.insert((*name).to_owned(), info);
+            batteries.insert(String::from(&name[..]), info);
         }
 
         self.data.ac_online = ac_online;

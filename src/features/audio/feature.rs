@@ -66,7 +66,7 @@ impl feature::Feature for Audio {
             .arg("get")
             .arg("Master")
             .output()
-            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
+            .map(|o| String::from(String::from_utf8_lossy(&o.stdout).trim()))
             .wrap_error(FEATURE_NAME, "getting amixer info failed")?;
 
         let last_line = &output

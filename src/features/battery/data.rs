@@ -94,14 +94,14 @@ mod tests {
         assert_eq!(
             BatteryData {
                 ac_online: true,
-                batteries: map!("BAT0".to_owned() => info1.clone()),
+                batteries: map!(String::from("BAT0") => info1.clone()),
             }.render(),
             "▲ 56% (00:10)"
         );
         assert_eq!(
             BatteryData {
                 ac_online: false,
-                batteries: map!("BAT0".to_owned() => info1.clone()),
+                batteries: map!(String::from("BAT0") => info1.clone()),
             }.render(),
             "▼ 56% (00:10)"
         );
@@ -110,9 +110,9 @@ mod tests {
             BatteryData {
                 ac_online: true,
                 batteries: map!(
-                        "BAT0".to_owned() => info1.clone(),
-                        "BAT1".to_owned() => info2.clone(),
-                    ),
+                    String::from("BAT0") => info1.clone(),
+                    String::from("BAT1") => info2.clone(),
+                ),
             }.render(),
             "▲ 56% (00:10) · 75% (00:12)"
         );
@@ -120,9 +120,9 @@ mod tests {
             BatteryData {
                 ac_online: false,
                 batteries: map!(
-                        "BAT0".to_owned() => info1.clone(),
-                        "BAT1".to_owned() => info2.clone(),
-                    ),
+                    String::from("BAT0") => info1.clone(),
+                    String::from("BAT1") => info2.clone(),
+                ),
             }.render(),
             "▼ 56% (00:10) · 75% (00:12)"
         );
@@ -130,10 +130,10 @@ mod tests {
             BatteryData {
                 ac_online: false,
                 batteries: map!(
-                        "BAT1".to_owned() => info2.clone(),
-                        "BAT2".to_owned() => info3.clone(),
-                        "BAT0".to_owned() => info1.clone(),
-                    ),
+                    String::from("BAT1") => info2.clone(),
+                    String::from("BAT2") => info3.clone(),
+                    String::from("BAT0") => info1.clone(),
+                ),
             }.render(),
             "▼ 56% (00:10) · 75% (00:12) · 21% (00:25)"
         );
@@ -151,7 +151,7 @@ mod tests {
         assert_eq!(
             BatteryInfo {
                 capacity: 0.356,
-                estimation: time::Duration::from_secs(3 * 60 * 60 + 15 * 60 + 59),
+                estimation: time::Duration::from_secs(11759),
             }.render(),
             "36% (03:15)"
         );

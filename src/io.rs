@@ -14,16 +14,6 @@ pub fn read_file(path: &str) -> io::Result<String> {
     Ok(s)
 }
 
-pub fn render_features(order: &[String], feature_map: &HashMap<String, Box<feature::Feature>>) {
-    let status = order
-        .iter()
-        .map(|id| feature_map.get(id).unwrap().render())
-        .collect::<Vec<_>>()
-        .join(" / ");
-
-    render_status(&status);
-}
-
 pub fn read_int_from_file(path: &str) -> io::Result<i32> {
     read_file(path)?
         .trim_right_matches('\n')
@@ -34,6 +24,16 @@ pub fn read_int_from_file(path: &str) -> io::Result<i32> {
                 format!("file \"{}\" doesn't contain an int value", &path),
             ))
         })
+}
+
+pub fn render_features(order: &[String], feature_map: &HashMap<String, Box<feature::Feature>>) {
+    let status = order
+        .iter()
+        .map(|id| feature_map.get(id).unwrap().render())
+        .collect::<Vec<_>>()
+        .join(" / ");
+
+    render_status(&status);
 }
 
 fn render_status(message: &str) {

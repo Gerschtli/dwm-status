@@ -5,6 +5,7 @@ use std::result::Result as StdResult;
 
 pub type Result<T> = StdResult<T, Error>;
 
+#[derive(Debug)]
 pub struct Error {
     name: String,
     description: String,
@@ -14,22 +15,22 @@ pub struct Error {
 impl Error {
     fn new<E: fmt::Debug>(name: &str, description: &str, cause: E) -> Self {
         Error {
-            name: name.to_owned(),
-            description: description.to_owned(),
+            name: String::from(name),
+            description: String::from(description),
             cause: Some(format!("{:?}", cause)),
         }
     }
 
     pub fn new_custom(name: &str, description: &str) -> Self {
         Error {
-            name: name.to_owned(),
-            description: description.to_owned(),
+            name: String::from(name),
+            description: String::from(description),
             cause: None,
         }
     }
 
     pub fn show_error(self) {
-        eprintln!("{:?}", self);
+        eprintln!("{}", self);
 
         io::show_notification(
             &format!("dwm-status: {}", self.name),
@@ -39,18 +40,15 @@ impl Error {
     }
 }
 
-impl fmt::Debug for Error {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "Error => {}: {}{}",
-            self.name,
-            self.description,
-            match self.cause {
-                Some(ref cause) => format!(" ({})", cause),
-                None => "".to_owned(),
-            }
-        )
+        write!(f, "Error => {}: {}", self.name, self.description)?;
+
+        if let Some(ref cause) = self.cause {
+            write!(f, " ({})", cause)?;
+        }
+
+        Ok(())
     }
 }
 

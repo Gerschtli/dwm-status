@@ -75,11 +75,11 @@ pub fn run() -> Result<()> {
         return Err(Error::new_custom("empty config", "no features enabled"));
     }
 
-    let order: Vec<_> = features.iter().map(|x| x.id().to_owned()).collect();
+    let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();
 
     let mut feature_map: HashMap<_, _> = features
         .into_iter()
-        .map(|feature| (feature.id().to_owned(), feature))
+        .map(|feature| (String::from(feature.id()), feature))
         .collect();
 
     render(&rx, &order, &mut feature_map)
