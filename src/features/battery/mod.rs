@@ -25,3 +25,18 @@ pub fn get_value(device: &str, name: &str) -> Result<i32> {
     io::read_int_from_file(&format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
         .wrap_error(FEATURE_NAME, &format!("error reading {}/{}", device, name))
 }
+
+pub fn get_value2(device: &str, name1: &str, name2: &str) -> Result<i32> {
+    if let Ok(result) = get_value(device, name1) {
+        return Ok(result);
+    }
+
+    if let Ok(result) = get_value(device, name2) {
+        return Ok(result);
+    }
+
+    Err(Error::new_custom(
+        FEATURE_NAME,
+        &format!("error reading {}/{} or {}/{}", device, name1, device, name2),
+    ))
+}
