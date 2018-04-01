@@ -12,8 +12,10 @@ If an error occures, notifications via libnotify are sent.
 
 ## Requirements
 
-Cargo, rustc and lib{dbus,gdk-pixbuf,glib,notify}-dev are required to build the binary.
+`cargo`, `rustc` and `lib{dbus,gdk-pixbuf,glib,notify}-dev` are required to build the binary.
 To set the status text `xsetroot` is used.
+
+The `upower` daemon has to be running for the battery feature for receiving DBus messages.
 
 ## Build and run
 
