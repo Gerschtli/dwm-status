@@ -1,4 +1,4 @@
-# dwm-status [![Build Status](https://travis-ci.org/Gerschtli/dwm-status.svg?branch=master)](https://travis-ci.org/Gerschtli/dwm-status)
+# dwm-status [![Travis CI](https://img.shields.io/travis/Gerschtli/dwm-status.svg?style=flat-square)](https://travis-ci.org/Gerschtli/dwm-status) [![Crates.io](https://img.shields.io/crates/v/dwm-status.svg?style=flat-square)](https://crates.io/crates/dwm-status) [![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
 DWM status service which dynamically updates when needed.
 Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
