@@ -31,9 +31,14 @@ impl BatteryDevice {
         Ok(charge_now as f32 / charge_full as f32)
     }
 
-    pub fn estimation(&self, is_ac_online: bool) -> Result<time::Duration> {
-        let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
+    pub fn estimation(&self, is_ac_online: bool) -> Result<Option<time::Duration>> {
         let current_now = get_value2(&self.name, CURRENT_NOW, POWER_NOW)?;
+
+        if current_now == 0 {
+            return Ok(None);
+        }
+
+        let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
 
         let seconds = if is_ac_online {
             let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
@@ -42,7 +47,7 @@ impl BatteryDevice {
             charge_now as u64 * 3600u64 / current_now as u64
         };
 
-        Ok(time::Duration::from_secs(seconds))
+        Ok(Some(time::Duration::from_secs(seconds)))
     }
 
     pub fn notifier(&mut self) -> &mut BatteryNotifier {

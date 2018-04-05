@@ -74,8 +74,8 @@ impl feature::Feature for Battery {
 
             if ac_online {
                 device.notifier().reset();
-            } else {
-                device.notifier().update(info.capacity, &info.estimation);
+            } else if let Some(ref estimation) = &info.estimation {
+                device.notifier().update(info.capacity, estimation);
             }
 
             batteries.insert(String::from(&name[..]), info);

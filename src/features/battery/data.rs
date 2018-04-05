@@ -5,19 +5,19 @@ use std::time;
 #[derive(Clone, Debug)]
 pub struct BatteryInfo {
     pub capacity: f32,
-    pub estimation: time::Duration,
+    pub estimation: Option<time::Duration>,
 }
 
 impl feature::Renderable for BatteryInfo {
     fn render(&self) -> String {
-        let minutes = self.estimation.as_secs() / 60;
+        let mut rendered = format!("{:.0}%", self.capacity * 100.);
 
-        format!(
-            "{:.0}% ({:02}:{:02})",
-            self.capacity * 100.,
-            minutes / 60,
-            minutes % 60,
-        )
+        if let Some(ref estimation) = self.estimation {
+            let minutes = estimation.as_secs() / 60;
+            rendered.push_str(&format!(" ({:02}:{:02})", minutes / 60, minutes % 60,));
+        }
+
+        rendered
     }
 }
 
@@ -65,15 +65,15 @@ mod tests {
     fn test_display_data() {
         let info1 = BatteryInfo {
             capacity: 0.56,
-            estimation: time::Duration::from_secs(600),
+            estimation: Some(time::Duration::from_secs(600)),
         };
         let info2 = BatteryInfo {
             capacity: 0.75,
-            estimation: time::Duration::from_secs(720),
+            estimation: Some(time::Duration::from_secs(720)),
         };
         let info3 = BatteryInfo {
             capacity: 0.21,
-            estimation: time::Duration::from_secs(1510),
+            estimation: Some(time::Duration::from_secs(1510)),
         };
 
         assert_eq!(
@@ -144,16 +144,23 @@ mod tests {
         assert_eq!(
             BatteryInfo {
                 capacity: 0.,
-                estimation: time::Duration::from_secs(0),
+                estimation: Some(time::Duration::from_secs(0)),
             }.render(),
             "0% (00:00)"
         );
         assert_eq!(
             BatteryInfo {
                 capacity: 0.356,
-                estimation: time::Duration::from_secs(11759),
+                estimation: Some(time::Duration::from_secs(11759)),
             }.render(),
             "36% (03:15)"
+        );
+        assert_eq!(
+            BatteryInfo {
+                capacity: 0.356,
+                estimation: None,
+            }.render(),
+            "36%"
         );
     }
 }
