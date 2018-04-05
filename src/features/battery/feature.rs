@@ -74,7 +74,7 @@ impl feature::Feature for Battery {
 
             if ac_online {
                 device.notifier().reset();
-            } else if let Some(ref estimation) = &info.estimation {
+            } else if let Some(ref estimation) = info.estimation {
                 device.notifier().update(info.capacity, estimation);
             }
 
