@@ -13,4 +13,6 @@ stdenv.mkDerivation {
     pkgconfig
     rustracer
   ];
+
+  RUST_BACKTRACE = 1;
 }
