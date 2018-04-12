@@ -1,5 +1,5 @@
-use super::BatteryNotifier;
 use super::get_value2;
+use super::BatteryNotifier;
 use error::*;
 use std::time;
 

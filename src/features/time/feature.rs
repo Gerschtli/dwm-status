@@ -1,5 +1,5 @@
-use super::FEATURE_NAME;
 use super::TimeData;
+use super::FEATURE_NAME;
 use async;
 use chrono;
 use error::*;
