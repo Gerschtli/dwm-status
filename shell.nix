@@ -4,7 +4,6 @@ stdenv.mkDerivation {
   name = "dwm-status";
 
   buildInputs = [
-    cargo-edit
     dbus
     gdk_pixbuf
     glib
