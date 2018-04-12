@@ -28,7 +28,13 @@ impl BatteryDevice {
         let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
         let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
 
-        Ok(charge_now as f32 / charge_full as f32)
+        let capacity = charge_now as f32 / charge_full as f32;
+
+        if capacity > 1. {
+            return Ok(1.);
+        }
+
+        Ok(capacity)
     }
 
     pub fn estimation(&self, is_ac_online: bool) -> Result<Option<time::Duration>> {
