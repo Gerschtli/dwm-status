@@ -1,6 +1,7 @@
 use super::BatteryData;
 use super::BatteryInfo;
 use super::BatteryManager;
+use super::BatteryNotifier;
 use super::DbusWatcher;
 use super::DeviceMessage;
 use super::FEATURE_NAME;
@@ -16,6 +17,7 @@ pub struct Battery {
     data: BatteryData,
     id: String,
     manager: BatteryManager,
+    notifier: BatteryNotifier,
     tx: mpsc::Sender<async::Message>,
     tx_devices: mpsc::Sender<DeviceMessage>,
 }
@@ -36,6 +38,7 @@ impl feature::FeatureConfig for Battery {
             },
             id,
             manager,
+            notifier: BatteryNotifier::new(),
             tx,
             tx_devices,
         })
@@ -72,13 +75,23 @@ impl feature::Feature for Battery {
                 estimation: device.estimation(ac_online)?,
             };
 
-            if ac_online {
-                device.notifier().reset();
-            } else if let Some(ref estimation) = info.estimation {
-                device.notifier().update(info.capacity, estimation);
-            }
-
             batteries.insert(String::from(&name[..]), info);
+        }
+
+        if ac_online {
+            self.notifier.reset();
+        } else {
+            // get battery with highest capacity
+            let mut infos = batteries.values().collect::<Vec<&BatteryInfo>>();
+            infos.sort_by(|a, b| b.capacity.partial_cmp(&a.capacity).unwrap());
+
+            if let Some(BatteryInfo {
+                capacity,
+                estimation: Some(estimation),
+            }) = infos.get(0)
+            {
+                self.notifier.update(*capacity, estimation);
+            }
         }
 
         self.data.ac_online = ac_online;

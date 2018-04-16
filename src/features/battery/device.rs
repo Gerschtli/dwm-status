@@ -1,5 +1,4 @@
 use super::get_value2;
-use super::BatteryNotifier;
 use error::*;
 use std::time;
 
@@ -13,14 +12,12 @@ const POWER_NOW: &str = "power_now";
 #[derive(Debug)]
 pub struct BatteryDevice {
     name: String,
-    notifier: BatteryNotifier,
 }
 
 impl BatteryDevice {
     pub fn new(name: &str) -> Result<Self> {
         Ok(BatteryDevice {
             name: String::from(name),
-            notifier: BatteryNotifier::new(name),
         })
     }
 
@@ -54,9 +51,5 @@ impl BatteryDevice {
         };
 
         Ok(Some(time::Duration::from_secs(seconds)))
-    }
-
-    pub fn notifier(&mut self) -> &mut BatteryNotifier {
-        &mut self.notifier
     }
 }

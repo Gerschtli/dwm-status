@@ -8,15 +8,11 @@ const CRITICAL: f32 = 0.1;
 #[derive(Debug)]
 pub struct BatteryNotifier {
     capacity: Option<f32>,
-    name: String,
 }
 
 impl BatteryNotifier {
-    pub fn new(name: &str) -> Self {
-        BatteryNotifier {
-            capacity: None,
-            name: String::from(name),
-        }
+    pub fn new() -> Self {
+        BatteryNotifier { capacity: None }
     }
 
     pub fn reset(&mut self) {
@@ -32,7 +28,7 @@ impl BatteryNotifier {
                 } {
                     let minutes = estimation.as_secs() / 60;
                     io::show_notification(
-                        &format!("Battery {} under {:.0}%", self.name, level * 100.),
+                        &format!("Battery under {:.0}%", level * 100.),
                         &format!("{:02}:{:02} remaining", minutes / 60, minutes % 60),
                         if level <= &CRITICAL {
                             libnotify::Urgency::Critical
