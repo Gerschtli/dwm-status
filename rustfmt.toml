@@ -1,9 +1,7 @@
 combine_control_expr = false
 format_strings = true
 match_block_trailing_comma = true
-reorder_imported_names = true
 reorder_imports = true
-reorder_imports_in_group = true
 use_field_init_shorthand = true
 use_try_shorthand = true
 wrap_comments = true
