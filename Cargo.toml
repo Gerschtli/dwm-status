@@ -20,7 +20,7 @@ libnotify = "1.0.3"
 
 [dependencies.clippy]
 optional = true
-version = "0.0.193"
+version = "0.0.194"
 
 [dependencies.uuid]
 features = ["v4"]

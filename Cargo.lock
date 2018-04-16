@@ -33,17 +33,17 @@ dependencies = [
 
 [[package]]
 name = "clippy"
-version = "0.0.193"
+version = "0.0.194"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "clippy_lints 0.0.193 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clippy_lints 0.0.194 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "semver 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "clippy_lints"
-version = "0.0.193"
+version = "0.0.194"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "if_chain 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -75,7 +75,7 @@ name = "dwm-status"
 version = "0.2.0"
 dependencies = [
  "chrono 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "clippy 0.0.193 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clippy 0.0.194 (registry+https://github.com/rust-lang/crates.io-index)",
  "dbus 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "inotify 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libnotify 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -528,8 +528,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum bitflags 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b3c30d3802dfb7281680d6285f2ccdaa8c2d8fee41f93805dba5c4cf50dc23cf"
 "checksum cfg-if 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "d4c819a1287eb618df47cc647173c5c4c66ba19d888a6e50d605672aed3140de"
 "checksum chrono 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ba5f60682a4c264e7f8d77b82e7788938a76befdf949d4a98026d19099c9d873"
-"checksum clippy 0.0.193 (registry+https://github.com/rust-lang/crates.io-index)" = "eb0a4f99c61c3aabb50d133ce4b1e311c9c225c92cedae29597cce7cd1945415"
-"checksum clippy_lints 0.0.193 (registry+https://github.com/rust-lang/crates.io-index)" = "ecc6358b7e2e0c99c24ea88edc43c5fe1638f186255adb92d2302ae71027560f"
+"checksum clippy 0.0.194 (registry+https://github.com/rust-lang/crates.io-index)" = "b660930d488531dde4f8210e7c0faa649a135990200118fe915cabd1174ae45a"
+"checksum clippy_lints 0.0.194 (registry+https://github.com/rust-lang/crates.io-index)" = "a1c8a28e3b83b207c1aadfe314a858d84102704483ec97c234773b2e7c11c44e"
 "checksum dbus 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5b2c58aab20dd6637871e6e03cb6122f00b496a91eb65b688639c940012d8710"
 "checksum either 1.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3be565ca5c557d7f59e7cfcf1844f9e3033650c929c6566f511e8005f205c1d0"
 "checksum fuchsia-zircon 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2e9763c69ebaae630ba35f74888db465e49e259ba1bc0eda7d06f4a067615d82"
