@@ -1,3 +1,5 @@
+use super::fmt_capacity;
+use super::fmt_time;
 use io;
 use libnotify;
 use std::time;
@@ -26,10 +28,9 @@ impl BatteryNotifier {
                     Some(value) if level >= &value => false,
                     _ => true,
                 } {
-                    let minutes = estimation.as_secs() / 60;
                     io::show_notification(
-                        &format!("Battery under {:.0}%", level * 100.),
-                        &format!("{:02}:{:02} remaining", minutes / 60, minutes % 60),
+                        &format!("Battery under {}", fmt_capacity(*level)),
+                        &format!("{} remaining", fmt_time(estimation)),
                         if level <= &CRITICAL {
                             libnotify::Urgency::Critical
                         } else {

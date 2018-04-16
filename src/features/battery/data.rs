@@ -1,3 +1,5 @@
+use super::fmt_capacity;
+use super::fmt_time;
 use feature;
 use std::collections::HashMap;
 use std::time;
@@ -10,11 +12,10 @@ pub struct BatteryInfo {
 
 impl feature::Renderable for BatteryInfo {
     fn render(&self) -> String {
-        let mut rendered = format!("{:.0}%", self.capacity * 100.);
+        let mut rendered = fmt_capacity(self.capacity);
 
         if let Some(ref estimation) = self.estimation {
-            let minutes = estimation.as_secs() / 60;
-            rendered.push_str(&format!(" ({:02}:{:02})", minutes / 60, minutes % 60,));
+            rendered.push_str(&format!(" ({})", fmt_time(estimation)));
         }
 
         rendered
