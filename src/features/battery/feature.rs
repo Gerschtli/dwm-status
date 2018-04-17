@@ -85,7 +85,7 @@ impl feature::Feature for Battery {
             let mut infos = batteries.values().collect::<Vec<&BatteryInfo>>();
             infos.sort_by(|a, b| b.capacity.partial_cmp(&a.capacity).unwrap());
 
-            if let Some(BatteryInfo {
+            if let Some(&BatteryInfo {
                 capacity,
                 estimation: Some(estimation),
             }) = infos.get(0)
