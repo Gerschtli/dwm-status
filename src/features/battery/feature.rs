@@ -82,15 +82,15 @@ impl feature::Feature for Battery {
             self.notifier.reset();
         } else {
             // get battery with highest capacity
-            let mut infos = batteries.values().collect::<Vec<&BatteryInfo>>();
+            let mut infos = batteries.values().collect::<Vec<_>>();
             infos.sort_by(|a, b| b.capacity.partial_cmp(&a.capacity).unwrap());
 
-            if let Some(&BatteryInfo {
+            if let Some(&&BatteryInfo {
                 capacity,
-                estimation: Some(estimation),
+                estimation: Some(ref estimation),
             }) = infos.get(0)
             {
-                self.notifier.update(*capacity, estimation);
+                self.notifier.update(capacity, estimation);
             }
         }
 
