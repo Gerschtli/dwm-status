@@ -69,7 +69,8 @@ Shows following information:
 
 Watches UPower DBus signals for added or removed batteries and changes of battery states.
 
-If discharging and the capacity is under specific values, warning notifications with urgency normal or critical are sent.
+If discharging and the capacity of the fullest battery is under specific values, warning notifications with urgency
+normal or critical are sent.
 
 | capacity | urgency  |
 | -------- | -------- |
