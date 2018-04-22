@@ -28,7 +28,19 @@ $ ./target/release/dwm-status <config-file>
 ```
 Or install globally to `~/.cargo/bin`:
 ```sh
-$ cargo install
+$ cargo install dwm-status
+```
+
+### [Nix](https://nixos.org/nix/) support
+
+Build:
+```sh
+$ nix-build
+```
+
+And run:
+```sh
+$ ./result/bin/dwm_status <config-file>
 ```
 
 ## Configuration
@@ -61,11 +73,11 @@ Shows following information:
 | charging             | `▲ 10% (01:23)` | In parentheses time to full  |
 | discharging          | `▼ 50% (02:03)` | In parentheses time to empty |
 
-| battery count | example                       | notes                                    |
-| ------------- | ----------------------------- | ---------------------------------------- |
-| 0             | `NO BATT`                     |                                          |
-| 1             | `▼ 50% (02:03)`               |                                          |
-| 2             | `▼ 50% (02:03) · 50% (02:03)` | Batteries ordered alphabetically by name |
+| battery count | example               | notes                                    |
+| ------------- | --------------------- | ---------------------------------------- |
+| 0             | `NO BATT`             |                                          |
+| 1             | `▼ 50% (02:03)`       |                                          |
+| 2             | `▼ 50% (02:03) · 50%` | Batteries ordered alphabetically by name |
 
 Watches UPower DBus signals for added or removed batteries and changes of battery states.
 
