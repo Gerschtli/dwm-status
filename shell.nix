@@ -4,7 +4,6 @@ stdenv.mkDerivation {
   name = "dwm-status";
 
   buildInputs = [
-    carnix
     dbus
     gdk_pixbuf
     latest.rustChannels.nightly.rust

@@ -1,18 +1,16 @@
 with import <nixpkgs> { };
 
-((import ./dwm-status.nix).dwm_status {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    dwm-status = attrs: {
-      buildInputs = [
-        libnotify
-      ];
-    };
+rustPlatform.buildRustPackage rec {
+  name = "dwm-status";
 
-    gdk-pixbuf-sys = attrs: {
-      buildInputs = [
-        gdk_pixbuf
-        pkgconfig
-      ];
-    };
-  };
+  src = ./.;
+
+  buildInputs = [
+    dbus
+    gdk_pixbuf
+    libnotify
+    pkgconfig
+  ];
+
+  cargoSha256 = "0lf9zjax2g398qpsdaqqk38afc38jsk0wfhw7sh23771k556nmr7";
 }
