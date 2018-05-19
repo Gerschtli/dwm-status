@@ -21,6 +21,7 @@ script:
   - cargo build --verbose
   - |
     if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
+      cargo check
       cargo clippy
     fi
   - cargo test --verbose
