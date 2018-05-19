@@ -29,7 +29,8 @@ use std::sync::mpsc;
 fn get_config() -> Result<String> {
     let mut args = env::args();
 
-    let path = args.nth(1)
+    let path = args
+        .nth(1)
         .wrap_error("usage", "first parameter config file")?;
 
     io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))

@@ -87,7 +87,8 @@ impl feature::Feature for Audio {
             return Ok(());
         }
 
-        let volume = last.get(0)
+        let volume = last
+            .get(0)
             .wrap_error(FEATURE_NAME, "no volume part found")?
             .parse::<u32>()
             .wrap_error(FEATURE_NAME, "volume not parsable")?;

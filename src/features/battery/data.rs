@@ -36,7 +36,8 @@ impl feature::Renderable for BatteryData {
 
         let mut keys = self.batteries.keys().collect::<Vec<_>>();
         keys.sort();
-        let batteries = keys.into_iter()
+        let batteries = keys
+            .into_iter()
             .map(|key| self.batteries[key].render())
             .collect::<Vec<_>>()
             .join(" · ");
