@@ -5,8 +5,6 @@ use chrono;
 use error::*;
 use feature;
 use std::sync::mpsc;
-use std::thread;
-use std::time;
 
 #[derive(Debug)]
 pub struct Time {
@@ -31,15 +29,7 @@ impl feature::Feature for Time {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        let tx = self.tx.clone();
-        let id = self.id.clone();
-
-        thread::spawn(move || loop {
-            thread::sleep(time::Duration::from_secs(60));
-
-            async::send_message(FEATURE_NAME, &id, &tx);
-        });
-
+        async::send_message_interval(FEATURE_NAME, self.id.clone(), self.tx.clone(), 60);
         Ok(())
     }
 
