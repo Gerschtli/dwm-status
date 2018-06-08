@@ -58,7 +58,7 @@ time
 
 Shows either `MUTE` or the current volume like `S 52%`. Listens on `alsactl monitor` for changes.
 
-alsa-utils are required.
+`alsa-utils` are required.
 
 #### Backlight
 
@@ -94,7 +94,7 @@ normal or critical are sent.
 
 #### CPU Load
 
-Shows CPU load in format `0.55 0.61 0.42` and refreshes every 20 seconds.
+Shows CPU load taken from `/proc/loadavg` in format `0.55 0.61 0.42` and refreshes every 20 seconds.
 
 #### Time
 
