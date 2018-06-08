@@ -3,10 +3,6 @@
     trivial_numeric_casts, unsafe_code, unstable_features, unused_import_braces,
     unused_qualifications
 )]
-#![cfg_attr(feature = "dev", allow(unstable_features))]
-#![cfg_attr(feature = "dev", feature(plugin))]
-#![cfg_attr(feature = "dev", plugin(clippy))]
-#![cfg_attr(feature = "dev", deny(warnings))]
 
 extern crate chrono;
 extern crate dbus;
