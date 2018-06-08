@@ -1,11 +1,13 @@
 mod audio;
 mod backlight;
 mod battery;
+mod cpu_load;
 mod time;
 
 use self::audio::Audio;
 use self::backlight::Backlight;
 use self::battery::Battery;
+use self::cpu_load::CpuLoad;
 use self::time::Time;
 use async;
 use error::*;
@@ -27,10 +29,11 @@ pub fn create_feature(
     name: &str,
     tx: &mpsc::Sender<async::Message>,
 ) -> Result<Box<feature::Feature>> {
-    match name {
+    match &name.to_string().to_lowercase()[..] {
         "audio" => feature!(Audio, tx),
         "backlight" => feature!(Backlight, tx),
         "battery" => feature!(Battery, tx),
+        "cpu_load" => feature!(CpuLoad, tx),
         "time" => feature!(Time, tx),
         _ => Err(Error::new_custom(
             "create feature",

@@ -92,6 +92,10 @@ normal or critical are sent.
 | 15%      | normal   |
 | 20%      | normal   |
 
+#### CPU Load
+
+Shows CPU load in format `0.55 0.61 0.42` and refreshes every 20 seconds.
+
 #### Time
 
 Shows time in format `YYYY-MM-DD HH:MM` and refreshes every minute.
