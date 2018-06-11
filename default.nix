@@ -9,13 +9,8 @@ rustPlatform.buildRustPackage rec {
 
   src = ./.;
 
-  buildInputs = [
-    dbus
-    gdk_pixbuf
-    libnotify
-    makeWrapper
-    pkgconfig
-  ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ dbus gdk_pixbuf libnotify ];
 
   cargoSha256 = "0169k91pb7ipvi0m71cmkppp1klgp5ghampa7x0fxkyrvrf0dvqg";
 
