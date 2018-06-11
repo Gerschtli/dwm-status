@@ -17,8 +17,10 @@ mod error;
 mod feature;
 mod features;
 mod io;
+mod status_bar;
 
 use error::*;
+use status_bar::StatusBar;
 use std::collections::HashMap;
 use std::env;
 use std::sync::mpsc;
@@ -38,7 +40,8 @@ fn render(
     order: &[String],
     feature_map: &mut HashMap<String, Box<feature::Feature>>,
 ) -> Result<()> {
-    io::render_features(order, feature_map);
+    let status_bar = StatusBar::new()?;
+    status_bar.render(order, feature_map)?;
 
     for message in rx {
         match feature_map.get_mut(&message.id) {
@@ -54,7 +57,7 @@ fn render(
             },
         };
 
-        io::render_features(order, feature_map);
+        status_bar.render(order, feature_map)?;
     }
 
     Ok(())

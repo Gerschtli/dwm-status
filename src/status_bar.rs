@@ -1,0 +1,68 @@
+#![allow(unsafe_code)]
+
+use error::*;
+use feature;
+use std::collections::HashMap;
+use std::ffi::CString;
+use std::os::raw::c_char;
+use std::ptr;
+use x11::xlib;
+
+pub struct StatusBar {
+    display: *mut xlib::Display,
+    root_window: xlib::Window,
+}
+
+impl StatusBar {
+    pub fn new() -> Result<Self> {
+        unsafe {
+            let display = xlib::XOpenDisplay(ptr::null());
+
+            if display.is_null() {
+                return Err(Error::new_custom("render", "cannot open display"));
+            }
+
+            // Create window.
+            let screen = xlib::XDefaultScreen(display);
+            let root_window = xlib::XRootWindow(display, screen);
+
+            Ok(StatusBar {
+                display,
+                root_window,
+            })
+        }
+    }
+
+    pub fn render(
+        &self,
+        order: &[String],
+        feature_map: &HashMap<String, Box<feature::Feature>>,
+    ) -> Result<()> {
+        let status = order
+            .iter()
+            .map(|id| feature_map.get(id).unwrap().render())
+            .collect::<Vec<_>>()
+            .join(" / ");
+
+        let status_c = CString::new(status)
+            .wrap_error("render", "status text could not be converted to CString")?;
+
+        unsafe {
+            xlib::XStoreName(
+                self.display,
+                self.root_window,
+                status_c.as_ptr() as *mut c_char,
+            );
+        }
+
+        Ok(())
+    }
+}
+
+impl Drop for StatusBar {
+    fn drop(&mut self) {
+        unsafe {
+            xlib::XCloseDisplay(self.display);
+        }
+    }
+}

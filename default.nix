@@ -1,7 +1,7 @@
 with import <nixpkgs> { };
 
 let
-  runtimeDeps = [ alsaUtils xorg.xsetroot ];
+  runtimeDeps = [ alsaUtils ];
 in
 
 rustPlatform.buildRustPackage rec {

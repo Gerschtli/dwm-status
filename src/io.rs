@@ -1,10 +1,7 @@
-use feature;
 use libnotify;
-use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::io::Read;
-use std::process;
 use std::str;
 
 pub fn read_file(path: &str) -> io::Result<String> {
@@ -24,24 +21,6 @@ pub fn read_int_from_file(path: &str) -> io::Result<i32> {
                 format!("file \"{}\" doesn't contain an int value", &path),
             ))
         })
-}
-
-pub fn render_features(order: &[String], feature_map: &HashMap<String, Box<feature::Feature>>) {
-    let status = order
-        .iter()
-        .map(|id| feature_map.get(id).unwrap().render())
-        .collect::<Vec<_>>()
-        .join(" / ");
-
-    render_status(&status);
-}
-
-fn render_status(message: &str) {
-    process::Command::new("xsetroot")
-        .arg("-name")
-        .arg(&message)
-        .output()
-        .expect("xsetroot failed");
 }
 
 pub fn show_notification(summary: &str, body: &str, urgency: libnotify::Urgency) {
