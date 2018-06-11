@@ -5,6 +5,7 @@
 )]
 
 extern crate chrono;
+extern crate ctrlc;
 extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
@@ -36,28 +37,40 @@ fn get_config() -> Result<String> {
 }
 
 fn render(
+    tx: &mpsc::Sender<async::Message>,
     rx: &mpsc::Receiver<async::Message>,
     order: &[String],
     feature_map: &mut HashMap<String, Box<feature::Feature>>,
 ) -> Result<()> {
+    let tx = tx.clone();
+    ctrlc::set_handler(move || {
+        tx.send(async::Message::Kill)
+            .wrap_error_kill("termination", "notify thread killed");
+    }).wrap_error("termination", "failed to set termination handler")?;
+
     let status_bar = StatusBar::new()?;
     status_bar.render(order, feature_map)?;
 
     for message in rx {
-        match feature_map.get_mut(&message.id) {
-            Some(ref mut feature) => {
-                feature.update()?;
-                println!("update {}: {}", feature.name(), feature.render());
-            },
-            None => {
-                return Err(Error::new_custom(
-                    "invalid message",
-                    &format!("message id {} does not exist", message.id),
-                ))
-            },
-        };
+        match message {
+            async::Message::FeatureUpdate(ref id) => {
+                match feature_map.get_mut(id) {
+                    Some(ref mut feature) => {
+                        feature.update()?;
+                        println!("update {}: {}", feature.name(), feature.render());
+                    },
+                    None => {
+                        return Err(Error::new_custom(
+                            "invalid message",
+                            &format!("message id {} does not exist", id),
+                        ))
+                    },
+                };
 
-        status_bar.render(order, feature_map)?;
+                status_bar.render(order, feature_map)?;
+            },
+            async::Message::Kill => break,
+        }
     }
 
     Ok(())
@@ -85,5 +98,5 @@ pub fn run() -> Result<()> {
         .map(|feature| (String::from(feature.id()), feature))
         .collect();
 
-    render(&rx, &order, &mut feature_map)
+    render(&tx, &rx, &order, &mut feature_map)
 }

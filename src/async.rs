@@ -4,14 +4,13 @@ use std::thread;
 use std::time;
 
 #[derive(Debug)]
-pub struct Message {
-    pub id: String,
+pub enum Message {
+    FeatureUpdate(String),
+    Kill,
 }
 
 pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
-    let message = Message {
-        id: String::from(id),
-    };
+    let message = Message::FeatureUpdate(String::from(id));
 
     tx.send(message)
         .wrap_error_kill(feature, "notify thread killed");

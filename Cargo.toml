@@ -17,6 +17,10 @@ dbus = "0.6.1"
 inotify = "0.5.1"
 libnotify = "1.0.3"
 
+[dependencies.ctrlc]
+features = ["termination"]
+version = "3.1.1"
+
 [dependencies.uuid]
 features = ["v4"]
 version = "0.6.5"
