@@ -15,9 +15,10 @@ rustPlatform.buildRustPackage rec {
     libnotify
     makeWrapper
     pkgconfig
+    xorg.libX11
   ];
 
-  cargoSha256 = "0169k91pb7ipvi0m71cmkppp1klgp5ghampa7x0fxkyrvrf0dvqg";
+  cargoSha256 = "1xbk3ly52qx99pjxnl6fmkax5mkxswq9acajpmjkx4cm8ljws0h8";
 
   postInstall = ''
     wrapProgram $out/bin/${name} \

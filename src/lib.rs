@@ -9,6 +9,7 @@ extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
 extern crate uuid;
+extern crate x11;
 
 mod async;
 mod error;

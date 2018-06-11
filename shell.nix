@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     libnotify
     pkgconfig
     rustracer
+    xorg.libX11
   ];
 
   RUST_BACKTRACE = 1;
