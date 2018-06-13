@@ -22,7 +22,6 @@ impl StatusBar {
                 return Err(Error::new_custom("render", "cannot open display"));
             }
 
-            // Create window.
             let screen = xlib::XDefaultScreen(display);
             let root_window = xlib::XRootWindow(display, screen);
 
