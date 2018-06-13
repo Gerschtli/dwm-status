@@ -1,9 +1,5 @@
 with import <nixpkgs> { };
 
-let
-  runtimeDeps = [ alsaUtils ];
-in
-
 rustPlatform.buildRustPackage rec {
   name = "dwm-status";
 
@@ -16,6 +12,6 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/${name} \
-      --prefix "PATH" : "${stdenv.lib.makeBinPath runtimeDeps}"
+      --prefix "PATH" : "${alsaUtils}/bin"
   '';
 }
