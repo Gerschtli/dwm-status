@@ -12,10 +12,7 @@ If an error occures, notifications via libnotify are sent.
 
 ## Requirements
 
-`cargo`, `rustc` and `lib{dbus,gdk-pixbuf,glib,notify}-dev` are required to build the binary.
-To set the status text `xsetroot` is used.
-
-The `upower` daemon has to be running for the battery feature for receiving DBus messages.
+`cargo`, `rustc` and `lib{dbus,gdk-pixbuf,glib,notify,x11}-dev` are required to build the binary.
 
 ## Build and run
 
@@ -56,15 +53,17 @@ time
 
 #### Audio
 
-Shows either `MUTE` or the current volume like `S 52%`. Listens on `alsactl monitor` for changes.
+**Note:** `alsa-utils` are required.
 
-`alsa-utils` are required.
+Shows either `MUTE` or the current volume like `S 52%`. Listens on `alsactl monitor` for changes.
 
 #### Backlight
 
 Shows backlight value like `L 23%` and watches `/sys/class/backlight` for changes.
 
 #### Battery
+
+**Note:** The `upower` daemon has to be running for receiving DBus messages.
 
 Shows following information:
 
