@@ -52,6 +52,8 @@ impl StatusBar {
                 self.root_window,
                 status_c.as_ptr() as *mut c_char,
             );
+
+            xlib::XFlush(self.display);
         }
 
         Ok(())
