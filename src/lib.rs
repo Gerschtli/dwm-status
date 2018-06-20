@@ -5,6 +5,7 @@
 )]
 
 extern crate chrono;
+extern crate config;
 extern crate ctrlc;
 extern crate dbus;
 extern crate inotify;
@@ -13,6 +14,7 @@ extern crate uuid;
 extern crate x11;
 
 mod async;
+mod conf;
 mod error;
 #[macro_use]
 mod feature;
@@ -78,6 +80,8 @@ fn render(
 
 pub fn run() -> Result<()> {
     let (tx, rx) = mpsc::channel();
+
+    let config = conf::Conf::new()?;
 
     let mut features = Vec::new();
     for line in get_config()?.lines() {
