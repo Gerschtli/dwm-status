@@ -39,7 +39,9 @@ pub trait Feature: Renderable {
 }
 
 pub trait FeatureConfig: Feature {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self>
+    type Settings;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self>
     where
         Self: Sized;
 }

@@ -10,16 +10,19 @@ extern crate ctrlc;
 extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
 extern crate uuid;
 extern crate x11;
 
 mod async;
-mod conf;
 mod error;
 #[macro_use]
 mod feature;
 mod features;
 mod io;
+mod settings;
 mod status_bar;
 
 use error::*;
@@ -28,14 +31,14 @@ use std::collections::HashMap;
 use std::env;
 use std::sync::mpsc;
 
-fn get_config() -> Result<String> {
+fn get_settings() -> Result<settings::Settings> {
     let mut args = env::args();
 
     let path = args
         .nth(1)
         .wrap_error("usage", "first parameter config file")?;
 
-    io::read_file(&path).wrap_error("config file", &format!("{} not readable", path))
+    settings::Settings::new(&path).wrap_error("settings", "error creating settings object")
 }
 
 fn render(
@@ -81,18 +84,18 @@ fn render(
 pub fn run() -> Result<()> {
     let (tx, rx) = mpsc::channel();
 
-    let config = conf::Conf::new()?;
-
+    let settings = get_settings()?;
     let mut features = Vec::new();
-    for line in get_config()?.lines() {
-        let mut feature = features::create_feature(line, &tx)?;
+
+    for feature_name in &settings.order {
+        let mut feature = features::create_feature(&feature_name, &tx, &settings)?;
         feature.init_notifier()?;
         feature.update()?;
         features.push(feature);
     }
 
     if features.is_empty() {
-        return Err(Error::new_custom("empty config", "no features enabled"));
+        return Err(Error::new_custom("settings", "no features enabled"));
     }
 
     let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();

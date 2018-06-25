@@ -18,6 +18,8 @@ config = "0.8.0"
 dbus = "0.6.1"
 inotify = "0.5.1"
 libnotify = "1.0.3"
+serde = "1.0.66"
+serde_derive = "1.0.66"
 
 [dependencies.ctrlc]
 features = ["termination"]

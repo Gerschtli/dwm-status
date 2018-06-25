@@ -3,6 +3,7 @@ use super::FEATURE_NAME;
 use async;
 use error::*;
 use feature;
+use settings;
 use std::io::Read;
 use std::process;
 use std::sync::mpsc;
@@ -15,16 +16,20 @@ const FILTER: &[char] = &['[', ']', '%'];
 pub struct Audio {
     data: AudioData,
     id: String,
+    settings: settings::Audio,
     tx: mpsc::Sender<async::Message>,
 }
 
 renderable_impl!(Audio);
 
 impl feature::FeatureConfig for Audio {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+    type Settings = settings::Audio;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Audio {
             data: AudioData::Mute,
             id,
+            settings,
             tx,
         })
     }

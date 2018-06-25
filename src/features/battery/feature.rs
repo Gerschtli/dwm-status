@@ -8,6 +8,7 @@ use super::FEATURE_NAME;
 use async;
 use error::*;
 use feature;
+use settings;
 use std::collections::HashMap;
 use std::sync::mpsc;
 use std::thread;
@@ -18,14 +19,17 @@ pub struct Battery {
     id: String,
     manager: BatteryManager,
     notifier: BatteryNotifier,
-    tx: mpsc::Sender<async::Message>,
+    settings: settings::Battery,
     tx_devices: mpsc::Sender<DeviceMessage>,
+    tx: mpsc::Sender<async::Message>,
 }
 
 renderable_impl!(Battery);
 
 impl feature::FeatureConfig for Battery {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+    type Settings = settings::Battery;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         let (tx_devices, rx_devices) = mpsc::channel();
 
         let mut manager = BatteryManager::new(rx_devices)?;
@@ -39,6 +43,7 @@ impl feature::FeatureConfig for Battery {
             id,
             manager,
             notifier: BatteryNotifier::new(),
+            settings,
             tx,
             tx_devices,
         })

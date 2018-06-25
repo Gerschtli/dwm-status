@@ -4,19 +4,23 @@ use async;
 use error::*;
 use feature;
 use io;
+use settings;
 use std::sync::mpsc;
 
 #[derive(Debug)]
 pub struct CpuLoad {
     data: CpuLoadData,
     id: String,
+    settings: settings::CpuLoad,
     tx: mpsc::Sender<async::Message>,
 }
 
 renderable_impl!(CpuLoad);
 
 impl feature::FeatureConfig for CpuLoad {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+    type Settings = settings::CpuLoad;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(CpuLoad {
             data: CpuLoadData {
                 one: 0.,
@@ -24,6 +28,7 @@ impl feature::FeatureConfig for CpuLoad {
                 fifteen: 0.,
             },
             id,
+            settings,
             tx,
         })
     }

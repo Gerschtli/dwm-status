@@ -4,22 +4,27 @@ use async;
 use chrono;
 use error::*;
 use feature;
+use settings;
 use std::sync::mpsc;
 
 #[derive(Debug)]
 pub struct Time {
     data: TimeData,
     id: String,
+    settings: settings::Time,
     tx: mpsc::Sender<async::Message>,
 }
 
 renderable_impl!(Time);
 
 impl feature::FeatureConfig for Time {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+    type Settings = settings::Time;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Time {
             data: TimeData(chrono::Local::now()),
             id,
+            settings,
             tx,
         })
     }

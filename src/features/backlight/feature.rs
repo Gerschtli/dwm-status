@@ -5,6 +5,7 @@ use async;
 use error::*;
 use feature;
 use inotify;
+use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
@@ -14,17 +15,21 @@ pub struct Backlight {
     data: BacklightData,
     device: BacklightDevice,
     id: String,
+    settings: settings::Backlight,
     tx: mpsc::Sender<async::Message>,
 }
 
 renderable_impl!(Backlight);
 
 impl feature::FeatureConfig for Backlight {
-    fn new(id: String, tx: mpsc::Sender<async::Message>) -> Result<Self> {
+    type Settings = settings::Backlight;
+
+    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Backlight {
             data: BacklightData(0.),
             device: BacklightDevice::new()?,
             id,
+            settings,
             tx,
         })
     }
