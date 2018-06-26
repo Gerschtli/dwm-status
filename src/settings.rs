@@ -42,7 +42,7 @@ pub struct Battery {
 #[derive(Clone, Debug, Deserialize)]
 pub struct CpuLoad {
     pub template: String,
-    pub update_interval: u32,
+    pub update_interval: u64,
 }
 
 #[derive(Clone, Debug, Deserialize)]
