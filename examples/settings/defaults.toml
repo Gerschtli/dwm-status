@@ -1,0 +1,28 @@
+debug = false
+order = []
+separator = " / "
+
+[audio]
+control = "Master"
+mute = "MUTE"
+template = "S {}%"
+
+[backlight]
+device = "intel_backlight"
+template = "L {:.0}%"
+
+[battery]
+charging = "▲"
+discharging = "▼"
+enable_notifier = true
+no_battery = "NO BATT"
+notifier_critical = 10
+notifier_levels = [2, 5, 10, 15, 20]
+separator = " · "
+
+[cpu_load]
+template = "{:.2} {:.2} {:.2}"
+
+[time]
+format = "%Y-%m-%d %H:%M"
+update_seconds = false
