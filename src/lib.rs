@@ -46,6 +46,7 @@ fn render(
     rx: &mpsc::Receiver<async::Message>,
     order: &[String],
     feature_map: &mut HashMap<String, Box<feature::Feature>>,
+    debug: bool,
 ) -> Result<()> {
     let tx = tx.clone();
     ctrlc::set_handler(move || {
@@ -62,7 +63,9 @@ fn render(
                 match feature_map.get_mut(id) {
                     Some(ref mut feature) => {
                         feature.update()?;
-                        println!("update {}: {}", feature.name(), feature.render());
+                        if debug {
+                            println!("update {}: {}", feature.name(), feature.render());
+                        }
                     },
                     None => {
                         return Err(Error::new_custom(
@@ -105,5 +108,5 @@ pub fn run() -> Result<()> {
         .map(|feature| (String::from(feature.id()), feature))
         .collect();
 
-    render(&tx, &rx, &order, &mut feature_map)
+    render(&tx, &rx, &order, &mut feature_map, settings.debug)
 }
