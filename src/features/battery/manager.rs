@@ -10,14 +10,16 @@ use std::sync::mpsc;
 #[derive(Debug)]
 pub struct BatteryManager {
     ac_name: String,
+    debug: bool,
     devices: HashMap<String, BatteryDevice>,
     rx_devices: mpsc::Receiver<DeviceMessage>,
 }
 
 impl BatteryManager {
-    pub fn new(rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
+    pub fn new(debug: bool, rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
         Ok(BatteryManager {
             ac_name: AcAdapter::get_current()?,
+            debug,
             devices: HashMap::new(),
             rx_devices,
         })
@@ -35,12 +37,16 @@ impl BatteryManager {
         while let Ok(message) = self.rx_devices.try_recv() {
             match message {
                 DeviceMessage::Added(name) => {
-                    println!("update {} add: {}", FEATURE_NAME, &name);
+                    if self.debug {
+                        println!("update {} add: {}", FEATURE_NAME, &name);
+                    }
                     let device = BatteryDevice::new(&name)?;
                     self.devices.insert(name, device);
                 },
                 DeviceMessage::Removed(name) => {
-                    println!("update {} remove: {}", FEATURE_NAME, &name);
+                    if self.debug {
+                        println!("update {} remove: {}", FEATURE_NAME, &name);
+                    }
                     self.devices.remove(&name);
                 },
             }

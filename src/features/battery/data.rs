@@ -1,6 +1,7 @@
 use super::fmt_capacity;
 use super::fmt_time;
 use feature;
+use settings;
 use std::collections::HashMap;
 use std::time;
 
@@ -26,12 +27,13 @@ impl feature::Renderable for BatteryInfo {
 pub struct BatteryData {
     pub ac_online: bool,
     pub batteries: HashMap<String, BatteryInfo>,
+    pub settings: settings::Battery,
 }
 
 impl feature::Renderable for BatteryData {
     fn render(&self) -> String {
         if self.batteries.is_empty() {
-            return String::from("NO BATT");
+            return self.settings.no_battery.clone();
         }
 
         let mut keys = self.batteries.keys().collect::<Vec<_>>();
@@ -40,11 +42,15 @@ impl feature::Renderable for BatteryData {
             .into_iter()
             .map(|key| self.batteries[key].render())
             .collect::<Vec<_>>()
-            .join(" · ");
+            .join(&self.settings.separator);
 
         format!(
             "{} {}",
-            if self.ac_online { '▲' } else { '▼' },
+            if self.ac_online {
+                &self.settings.charging
+            } else {
+                &self.settings.discharging
+            },
             batteries
         )
     }
@@ -82,30 +88,70 @@ mod tests {
             BatteryData {
                 ac_online: true,
                 batteries: HashMap::new(),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "NO BATT"
+            "no_battery"
         );
         assert_eq!(
             BatteryData {
                 ac_online: false,
                 batteries: HashMap::new(),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "NO BATT"
+            "no_battery"
         );
 
         assert_eq!(
             BatteryData {
                 ac_online: true,
                 batteries: map!(String::from("BAT0") => info1.clone()),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "▲ 56% (00:10)"
+            "charging 56% (00:10)"
         );
         assert_eq!(
             BatteryData {
                 ac_online: false,
                 batteries: map!(String::from("BAT0") => info1.clone()),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "▼ 56% (00:10)"
+            "discharging 56% (00:10)"
         );
 
         assert_eq!(
@@ -115,8 +161,18 @@ mod tests {
                     String::from("BAT0") => info1.clone(),
                     String::from("BAT1") => info2.clone(),
                 ),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "▲ 56% (00:10) · 75% (00:12)"
+            "charging 56% (00:10)-separator-75% (00:12)"
         );
         assert_eq!(
             BatteryData {
@@ -125,8 +181,18 @@ mod tests {
                     String::from("BAT0") => info1.clone(),
                     String::from("BAT1") => info2.clone(),
                 ),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "▼ 56% (00:10) · 75% (00:12)"
+            "discharging 56% (00:10)-separator-75% (00:12)"
         );
         assert_eq!(
             BatteryData {
@@ -136,8 +202,18 @@ mod tests {
                     String::from("BAT2") => info3.clone(),
                     String::from("BAT0") => info1.clone(),
                 ),
+                settings: settings::Battery {
+                    charging: String::from("charging"),
+                    debug: false,
+                    discharging: String::from("discharging"),
+                    enable_notifier: false,
+                    no_battery: String::from("no_battery"),
+                    notifier_critical: 1,
+                    notifier_levels: vec![1, 2],
+                    separator: String::from("-separator-"),
+                },
             }.render(),
-            "▼ 56% (00:10) · 75% (00:12) · 21% (00:25)"
+            "discharging 56% (00:10)-separator-75% (00:12)-separator-21% (00:25)"
         );
     }
 

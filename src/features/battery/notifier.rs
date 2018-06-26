@@ -2,19 +2,21 @@ use super::fmt_capacity;
 use super::fmt_time;
 use io;
 use libnotify;
+use settings;
 use std::time;
-
-const LEVELS: &[f32] = &[0.02, 0.05, 0.1, 0.15, 0.2];
-const CRITICAL: f32 = 0.1;
 
 #[derive(Debug)]
 pub struct BatteryNotifier {
     capacity: Option<f32>,
+    settings: settings::Battery,
 }
 
 impl BatteryNotifier {
-    pub fn new() -> Self {
-        BatteryNotifier { capacity: None }
+    pub fn new(settings: settings::Battery) -> Self {
+        BatteryNotifier {
+            capacity: None,
+            settings,
+        }
     }
 
     pub fn reset(&mut self) {
@@ -22,16 +24,22 @@ impl BatteryNotifier {
     }
 
     pub fn update(&mut self, capacity: f32, estimation: &time::Duration) {
-        for level in LEVELS {
-            if level >= &capacity {
+        if !self.settings.enable_notifier {
+            return;
+        }
+
+        for level in &self.settings.notifier_levels {
+            let decimal_level = *level as f32 / 100.;
+
+            if decimal_level >= capacity {
                 if match self.capacity {
-                    Some(value) if level >= &value => false,
+                    Some(value) if decimal_level >= value => false,
                     _ => true,
                 } {
                     io::show_notification(
-                        &format!("Battery under {}", fmt_capacity(*level)),
+                        &format!("Battery under {}", fmt_capacity(decimal_level)),
                         &format!("{} remaining", fmt_time(estimation)),
-                        if level <= &CRITICAL {
+                        if level <= &self.settings.notifier_critical {
                             libnotify::Urgency::Critical
                         } else {
                             libnotify::Urgency::Normal

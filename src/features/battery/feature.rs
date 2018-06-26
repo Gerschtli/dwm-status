@@ -32,17 +32,18 @@ impl feature::FeatureConfig for Battery {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         let (tx_devices, rx_devices) = mpsc::channel();
 
-        let mut manager = BatteryManager::new(rx_devices)?;
+        let mut manager = BatteryManager::new(settings.debug, rx_devices)?;
         manager.update_devices_list()?;
 
         Ok(Battery {
             data: BatteryData {
                 ac_online: true,
                 batteries: HashMap::new(),
+                settings: settings.clone(),
             },
             id,
             manager,
-            notifier: BatteryNotifier::new(),
+            notifier: BatteryNotifier::new(settings.clone()),
             settings,
             tx,
             tx_devices,
