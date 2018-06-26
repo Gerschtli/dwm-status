@@ -27,18 +27,6 @@ macro_rules! feature {
     }};
 }
 
-macro_rules! features {
-    ($name: ident, $tx: ident, $settings: ident; $( $feature_name: expr => $struct: ident, )*) => {{
-        match &$name.to_string().to_lowercase()[..] {
-            $( "$feature_name" => feature!($struct, $tx, $settings.$feature_name), )*
-            _ => Err(Error::new_custom(
-                "create feature",
-                &format!("feature {} does not exist", $name),
-            )),
-        }
-    }}
-}
-
 pub fn create_feature(
     name: &str,
     tx: &mpsc::Sender<async::Message>,
