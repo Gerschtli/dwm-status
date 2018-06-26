@@ -23,9 +23,10 @@ impl feature::FeatureConfig for CpuLoad {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(CpuLoad {
             data: CpuLoadData {
-                one: 0.,
-                five: 0.,
                 fifteen: 0.,
+                five: 0.,
+                one: 0.,
+                template: String::from(&settings.template[..]),
             },
             id,
             settings,
@@ -49,9 +50,10 @@ impl feature::Feature for CpuLoad {
         let mut iterator = content.split_whitespace().into_iter();
 
         self.data = CpuLoadData {
-            one: convert_to_float(iterator.next())?,
-            five: convert_to_float(iterator.next())?,
             fifteen: convert_to_float(iterator.next())?,
+            five: convert_to_float(iterator.next())?,
+            one: convert_to_float(iterator.next())?,
+            template: String::from(&self.settings.template[..]),
         };
 
         Ok(())
