@@ -26,7 +26,7 @@ impl feature::FeatureConfig for CpuLoad {
                 fifteen: 0.,
                 five: 0.,
                 one: 0.,
-                template: String::from(&settings.template[..]),
+                template: settings.template.clone(),
             },
             id,
             settings,
@@ -53,7 +53,7 @@ impl feature::Feature for CpuLoad {
             fifteen: convert_to_float(iterator.next())?,
             five: convert_to_float(iterator.next())?,
             one: convert_to_float(iterator.next())?,
-            template: String::from(&self.settings.template[..]),
+            template: self.settings.template.clone(),
         };
 
         Ok(())

@@ -23,7 +23,7 @@ impl feature::FeatureConfig for Time {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Time {
             data: TimeData {
-                format: String::from(&settings.format[..]),
+                format: settings.format.clone(),
                 time: chrono::Local::now(),
             },
             id,
@@ -44,7 +44,7 @@ impl feature::Feature for Time {
 
     fn update(&mut self) -> Result<()> {
         self.data = TimeData {
-            format: String::from(&self.settings.format[..]),
+            format: self.settings.format.clone(),
             time: chrono::Local::now(),
         };
         Ok(())

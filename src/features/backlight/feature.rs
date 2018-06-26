@@ -27,7 +27,7 @@ impl feature::FeatureConfig for Backlight {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Backlight {
             data: BacklightData {
-                template: String::from(&settings.template[..]),
+                template: settings.template.clone(),
                 value: 0.,
             },
             device: BacklightDevice::new(&settings.device)?,
@@ -74,7 +74,7 @@ impl feature::Feature for Backlight {
 
     fn update(&mut self) -> Result<()> {
         self.data = BacklightData {
-            template: String::from(&self.settings.template[..]),
+            template: self.settings.template.clone(),
             value: self.device.value()?,
         };
 

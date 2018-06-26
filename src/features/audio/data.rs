@@ -9,7 +9,7 @@ pub enum AudioData {
 impl feature::Renderable for AudioData {
     fn render(&self) -> String {
         match *self {
-            AudioData::Mute { ref template } => String::from(&template[..]),
+            AudioData::Mute { ref template } => template.clone(),
             AudioData::Volume {
                 ref template,
                 ref volume,

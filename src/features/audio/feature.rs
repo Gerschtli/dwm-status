@@ -28,7 +28,7 @@ impl feature::FeatureConfig for Audio {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Audio {
             data: AudioData::Mute {
-                template: String::from(&settings.mute[..]),
+                template: settings.mute.clone(),
             },
             id,
             settings,
@@ -91,7 +91,7 @@ impl feature::Feature for Audio {
 
         if last.get(1).map(|muted| *muted == "off").unwrap_or(false) {
             self.data = AudioData::Mute {
-                template: String::from(&self.settings.mute[..]),
+                template: self.settings.mute.clone(),
             };
             return Ok(());
         }
@@ -103,7 +103,7 @@ impl feature::Feature for Audio {
             .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
         self.data = AudioData::Volume {
-            template: String::from(&self.settings.template[..]),
+            template: self.settings.template.clone(),
             volume,
         };
         Ok(())
