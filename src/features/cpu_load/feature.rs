@@ -55,9 +55,9 @@ impl feature::Feature for CpuLoad {
         let mut iterator = content.split_whitespace().into_iter();
 
         self.data = CpuLoadData {
-            fifteen: convert_to_float(iterator.next())?,
-            five: convert_to_float(iterator.next())?,
             one: convert_to_float(iterator.next())?,
+            five: convert_to_float(iterator.next())?,
+            fifteen: convert_to_float(iterator.next())?,
             template: self.settings.template.clone(),
         };
 
