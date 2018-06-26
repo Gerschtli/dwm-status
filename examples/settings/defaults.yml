@@ -5,11 +5,11 @@ separator: " / "
 audio:
   control: Master
   mute: MUTE
-  template: S {}%
+  template: S {VOL}%
 
 backlight:
   device: intel_backlight
-  template: L {:.0}%
+  template: L {BL}%
 
 battery:
   charging: ▲
@@ -21,7 +21,7 @@ battery:
   separator: " · "
 
 cpu_load:
-  template: "{:.2} {:.2} {:.2}"
+  template: "{CL1} {CL5} {CL15}"
 
 time:
   format: "%Y-%m-%d %H:%M"

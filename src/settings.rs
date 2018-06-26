@@ -78,14 +78,14 @@ impl Settings {
             map!(
                 "control" => "Master",
                 "mute" => "MUTE",
-                "template" => "S {}%",
+                "template" => "S {VOL}%",
             ),
         )?;
         config.set_default(
             "backlight",
             map!(
                 "device" => "intel_backlight",
-                "template" => "L {:.0}%",
+                "template" => "L {BL}%",
             ),
         )?;
         config.set_default(
@@ -103,7 +103,7 @@ impl Settings {
         config.set_default(
             "cpu_load",
             map!(
-                "template" => "{:.2} {:.2} {:.2}",
+                "template" => "{CL1} {CL5} {CL15}",
             ),
         )?;
         config.set_default(
@@ -118,9 +118,7 @@ impl Settings {
 
         // propagate debug value to battery module
         let debug = config.get_bool("debug")?;
-        let mut battery_map = config.get_table("battery")?;
-        battery_map.insert(String::from("debug"), debug.into());
-        config.set("battery", battery_map)?;
+        config.set("battery.debug", debug)?;
 
         config.try_into()
     }
