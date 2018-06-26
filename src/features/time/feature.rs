@@ -22,7 +22,10 @@ impl feature::FeatureConfig for Time {
 
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Time {
-            data: TimeData(chrono::Local::now()),
+            data: TimeData {
+                format: String::from(&settings.format[..]),
+                time: chrono::Local::now(),
+            },
             id,
             settings,
             tx,
@@ -34,12 +37,16 @@ impl feature::Feature for Time {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        async::send_message_interval(FEATURE_NAME, self.id.clone(), self.tx.clone(), 60);
+        let interval = if self.settings.update_seconds { 1 } else { 60 };
+        async::send_message_interval(FEATURE_NAME, self.id.clone(), self.tx.clone(), interval);
         Ok(())
     }
 
     fn update(&mut self) -> Result<()> {
-        self.data = TimeData(chrono::Local::now());
+        self.data = TimeData {
+            format: String::from(&self.settings.format[..]),
+            time: chrono::Local::now(),
+        };
         Ok(())
     }
 }
