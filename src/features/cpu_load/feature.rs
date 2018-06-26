@@ -39,7 +39,12 @@ impl feature::Feature for CpuLoad {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        async::send_message_interval(FEATURE_NAME, self.id.clone(), self.tx.clone(), 20);
+        async::send_message_interval(
+            FEATURE_NAME,
+            self.id.clone(),
+            self.tx.clone(),
+            self.settings.update_interval,
+        );
         Ok(())
     }
 

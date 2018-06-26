@@ -42,6 +42,7 @@ pub struct Battery {
 #[derive(Clone, Debug, Deserialize)]
 pub struct CpuLoad {
     pub template: String,
+    pub update_interval: u32,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -104,6 +105,7 @@ impl Settings {
             "cpu_load",
             map!(
                 "template" => "{CL1} {CL5} {CL15}",
+                "update_interval" => 20,
             ),
         )?;
         config.set_default(

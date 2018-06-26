@@ -27,7 +27,8 @@
     "separator": " · "
   },
   "cpu_load": {
-    "template": "{CL1} {CL5} {CL15}"
+    "template": "{CL1} {CL5} {CL15}",
+    "update_interval": 20
   },
   "time": {
     "format": "%Y-%m-%d %H:%M",
