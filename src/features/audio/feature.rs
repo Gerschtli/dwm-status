@@ -27,7 +27,9 @@ impl feature::FeatureConfig for Audio {
 
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Audio {
-            data: AudioData::Mute,
+            data: AudioData::Mute {
+                template: String::from(&settings.mute[..]),
+            },
             id,
             settings,
             tx,
@@ -69,7 +71,7 @@ impl feature::Feature for Audio {
         // originally taken from https://github.com/greshake/i3status-rust/blob/master/src/blocks/sound.rs
         let output = process::Command::new("amixer")
             .arg("get")
-            .arg("Master")
+            .arg(&self.settings.control)
             .output()
             .map(|o| String::from(String::from_utf8_lossy(&o.stdout).trim()))
             .wrap_error(FEATURE_NAME, "getting amixer info failed")?;
@@ -88,7 +90,9 @@ impl feature::Feature for Audio {
             .collect::<Vec<&str>>();
 
         if last.get(1).map(|muted| *muted == "off").unwrap_or(false) {
-            self.data = AudioData::Mute;
+            self.data = AudioData::Mute {
+                template: String::from(&self.settings.mute[..]),
+            };
             return Ok(());
         }
 
@@ -98,7 +102,10 @@ impl feature::Feature for Audio {
             .parse::<u32>()
             .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
-        self.data = AudioData::Volume(volume);
+        self.data = AudioData::Volume {
+            template: String::from(&self.settings.template[..]),
+            volume,
+        };
         Ok(())
     }
 }

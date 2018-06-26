@@ -2,15 +2,18 @@ use feature;
 
 #[derive(Debug)]
 pub enum AudioData {
-    Mute,
-    Volume(u32),
+    Mute { template: String },
+    Volume { template: String, volume: u32 },
 }
 
 impl feature::Renderable for AudioData {
     fn render(&self) -> String {
         match *self {
-            AudioData::Mute => String::from("MUTE"),
-            AudioData::Volume(volume) => format!("S {}%", volume),
+            AudioData::Mute { ref template } => String::from(&template[..]),
+            AudioData::Volume {
+                ref template,
+                ref volume,
+            } => template.replace("{VOL}", &volume.to_string()),
         }
     }
 }
@@ -22,8 +25,32 @@ mod tests {
     use feature::Renderable;
     #[test]
     fn test_display() {
-        assert_eq!(AudioData::Mute.render(), "MUTE");
-        assert_eq!(AudioData::Volume(0).render(), "S 0%");
-        assert_eq!(AudioData::Volume(85).render(), "S 85%");
+        assert_eq!(
+            AudioData::Mute {
+                template: String::from("ABC")
+            }.render(),
+            "ABC"
+        );
+        assert_eq!(
+            AudioData::Volume {
+                template: String::from("xx {VOL}%"),
+                volume: 0
+            }.render(),
+            "xx 0%"
+        );
+        assert_eq!(
+            AudioData::Volume {
+                template: String::from("xx {VOL}% {VOL}"),
+                volume: 10
+            }.render(),
+            "xx 10% 10"
+        );
+        assert_eq!(
+            AudioData::Volume {
+                template: String::from("xx {WOL}%"),
+                volume: 10
+            }.render(),
+            "xx {WOL}%"
+        );
     }
 }
