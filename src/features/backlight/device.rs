@@ -2,39 +2,43 @@ use super::FEATURE_NAME;
 use error::*;
 use io;
 
-const PATH: &str = "/sys/class/backlight/intel_backlight";
-
 #[derive(Debug)]
 pub struct BacklightDevice {
     max: i32,
+    path: String,
 }
 
 impl BacklightDevice {
-    pub fn new() -> Result<Self> {
-        Ok(BacklightDevice {
-            max: get_brightness("max")?,
-        })
+    pub fn new(device: &str) -> Result<Self> {
+        let mut device = BacklightDevice {
+            max: 0,
+            path: format!("/sys/class/backlight/{}", device),
+        };
+
+        device.max = device.get_brightness("max")?;
+
+        Ok(device)
     }
 
     pub fn brightness_file(&self) -> String {
-        build_path("actual")
+        self.build_path("actual")
     }
 
     pub fn value(&self) -> Result<f32> {
-        let current = get_brightness("actual")?;
+        let current = self.get_brightness("actual")?;
         let value = current as f32 / self.max as f32;
 
         Ok(value)
     }
-}
 
-fn build_path(name: &str) -> String {
-    format!("{}/{}_brightness", PATH, name)
-}
+    fn build_path(&self, name: &str) -> String {
+        format!("{}/{}_brightness", self.path, name)
+    }
 
-fn get_brightness(name: &str) -> Result<i32> {
-    let brightness = io::read_int_from_file(&build_path(name))
-        .wrap_error(FEATURE_NAME, &format!("error reading {} brightness", name))?;
+    fn get_brightness(&self, name: &str) -> Result<i32> {
+        let brightness = io::read_int_from_file(&self.build_path(name))
+            .wrap_error(FEATURE_NAME, &format!("error reading {} brightness", name))?;
 
-    Ok(brightness)
+        Ok(brightness)
+    }
 }

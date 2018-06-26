@@ -26,8 +26,11 @@ impl feature::FeatureConfig for Backlight {
 
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(Backlight {
-            data: BacklightData(0.),
-            device: BacklightDevice::new()?,
+            data: BacklightData {
+                template: String::from(&settings.template[..]),
+                value: 0.,
+            },
+            device: BacklightDevice::new(&settings.device)?,
             id,
             settings,
             tx,
@@ -70,7 +73,10 @@ impl feature::Feature for Backlight {
     }
 
     fn update(&mut self) -> Result<()> {
-        self.data = BacklightData(self.device.value()?);
+        self.data = BacklightData {
+            template: String::from(&self.settings.template[..]),
+            value: self.device.value()?,
+        };
 
         Ok(())
     }
