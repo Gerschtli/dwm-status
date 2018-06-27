@@ -37,8 +37,25 @@ impl feature::Feature for Time {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        let interval = if self.settings.update_seconds { 1 } else { 60 };
-        async::send_message_interval(FEATURE_NAME, self.id.clone(), self.tx.clone(), interval);
+        let (interval, delay) = if self.settings.update_seconds {
+            (1, None)
+        } else {
+            let seconds_string = format!("{}", chrono::Local::now().format("%S"));
+            let seconds = seconds_string
+                .parse::<u64>()
+                .wrap_error(FEATURE_NAME, "could extract initial delay seconds")?;
+
+            (60, Some(60 - seconds))
+        };
+
+        async::send_message_interval(
+            FEATURE_NAME,
+            self.id.clone(),
+            self.tx.clone(),
+            interval,
+            delay,
+        );
+
         Ok(())
     }
 
@@ -47,6 +64,7 @@ impl feature::Feature for Time {
             format: self.settings.format.clone(),
             time: chrono::Local::now(),
         };
+
         Ok(())
     }
 }

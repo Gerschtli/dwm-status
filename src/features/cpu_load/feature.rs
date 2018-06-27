@@ -7,6 +7,8 @@ use io;
 use settings;
 use std::sync::mpsc;
 
+const PATH_LOADAVG: &str = "/proc/loadavg";
+
 #[derive(Debug)]
 pub struct CpuLoad {
     data: CpuLoadData,
@@ -23,9 +25,9 @@ impl feature::FeatureConfig for CpuLoad {
     fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
         Ok(CpuLoad {
             data: CpuLoadData {
-                fifteen: 0.,
-                five: 0.,
                 one: 0.,
+                five: 0.,
+                fifteen: 0.,
                 template: settings.template.clone(),
             },
             id,
@@ -44,13 +46,15 @@ impl feature::Feature for CpuLoad {
             self.id.clone(),
             self.tx.clone(),
             self.settings.update_interval,
+            None,
         );
+
         Ok(())
     }
 
     fn update(&mut self) -> Result<()> {
-        let content = io::read_file("/proc/loadavg")
-            .wrap_error(FEATURE_NAME, "failed to read /proc/loadavg")?;
+        let content = io::read_file(PATH_LOADAVG)
+            .wrap_error(FEATURE_NAME, &format!("failed to read {}", PATH_LOADAVG))?;
 
         let mut iterator = content.split_whitespace().into_iter();
 

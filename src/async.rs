@@ -21,10 +21,17 @@ pub fn send_message_interval(
     id: String,
     tx: mpsc::Sender<Message>,
     interval: u64,
+    delay: Option<u64>,
 ) {
-    thread::spawn(move || loop {
-        thread::sleep(time::Duration::from_secs(interval));
+    thread::spawn(move || {
+        if let Some(delay_seconds) = delay {
+            thread::sleep(time::Duration::from_secs(delay_seconds));
+        }
 
-        send_message(feature, &id, &tx);
+        loop {
+            send_message(feature, &id, &tx);
+
+            thread::sleep(time::Duration::from_secs(interval));
+        }
     });
 }
