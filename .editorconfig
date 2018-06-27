@@ -10,5 +10,5 @@ insert_final_newline = true
 [*.{rs,sh}]
 indent_size = 4
 
-[*.{nix,yml}]
+[*.{hjson,json,md,nix,yml}]
 indent_size = 2
