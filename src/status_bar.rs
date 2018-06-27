@@ -11,10 +11,11 @@ use x11::xlib;
 pub struct StatusBar {
     display: *mut xlib::Display,
     root_window: xlib::Window,
+    separator: String,
 }
 
 impl StatusBar {
-    pub fn new() -> Result<Self> {
+    pub fn new(separator: String) -> Result<Self> {
         unsafe {
             let display = xlib::XOpenDisplay(ptr::null());
 
@@ -28,6 +29,7 @@ impl StatusBar {
             Ok(StatusBar {
                 display,
                 root_window,
+                separator,
             })
         }
     }
@@ -41,7 +43,7 @@ impl StatusBar {
             .iter()
             .map(|id| feature_map.get(id).unwrap().render())
             .collect::<Vec<_>>()
-            .join(" / ");
+            .join(&self.separator);
 
         let status_c = CString::new(status)
             .wrap_error("render", "status text could not be converted to CString")?;

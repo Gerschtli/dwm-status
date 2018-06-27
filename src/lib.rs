@@ -46,7 +46,7 @@ fn render(
     rx: &mpsc::Receiver<async::Message>,
     order: &[String],
     feature_map: &mut HashMap<String, Box<feature::Feature>>,
-    debug: bool,
+    settings: &settings::Settings,
 ) -> Result<()> {
     let tx = tx.clone();
     ctrlc::set_handler(move || {
@@ -54,7 +54,7 @@ fn render(
             .wrap_error_kill("termination", "notify thread killed");
     }).wrap_error("termination", "failed to set termination handler")?;
 
-    let status_bar = StatusBar::new()?;
+    let status_bar = StatusBar::new(settings.separator.clone())?;
     status_bar.render(order, feature_map)?;
 
     for message in rx {
@@ -63,7 +63,7 @@ fn render(
                 match feature_map.get_mut(id) {
                     Some(ref mut feature) => {
                         feature.update()?;
-                        if debug {
+                        if settings.debug {
                             println!("update {}: {}", feature.name(), feature.render());
                         }
                     },
@@ -108,5 +108,5 @@ pub fn run() -> Result<()> {
         .map(|feature| (String::from(feature.id()), feature))
         .collect();
 
-    render(&tx, &rx, &order, &mut feature_map, settings.debug)
+    render(&tx, &rx, &order, &mut feature_map, &settings)
 }
