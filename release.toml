@@ -1,3 +1,4 @@
 no-dev-version = true
 pre-release-commit-message = "Prepare {{version}} release"
+pre-release-hook = ["./release-hook.sh"]
 tag-message = "Version {{version}}"

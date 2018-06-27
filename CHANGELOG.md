@@ -103,7 +103,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Audio, backlight, battery and time features
   - Travis config with cargo fmt, build and test checks
 
-[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.1.0...HEAD
 [1.1.0]: https://github.com/Gerschtli/dwm-status/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Gerschtli/dwm-status/compare/0.5.1...1.0.0
 [0.5.1]: https://github.com/Gerschtli/dwm-status/compare/0.5.0...0.5.1
