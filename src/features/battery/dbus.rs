@@ -50,8 +50,7 @@ impl DbusWatcher {
             .add_match(&format!(
                 "type='signal',path='{}',interface='{}'",
                 PATH_UPOWER, INTERFACE_UPOWER
-            ))
-            .wrap_error(FEATURE_NAME, "failed to add match")?;
+            )).wrap_error(FEATURE_NAME, "failed to add match")?;
 
         let mut devices = HashSet::new();
 
