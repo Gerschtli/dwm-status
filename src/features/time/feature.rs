@@ -50,10 +50,10 @@ impl feature::Feature for Time {
             let update_interval = if update_seconds {
                 1
             } else {
-                60 - chrono::Local::now().second()
+                60 - u64::from(chrono::Local::now().second())
             };
 
-            thread::sleep(time::Duration::from_secs(update_interval as u64));
+            thread::sleep(time::Duration::from_secs(update_interval));
         });
 
         Ok(())
