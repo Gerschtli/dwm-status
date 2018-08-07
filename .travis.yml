@@ -9,24 +9,13 @@ matrix:
   allow_failures:
     - rust: nightly
 before_script:
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      cargo install cargo-update || echo "cargo-update already installed"
-      cargo install clippy || echo "clippy already installed"
-      cargo install-update -a
-    fi
+  - [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && rustup component add clippy-preview
   - rustup component add rustfmt-preview
 script:
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      cargo fmt -- --check
-    fi
+  - [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && cargo fmt -- --check
   - cargo build --verbose
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      cargo check
-      cargo clippy
-    fi
+  - cargo check
+  - [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && cargo clippy
   - cargo test --verbose
 addons:
   apt:
