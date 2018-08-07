@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Clippy propagates warnings to errors
 
-### fixed
+### Fixed
 - Update time feature with second precision after hibernate
 
 ## [1.1.1] - 2018-06-28
