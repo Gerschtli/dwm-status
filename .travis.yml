@@ -5,9 +5,6 @@ rust:
   - nightly
   - beta
   - stable
-matrix:
-  allow_failures:
-    - rust: nightly
 before_script:
   - |
     if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
