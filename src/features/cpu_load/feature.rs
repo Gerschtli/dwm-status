@@ -6,6 +6,8 @@ use feature;
 use io;
 use settings;
 use std::sync::mpsc;
+use std::thread;
+use std::time;
 
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
@@ -41,13 +43,15 @@ impl feature::Feature for CpuLoad {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        async::send_message_interval(
-            FEATURE_NAME,
-            self.id.clone(),
-            self.tx.clone(),
-            self.settings.update_interval,
-            None,
-        );
+        let id = self.id.clone();
+        let tx = self.tx.clone();
+        let update_interval = self.settings.update_interval;
+
+        thread::spawn(move || loop {
+            async::send_message(FEATURE_NAME, &id, &tx);
+
+            thread::sleep(time::Duration::from_secs(update_interval));
+        });
 
         Ok(())
     }
