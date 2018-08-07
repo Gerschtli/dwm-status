@@ -3,12 +3,14 @@ with import <nixpkgs> { };
 rustPlatform.buildRustPackage rec {
   name = "dwm-status";
 
-  src = ./.;
+  src = builtins.filterSource
+    (path: type: type != "directory" || baseNameOf path != "target")
+    ./.;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "13ibcbk8shfajk200d8v2p6y3zfrz5dlvxqfw1zsm630s5dmy6qx";
+  cargoSha256 = "1ngdzzxnv4y6xprmkawf6s2696zgwiwgb6ykj5adb4knlx5c634d";
 
   postInstall = ''
     wrapProgram $out/bin/${name} \
