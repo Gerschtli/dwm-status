@@ -12,7 +12,7 @@ If an error occurs, notifications are sent via libnotify.
 
 ## Requirements
 
-`cargo`, `rustc` and `lib{dbus,gdk-pixbuf,glib,notify,x11}-dev` are required to build the binary.
+`cargo`, `rustc` and `lib{dbus,gdk-pixbuf,notify,x11}-dev` are required to build the binary.
 
 ## Build and run
 
@@ -135,3 +135,19 @@ Shows time in configured format and refreshes every second or minute.
 | ---------------- | ------------------- | -------------------------------------------------------------------- |
 | `format`         | `"%Y-%m-%d %H:%M"`  | Time format of [chrono crate](https://github.com/chronotope/chrono). |
 | `update_seconds` | `false`             | Whether to update time feature every second or minute.               |
+
+## Contributing
+
+You need `rustup` with nightly toolchain, rustfmt, clippy and `lib{dbus,gdk-pixbuf,notify,x11}-dev`. I recommend the
+installation of racer.
+
+If your are using [nix](https://nixos.org/nix) you can use `shell.nix` for all dependencies except the `rustup`
+toolchain and components:
+
+```sh
+$ nix-shell
+[nix-shell]$ rustup install nightly
+[nix-shell]$ rustup default nightly
+[nix-shell]$ rustup component add clippy-preview
+[nix-shell]$ rustup component add rustfmt-preview
+```

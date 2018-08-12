@@ -6,11 +6,10 @@ stdenv.mkDerivation {
   buildInputs = [
     dbus
     gdk_pixbuf
-    latest.rustChannels.nightly.clippy-preview
-    latest.rustChannels.nightly.rust
     libnotify
     pkgconfig
     rustracer
+    rustup
     xorg.libX11
   ];
 
