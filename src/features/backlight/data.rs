@@ -24,28 +24,32 @@ mod tests {
             BacklightData {
                 template: String::from("L {BL}%"),
                 value: 0.
-            }.render(),
+            }
+            .render(),
             "L 0%"
         );
         assert_eq!(
             BacklightData {
                 template: String::from("XX {BL}% {BL}"),
                 value: 0.15
-            }.render(),
+            }
+            .render(),
             "XX 15% 15"
         );
         assert_eq!(
             BacklightData {
                 template: String::from("L {BL}%"),
                 value: 0.356
-            }.render(),
+            }
+            .render(),
             "L 36%"
         );
         assert_eq!(
             BacklightData {
                 template: String::from("L {BF}%"),
                 value: 0.356
-            }.render(),
+            }
+            .render(),
             "L {BF}%"
         );
     }

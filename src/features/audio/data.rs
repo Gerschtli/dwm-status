@@ -28,28 +28,32 @@ mod tests {
         assert_eq!(
             AudioData::Mute {
                 template: String::from("ABC")
-            }.render(),
+            }
+            .render(),
             "ABC"
         );
         assert_eq!(
             AudioData::Volume {
                 template: String::from("xx {VOL}%"),
                 volume: 0
-            }.render(),
+            }
+            .render(),
             "xx 0%"
         );
         assert_eq!(
             AudioData::Volume {
                 template: String::from("xx {VOL}% {VOL}"),
                 volume: 10
-            }.render(),
+            }
+            .render(),
             "xx 10% 10"
         );
         assert_eq!(
             AudioData::Volume {
                 template: String::from("xx {WOL}%"),
                 volume: 10
-            }.render(),
+            }
+            .render(),
             "xx {WOL}%"
         );
     }

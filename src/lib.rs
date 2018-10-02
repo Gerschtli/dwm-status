@@ -58,7 +58,8 @@ fn render(
     ctrlc::set_handler(move || {
         tx.send(async::Message::Kill)
             .wrap_error_kill("termination", "notify thread killed");
-    }).wrap_error("termination", "failed to set termination handler")?;
+    })
+    .wrap_error("termination", "failed to set termination handler")?;
 
     let status_bar = StatusBar::new(settings.separator.clone())?;
     status_bar.render(order, feature_map)?;

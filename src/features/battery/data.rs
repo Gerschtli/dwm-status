@@ -98,7 +98,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "no_battery"
         );
         assert_eq!(
@@ -115,7 +116,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "no_battery"
         );
 
@@ -133,7 +135,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "charging 56% (00:10)"
         );
         assert_eq!(
@@ -150,7 +153,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "discharging 56% (00:10)"
         );
 
@@ -171,7 +175,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "charging 56% (00:10)-separator-75% (00:12)"
         );
         assert_eq!(
@@ -191,7 +196,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "discharging 56% (00:10)-separator-75% (00:12)"
         );
         assert_eq!(
@@ -212,7 +218,8 @@ mod tests {
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
                 },
-            }.render(),
+            }
+            .render(),
             "discharging 56% (00:10)-separator-75% (00:12)-separator-21% (00:25)"
         );
     }
@@ -223,21 +230,24 @@ mod tests {
             BatteryInfo {
                 capacity: 0.,
                 estimation: Some(time::Duration::from_secs(0)),
-            }.render(),
+            }
+            .render(),
             "0% (00:00)"
         );
         assert_eq!(
             BatteryInfo {
                 capacity: 0.356,
                 estimation: Some(time::Duration::from_secs(11759)),
-            }.render(),
+            }
+            .render(),
             "36% (03:15)"
         );
         assert_eq!(
             BatteryInfo {
                 capacity: 0.356,
                 estimation: None,
-            }.render(),
+            }
+            .render(),
             "36%"
         );
     }

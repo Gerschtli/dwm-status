@@ -26,15 +26,17 @@ mod tests {
             TimeData {
                 format: String::from("%Y-%m-%d ---"),
                 time: date,
-            }.render(),
+            }
+            .render(),
             "2014-02-01 ---"
         );
         assert_eq!(
             TimeData {
                 format: String::from("%Y-%m-%d %H:%M:%S"),
                 time: date,
-            }.render(),
-            "2014-02-01 09:00:09"
+            }
+            .render(),
+            "2014-02-01 11:00:09"
         );
     }
 }
