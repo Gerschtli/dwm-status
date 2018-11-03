@@ -1,17 +1,14 @@
 use super::FEATURE_NAME;
 use async;
 use dbus;
+use dbus::data;
+use dbus_lib;
 use error::*;
 use std::collections::HashSet;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
 
-const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
-const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
-const MEMBER_DEVICE_ADDED: &str = "DeviceAdded";
-const MEMBER_ENUMERATE_DEVICES: &str = "EnumerateDevices";
-const MEMBER_PROPERTIES_CHANGED: &str = "PropertiesChanged";
 const PATH_BATTERY_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices/battery_";
 const PATH_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices";
 const PATH_UPOWER: &str = "/org/freedesktop/UPower";
@@ -34,11 +31,8 @@ impl DbusWatcher {
         tx: mpsc::Sender<async::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {
-        let connection = dbus::Connection::get_private(dbus::BusType::System)
-            .wrap_error(FEATURE_NAME, "failed to connect to dbus")?;
-
         Ok(DbusWatcher {
-            connection,
+            connection: dbus::Connection::new()?,
             id,
             tx,
             tx_devices,
@@ -46,12 +40,11 @@ impl DbusWatcher {
     }
 
     pub fn start(&self) -> Result<()> {
-        self.connection
-            .add_match(&format!(
-                "type='signal',path='{}',interface='{}'",
-                PATH_UPOWER, INTERFACE_UPOWER
-            ))
-            .wrap_error(FEATURE_NAME, "failed to add match")?;
+        self.connection.add_match(data::Match {
+            interface: data::Interface::UPOWER,
+            member: None,
+            path: PATH_UPOWER,
+        })?;
 
         let mut devices = HashSet::new();
 
@@ -59,34 +52,29 @@ impl DbusWatcher {
             self.add_device(&mut devices, &device)?;
         }
 
-        for item in self.connection.iter(300_000) {
-            if let dbus::ConnectionItem::Signal(signal) = item {
-                if self.is_upower_interface(&signal.interface())? {
-                    let path = signal
-                        .read1::<dbus::Path>()
-                        .wrap_error(FEATURE_NAME, "failed to read path of dbus signal")?;
+        self.connection.listen_for_signals(|signal| {
+            if signal.is_interface(data::Interface::UPOWER)? {
+                let path = signal.return_value::<dbus_lib::Path>()?;
 
-                    if self.is_device_added_member(&signal.member())? {
-                        self.add_device(&mut devices, &path)?;
-                    } else {
-                        self.remove_device(&mut devices, &path)?;
-                    }
-                } else if self.is_properties_changed_member(&signal.member())? {
-                    // wait for /sys/class/power_supply files updates
-                    thread::sleep(time::Duration::from_secs(2));
+                if signal.is_member(data::Member::DEVICE_ADDED)? {
+                    self.add_device(&mut devices, &path)?;
+                } else {
+                    self.remove_device(&mut devices, &path)?;
                 }
-
-                async::send_message(FEATURE_NAME, &self.id, &self.tx);
+            } else if signal.is_member(data::Member::PROPERTIES_CHANGED)? {
+                // wait for /sys/class/power_supply files updates
+                thread::sleep(time::Duration::from_secs(2));
             }
-        }
 
-        Ok(())
+            async::send_message(FEATURE_NAME, &self.id, &self.tx);
+            Ok(())
+        })
     }
 
     fn add_device<'a>(
         &self,
-        devices: &mut HashSet<dbus::Path<'a>>,
-        path: &dbus::Path<'a>,
+        devices: &mut HashSet<dbus_lib::Path<'a>>,
+        path: &dbus_lib::Path<'a>,
     ) -> Result<()> {
         let name = self.get_device_name(path)?;
 
@@ -95,9 +83,11 @@ impl DbusWatcher {
             return Ok(());
         }
 
-        self.connection
-            .add_match(&self.build_properties_changed_match(path))
-            .wrap_error(FEATURE_NAME, "failed to add device match")?;
+        self.connection.add_match(data::Match {
+            interface: data::Interface::DBUS_PROPERTIES,
+            member: Some(data::Member::PROPERTIES_CHANGED),
+            path,
+        })?;
 
         self.tx_devices
             .send(DeviceMessage::Added(String::from(name)))
@@ -108,64 +98,20 @@ impl DbusWatcher {
         Ok(())
     }
 
-    fn build_properties_changed_match(&self, path: &dbus::Path) -> String {
-        format!(
-            "type='signal',path='{}',interface='{}',member='{}'",
-            path, INTERFACE_DBUS_PROPERTIES, MEMBER_PROPERTIES_CHANGED
-        )
-    }
-
-    fn is_device_added_member(&self, member: &Option<dbus::Member>) -> Result<bool> {
-        let added_member = dbus::Member::new(MEMBER_DEVICE_ADDED)
-            .wrap_error(FEATURE_NAME, "failed to create member instance")?;
-
-        Ok(self.is_some_equal(member, &added_member))
-    }
-
-    fn is_properties_changed_member(&self, member: &Option<dbus::Member>) -> Result<bool> {
-        let added_member = dbus::Member::new(MEMBER_PROPERTIES_CHANGED)
-            .wrap_error(FEATURE_NAME, "failed to create member instance")?;
-
-        Ok(self.is_some_equal(member, &added_member))
-    }
-
-    fn is_some_equal<T: PartialEq>(&self, instance: &Option<T>, compare: &T) -> bool {
-        match *instance {
-            Some(ref instance) if instance == compare => true,
-            _ => false,
-        }
-    }
-
-    fn is_upower_interface(&self, interface: &Option<dbus::Interface>) -> Result<bool> {
-        let upower_interface = dbus::Interface::new(INTERFACE_UPOWER)
-            .wrap_error(FEATURE_NAME, "failed to create interface instance")?;
-
-        Ok(self.is_some_equal(interface, &upower_interface))
-    }
-
-    fn get_current_devices(&self) -> Result<Vec<dbus::Path>> {
+    fn get_current_devices(&self) -> Result<Vec<dbus_lib::Path>> {
         let message = dbus::Message::new_method_call(
-            INTERFACE_UPOWER,
+            data::Interface::UPOWER,
             PATH_UPOWER,
-            INTERFACE_UPOWER,
-            MEMBER_ENUMERATE_DEVICES,
-        )
-        .wrap_error(
-            FEATURE_NAME,
-            "failed to create dbus message enumerate devices",
+            data::Interface::UPOWER,
+            data::Member::ENUMERATE_DEVICES,
         )?;
 
-        let response = self.connection
-            .send_with_reply_and_block(message, 2000) // 2 seconds timeout
-            .wrap_error(FEATURE_NAME, "failed to call dbus enumerate devices")?;
+        let response = self.connection.send_message(message)?;
 
-        response.read1::<Vec<dbus::Path>>().wrap_error(
-            FEATURE_NAME,
-            "failed to read dbus response enumerate devices",
-        )
+        response.return_value::<Vec<dbus_lib::Path>>()
     }
 
-    fn get_device_name<'a>(&self, path: &'a dbus::Path) -> Result<&'a str> {
+    fn get_device_name<'a>(&self, path: &'a dbus_lib::Path) -> Result<&'a str> {
         let string = path.as_cstr().to_str().wrap_error(
             FEATURE_NAME,
             "failed to create utf8 string of dbus object path",
@@ -176,8 +122,8 @@ impl DbusWatcher {
 
     fn remove_device<'a>(
         &self,
-        devices: &mut HashSet<dbus::Path<'a>>,
-        path: &dbus::Path<'a>,
+        devices: &mut HashSet<dbus_lib::Path<'a>>,
+        path: &dbus_lib::Path<'a>,
     ) -> Result<()> {
         if !devices.contains(path) {
             return Ok(());
@@ -185,9 +131,11 @@ impl DbusWatcher {
 
         let name = self.get_device_name(path)?;
 
-        self.connection
-            .remove_match(&self.build_properties_changed_match(path))
-            .wrap_error(FEATURE_NAME, "failed to remove device match")?;
+        self.connection.remove_match(data::Match {
+            interface: data::Interface::DBUS_PROPERTIES,
+            member: Some(data::Member::PROPERTIES_CHANGED),
+            path,
+        })?;
 
         self.tx_devices
             .send(DeviceMessage::Removed(String::from(name)))
