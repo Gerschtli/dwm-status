@@ -29,6 +29,7 @@ mod feature;
 mod dbus;
 mod features;
 mod io;
+mod resume;
 mod settings;
 mod status_bar;
 
@@ -36,6 +37,7 @@ use error::*;
 use status_bar::StatusBar;
 use std::collections::HashMap;
 use std::env;
+use std::ops::DerefMut;
 use std::sync::mpsc;
 
 fn get_settings() -> Result<settings::Settings> {
@@ -70,10 +72,7 @@ fn render(
             async::Message::FeatureUpdate(ref id) => {
                 match feature_map.get_mut(id) {
                     Some(ref mut feature) => {
-                        feature.update()?;
-                        if settings.debug {
-                            println!("update {}: {}", feature.name(), feature.render());
-                        }
+                        update_feature(feature.deref_mut().deref_mut(), settings.debug)?;
                     },
                     None => {
                         return Err(Error::new_custom(
@@ -86,7 +85,25 @@ fn render(
                 status_bar.render(order, feature_map)?;
             },
             async::Message::Kill => break,
+            async::Message::UpdateAll => {
+                if settings.debug {
+                    println!("update all");
+                }
+                for feature in feature_map.values_mut() {
+                    update_feature(feature.deref_mut(), settings.debug)?;
+                }
+            },
         }
+    }
+
+    Ok(())
+}
+
+fn update_feature(feature: &mut feature::Feature, debug: bool) -> Result<()> {
+    feature.update()?;
+
+    if debug {
+        println!("update {}: {}", feature.name(), feature.render());
     }
 
     Ok(())
@@ -115,6 +132,8 @@ pub fn run() -> Result<()> {
         .into_iter()
         .map(|feature| (String::from(feature.id()), feature))
         .collect();
+
+    resume::init_resume_notifier(&tx)?;
 
     render(&tx, &rx, &order, &mut feature_map, &settings)
 }

@@ -16,12 +16,14 @@ macro_rules! enum_string {
 
 enum_string!(Interface;
     DBUS_PROPERTIES = "org.freedesktop.DBus.Properties",
+    LOGIN1 = "org.freedesktop.login1.Manager",
     UPOWER = "org.freedesktop.UPower",
 );
 
 enum_string!(Member;
     DEVICE_ADDED = "DeviceAdded",
     ENUMERATE_DEVICES = "EnumerateDevices",
+    PREPARE_FOR_SLEEP = "PrepareForSleep",
     PROPERTIES_CHANGED = "PropertiesChanged",
 );
 
@@ -49,7 +51,6 @@ impl<'a> Match<'a> {
 }
 
 #[cfg(test)]
-
 mod tests {
     use super::*;
 
@@ -59,6 +60,7 @@ mod tests {
             Interface::DBUS_PROPERTIES.value(),
             "org.freedesktop.DBus.Properties"
         );
+        assert_eq!(Interface::LOGIN1.value(), "org.freedesktop.login1.Manager");
         assert_eq!(Interface::UPOWER.value(), "org.freedesktop.UPower");
     }
 
@@ -66,6 +68,7 @@ mod tests {
     fn test_member() {
         assert_eq!(Member::DEVICE_ADDED.value(), "DeviceAdded");
         assert_eq!(Member::ENUMERATE_DEVICES.value(), "EnumerateDevices");
+        assert_eq!(Member::PREPARE_FOR_SLEEP.value(), "PrepareForSleep");
         assert_eq!(Member::PROPERTIES_CHANGED.value(), "PropertiesChanged");
     }
 

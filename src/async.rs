@@ -5,6 +5,7 @@ use std::sync::mpsc;
 pub enum Message {
     FeatureUpdate(String),
     Kill,
+    UpdateAll,
 }
 
 pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
