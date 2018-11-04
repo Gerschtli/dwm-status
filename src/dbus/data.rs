@@ -1,5 +1,6 @@
 macro_rules! enum_string {
     ($name:ident; $($key:ident = $value:expr,)*) => {
+        #[derive(Debug)]
         pub enum $name {
             $($key,)*
         }
@@ -27,6 +28,7 @@ enum_string!(Member;
     PROPERTIES_CHANGED = "PropertiesChanged",
 );
 
+#[derive(Debug)]
 pub struct Match<'a> {
     pub interface: Interface,
     pub member: Option<Member>,
