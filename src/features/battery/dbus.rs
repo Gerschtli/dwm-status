@@ -9,6 +9,11 @@ use std::sync::mpsc;
 use std::thread;
 use std::time;
 
+const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
+const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
+const MEMBER_DEVICE_ADDED: &str = "DeviceAdded";
+const MEMBER_ENUMERATE_DEVICES: &str = "EnumerateDevices";
+const MEMBER_PROPERTIES_CHANGED: &str = "PropertiesChanged";
 const PATH_BATTERY_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices/battery_";
 const PATH_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices";
 const PATH_UPOWER: &str = "/org/freedesktop/UPower";
@@ -41,7 +46,7 @@ impl DbusWatcher {
 
     pub fn start(&self) -> Result<()> {
         self.connection.add_match(data::Match {
-            interface: data::Interface::UPOWER,
+            interface: INTERFACE_UPOWER,
             member: None,
             path: PATH_UPOWER,
         })?;
@@ -53,15 +58,15 @@ impl DbusWatcher {
         }
 
         self.connection.listen_for_signals(|signal| {
-            if signal.is_interface(data::Interface::UPOWER)? {
+            if signal.is_interface(INTERFACE_UPOWER)? {
                 let path = signal.return_value::<dbus_lib::Path>()?;
 
-                if signal.is_member(data::Member::DEVICE_ADDED)? {
+                if signal.is_member(MEMBER_DEVICE_ADDED)? {
                     self.add_device(&mut devices, &path)?;
                 } else {
                     self.remove_device(&mut devices, &path)?;
                 }
-            } else if signal.is_member(data::Member::PROPERTIES_CHANGED)? {
+            } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
                 // wait for /sys/class/power_supply files updates
                 thread::sleep(time::Duration::from_secs(2));
             }
@@ -84,8 +89,8 @@ impl DbusWatcher {
         }
 
         self.connection.add_match(data::Match {
-            interface: data::Interface::DBUS_PROPERTIES,
-            member: Some(data::Member::PROPERTIES_CHANGED),
+            interface: INTERFACE_DBUS_PROPERTIES,
+            member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
         })?;
 
@@ -100,10 +105,10 @@ impl DbusWatcher {
 
     fn get_current_devices(&self) -> Result<Vec<dbus_lib::Path>> {
         let message = dbus::Message::new_method_call(
-            &data::Interface::UPOWER,
+            INTERFACE_UPOWER,
             PATH_UPOWER,
-            &data::Interface::UPOWER,
-            &data::Member::ENUMERATE_DEVICES,
+            INTERFACE_UPOWER,
+            MEMBER_ENUMERATE_DEVICES,
         )?;
 
         let response = self.connection.send_message(message)?;
@@ -132,8 +137,8 @@ impl DbusWatcher {
         let name = self.get_device_name(path)?;
 
         self.connection.remove_match(data::Match {
-            interface: data::Interface::DBUS_PROPERTIES,
-            member: Some(data::Member::PROPERTIES_CHANGED),
+            interface: INTERFACE_DBUS_PROPERTIES,
+            member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
         })?;
 

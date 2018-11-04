@@ -7,10 +7,10 @@ use std::ffi;
 const ERROR_NAME: &str = "dbus";
 
 macro_rules! compare_property {
-    ($method:ident, $property:ident, $data:ident) => {
-        pub fn $method(&self, compare: ::dbus::data::$data) -> Result<bool> {
+    ($method:ident, $property:ident) => {
+        pub fn $method(&self, compare: &'static str) -> Result<bool> {
             Ok(if let Some(interface) = self.message.$property() {
-                interface.as_cstr() == ffi::CString::new(compare.value())
+                interface.as_cstr() == ffi::CString::new(compare)
                     .wrap_error(ERROR_NAME, "failed to create CString")?
                     .as_c_str()
             } else {
@@ -25,28 +25,23 @@ pub struct Message {
 }
 
 impl Message {
-    compare_property!(is_interface, interface, Interface);
+    compare_property!(is_interface, interface);
 
-    compare_property!(is_member, member, Member);
+    compare_property!(is_member, member);
 
     pub fn new(message: dbus_lib::Message) -> Self {
         Message { message }
     }
 
     pub fn new_method_call<'a>(
-        bus: &data::Interface,
+        bus: &'static str,
         path: &'a str,
-        interface: &data::Interface,
-        member: &data::Member,
+        interface: &'static str,
+        member: &'static str,
     ) -> Result<Self> {
         Ok(Message {
-            message: dbus_lib::Message::new_method_call(
-                bus.value(),
-                path,
-                interface.value(),
-                member.value(),
-            )
-            .wrap_error(ERROR_NAME, "failed to create dbus method call message")?,
+            message: dbus_lib::Message::new_method_call(bus, path, interface, member)
+                .wrap_error(ERROR_NAME, "failed to create dbus method call message")?,
         })
     }
 
