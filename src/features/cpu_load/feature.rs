@@ -60,7 +60,7 @@ impl feature::Feature for CpuLoad {
         let content = io::read_file(PATH_LOADAVG)
             .wrap_error(FEATURE_NAME, &format!("failed to read {}", PATH_LOADAVG))?;
 
-        let mut iterator = content.split_whitespace().into_iter();
+        let mut iterator = content.split_whitespace();
 
         self.data = CpuLoadData {
             one: convert_to_float(iterator.next())?,

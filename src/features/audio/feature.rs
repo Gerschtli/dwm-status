@@ -78,13 +78,11 @@ impl feature::Feature for Audio {
 
         let last_line = &output
             .lines()
-            .into_iter()
             .last()
             .wrap_error(FEATURE_NAME, "empty amixer output")?;
 
         let last = last_line
             .split_whitespace()
-            .into_iter()
             .filter(|x| x.starts_with('[') && !x.contains("dB"))
             .map(|s| s.trim_matches(FILTER))
             .collect::<Vec<&str>>();
