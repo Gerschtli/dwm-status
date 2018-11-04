@@ -34,10 +34,10 @@ impl Message {
     }
 
     pub fn new_method_call<'a>(
-        bus: data::Interface,
+        bus: &data::Interface,
         path: &'a str,
-        interface: data::Interface,
-        member: data::Member,
+        interface: &data::Interface,
+        member: &data::Member,
     ) -> Result<Self> {
         Ok(Message {
             message: dbus_lib::Message::new_method_call(

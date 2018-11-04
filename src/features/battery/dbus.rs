@@ -100,10 +100,10 @@ impl DbusWatcher {
 
     fn get_current_devices(&self) -> Result<Vec<dbus_lib::Path>> {
         let message = dbus::Message::new_method_call(
-            data::Interface::UPOWER,
+            &data::Interface::UPOWER,
             PATH_UPOWER,
-            data::Interface::UPOWER,
-            data::Member::ENUMERATE_DEVICES,
+            &data::Interface::UPOWER,
+            &data::Member::ENUMERATE_DEVICES,
         )?;
 
         let response = self.connection.send_message(message)?;
