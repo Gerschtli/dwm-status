@@ -1,15 +1,16 @@
 use error::*;
 use std::sync::mpsc;
+use uuid;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum Message {
-    FeatureUpdate(String),
+    FeatureUpdate(uuid::Uuid),
     Kill,
     UpdateAll,
 }
 
-pub fn send_message(feature: &str, id: &str, tx: &mpsc::Sender<Message>) {
-    let message = Message::FeatureUpdate(String::from(id));
+pub fn send_message(feature: &str, id: uuid::Uuid, tx: &mpsc::Sender<Message>) {
+    let message = Message::FeatureUpdate(id);
 
     tx.send(message)
         .wrap_error_kill(feature, "notify thread killed");

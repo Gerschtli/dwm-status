@@ -9,11 +9,12 @@ use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
+use uuid;
 
 #[derive(Debug)]
 pub struct Time {
     data: TimeData,
-    id: String,
+    id: uuid::Uuid,
     settings: settings::Time,
     tx: mpsc::Sender<async::Message>,
 }
@@ -23,7 +24,11 @@ renderable_impl!(Time);
 impl feature::FeatureConfig for Time {
     type Settings = settings::Time;
 
-    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
+    fn new(
+        id: uuid::Uuid,
+        tx: mpsc::Sender<async::Message>,
+        settings: Self::Settings,
+    ) -> Result<Self> {
         Ok(Time {
             data: TimeData {
                 format: settings.format.clone(),
@@ -40,12 +45,12 @@ impl feature::Feature for Time {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        let id = self.id.clone();
+        let id = self.id;
         let tx = self.tx.clone();
         let update_seconds = self.settings.update_seconds;
 
         thread::spawn(move || loop {
-            async::send_message(FEATURE_NAME, &id, &tx);
+            async::send_message(FEATURE_NAME, id, &tx);
 
             let update_interval = if update_seconds {
                 1

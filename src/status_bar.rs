@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use std::ffi::CString;
 use std::os::raw::c_char;
 use std::ptr;
+use uuid;
 use x11::xlib;
 
 pub struct StatusBar {
@@ -36,8 +37,8 @@ impl StatusBar {
 
     pub fn render(
         &self,
-        order: &[String],
-        feature_map: &HashMap<String, Box<feature::Feature>>,
+        order: &[uuid::Uuid],
+        feature_map: &HashMap<uuid::Uuid, Box<feature::Feature>>,
     ) -> Result<()> {
         let status = order
             .iter()

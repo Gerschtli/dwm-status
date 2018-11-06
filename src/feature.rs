@@ -1,11 +1,12 @@
 use async;
 use error::*;
 use std::sync::mpsc;
+use uuid;
 
 macro_rules! feature_default {
     () => {
-        fn id(&self) -> &str {
-            &self.id
+        fn id(&self) -> ::uuid::Uuid {
+            self.id
         }
 
         fn name(&self) -> &str {
@@ -29,7 +30,7 @@ pub trait Renderable {
 }
 
 pub trait Feature: Renderable {
-    fn id(&self) -> &str;
+    fn id(&self) -> uuid::Uuid;
 
     fn init_notifier(&self) -> Result<()>;
 
@@ -41,7 +42,11 @@ pub trait Feature: Renderable {
 pub trait FeatureConfig: Feature {
     type Settings;
 
-    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self>
+    fn new(
+        id: uuid::Uuid,
+        tx: mpsc::Sender<async::Message>,
+        settings: Self::Settings,
+    ) -> Result<Self>
     where
         Self: Sized;
 }

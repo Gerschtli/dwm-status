@@ -53,8 +53,8 @@ fn get_settings() -> Result<settings::Settings> {
 fn render(
     tx: &mpsc::Sender<async::Message>,
     rx: &mpsc::Receiver<async::Message>,
-    order: &[String],
-    feature_map: &mut HashMap<String, Box<feature::Feature>>,
+    order: &[uuid::Uuid],
+    feature_map: &mut HashMap<uuid::Uuid, Box<feature::Feature>>,
     settings: &settings::Settings,
 ) -> Result<()> {
     let tx = tx.clone();
@@ -126,11 +126,11 @@ pub fn run() -> Result<()> {
         return Err(Error::new_custom("settings", "no features enabled"));
     }
 
-    let order: Vec<_> = features.iter().map(|x| String::from(x.id())).collect();
+    let order: Vec<_> = features.iter().map(|x| x.id()).collect();
 
     let mut feature_map: HashMap<_, _> = features
         .into_iter()
-        .map(|feature| (String::from(feature.id()), feature))
+        .map(|feature| (feature.id(), feature))
         .collect();
 
     resume::init_resume_notifier(&tx)?;

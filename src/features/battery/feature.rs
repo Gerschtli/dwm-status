@@ -12,11 +12,12 @@ use settings;
 use std::collections::HashMap;
 use std::sync::mpsc;
 use std::thread;
+use uuid;
 
 #[derive(Debug)]
 pub struct Battery {
     data: BatteryData,
-    id: String,
+    id: uuid::Uuid,
     manager: BatteryManager,
     notifier: BatteryNotifier,
     settings: settings::Battery,
@@ -29,7 +30,11 @@ renderable_impl!(Battery);
 impl feature::FeatureConfig for Battery {
     type Settings = settings::Battery;
 
-    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
+    fn new(
+        id: uuid::Uuid,
+        tx: mpsc::Sender<async::Message>,
+        settings: Self::Settings,
+    ) -> Result<Self> {
         let (tx_devices, rx_devices) = mpsc::channel();
 
         let mut manager = BatteryManager::new(settings.debug, rx_devices)?;
@@ -55,7 +60,7 @@ impl feature::Feature for Battery {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
-        let id = self.id.clone();
+        let id = self.id;
         let tx = self.tx.clone();
         let tx_devices = self.tx_devices.clone();
 

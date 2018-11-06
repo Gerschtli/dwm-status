@@ -9,12 +9,13 @@ use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
+use uuid;
 
 #[derive(Debug)]
 pub struct Backlight {
     data: BacklightData,
     device: BacklightDevice,
-    id: String,
+    id: uuid::Uuid,
     settings: settings::Backlight,
     tx: mpsc::Sender<async::Message>,
 }
@@ -24,7 +25,11 @@ renderable_impl!(Backlight);
 impl feature::FeatureConfig for Backlight {
     type Settings = settings::Backlight;
 
-    fn new(id: String, tx: mpsc::Sender<async::Message>, settings: Self::Settings) -> Result<Self> {
+    fn new(
+        id: uuid::Uuid,
+        tx: mpsc::Sender<async::Message>,
+        settings: Self::Settings,
+    ) -> Result<Self> {
         Ok(Backlight {
             data: BacklightData {
                 template: settings.template.clone(),
@@ -42,8 +47,8 @@ impl feature::Feature for Backlight {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
+        let id = self.id;
         let tx = self.tx.clone();
-        let id = self.id.clone();
         let brightness_file = self.device.brightness_file();
 
         thread::spawn(move || {
@@ -61,7 +66,7 @@ impl feature::Feature for Backlight {
                     .wrap_error_kill(FEATURE_NAME, "error while reading inotify events");
 
                 if events.any(|event| event.mask.contains(inotify::EventMask::MODIFY)) {
-                    async::send_message(FEATURE_NAME, &id, &tx);
+                    async::send_message(FEATURE_NAME, id, &tx);
                 }
 
                 // prevent event spamming

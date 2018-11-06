@@ -8,6 +8,7 @@ use std::collections::HashSet;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
+use uuid;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
 const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
@@ -25,14 +26,14 @@ pub enum DeviceMessage {
 
 pub struct DbusWatcher {
     connection: dbus::Connection,
-    id: String,
+    id: uuid::Uuid,
     tx: mpsc::Sender<async::Message>,
     tx_devices: mpsc::Sender<DeviceMessage>,
 }
 
 impl DbusWatcher {
     pub fn new(
-        id: String,
+        id: uuid::Uuid,
         tx: mpsc::Sender<async::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {
@@ -71,7 +72,7 @@ impl DbusWatcher {
                 thread::sleep(time::Duration::from_secs(2));
             }
 
-            async::send_message(FEATURE_NAME, &self.id, &self.tx);
+            async::send_message(FEATURE_NAME, self.id, &self.tx);
             Ok(())
         })
     }
