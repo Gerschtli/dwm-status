@@ -13,13 +13,13 @@ branch = "master"
 repository = "Gerschtli/dwm-status"
 
 [dependencies]
-chrono = "0.4.2"
-config = "0.8.0"
-dbus = "0.6.1"
-inotify = "0.5.1"
+chrono = "0.4.6"
+config = "0.9.1"
+dbus = "0.6.3"
+inotify = "0.6.1"
 libnotify = "1.0.3"
-serde = "1.0.66"
-serde_derive = "1.0.66"
+serde = "1.0.80"
+serde_derive = "1.0.80"
 
 [dependencies.ctrlc]
 features = ["termination"]
@@ -27,8 +27,8 @@ version = "3.1.1"
 
 [dependencies.uuid]
 features = ["v4"]
-version = "0.6.5"
+version = "0.7.1"
 
 [dependencies.x11]
 features = ["xlib"]
-version = "2.18.0"
+version = "2.18.1"
