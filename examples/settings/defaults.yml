@@ -6,6 +6,7 @@ audio:
   control: Master
   mute: MUTE
   template: S {VOL}%
+  icons: []
 
 backlight:
   device: intel_backlight

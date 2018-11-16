@@ -65,7 +65,8 @@ Shows status of configured alsa control device. Listens on `alsactl monitor` for
 | ---------- | ------------ | ------------------------------------------------------------------------------- |
 | `control`  | `"Master"`   | Alsa control device to listen for.                                              |
 | `mute`     | `"MUTE"`     | Text representation if muted.                                                   |
-| `template` | `"S {VOL}%"` | Text representation if unmuted. (`{VOL}` gets replaced with the current volume) |
+| `template` | `"S {VOL}%"` | Text representation if unmuted. (`{VOL}` gets replaced with the current volume, `{ICO}` gets replaced with the icon) |
+| `icons`    | `[]`         | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.     |
 
 ### Feature: Backlight
 
