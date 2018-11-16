@@ -89,8 +89,8 @@ value, warning notifications with urgency normal or critical (depending on the c
 
 Shows following information per battery:
 
-| status               | example         | notes                        |
-| -------------------- | --------------- | ---------------------------- |
+| status               | example          | notes                        |
+| -------------------- | ---------------- | ---------------------------- |
 | charging             | `▲ 10% (01:23)` | In parentheses time to full  |
 | discharging          | `▼ 50% (02:03)` | In parentheses time to empty |
 
@@ -106,8 +106,8 @@ Shows following information as feature block:
 
 | name                | default              | description                                                |
 | ------------------- | -------------------- | ---------------------------------------------------------- |
-| `charging`          | `"▲"`                | Text representation for status charging.                   |
-| `discharging`       | `"▼"`                | Text representation for status discharging.                |
+| `charging`          | `"▲"`               | Text representation for status charging.                   |
+| `discharging`       | `"▼"`               | Text representation for status discharging.                |
 | `enable_notifier`   | `true`               | Whether to enable the notifier.                            |
 | `no_battery`        | `"NO BATT"`          | Text representation if no battery present.                 |
 | `notifier_critical` | `10`                 | Maximum battery value to notify via critical notification. |
