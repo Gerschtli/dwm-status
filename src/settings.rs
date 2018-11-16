@@ -71,7 +71,7 @@ impl Settings {
         // NOTE: if default values change, document in "examples/settings"
 
         config.set_default("debug", false)?;
-        config.set_default("order", vec![String::from("time")])?;
+        config.set_default("order", Vec::<String>::new())?;
         config.set_default("separator", " / ")?;
 
         config.set_default(
