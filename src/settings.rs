@@ -18,6 +18,7 @@ pub struct Audio {
     pub control: String,
     pub mute: String,
     pub template: String,
+    pub icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -80,6 +81,7 @@ impl Settings {
                 "control" => "Master",
                 "mute" => "MUTE",
                 "template" => "S {VOL}%",
+                "icons" => Vec::<String>::new(),
             ),
         )?;
         config.set_default(

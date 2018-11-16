@@ -108,6 +108,7 @@ impl feature::Feature for Audio {
         self.data = AudioData::Volume {
             template: self.settings.template.clone(),
             volume,
+            icons: self.settings.icons.clone(),
         };
         Ok(())
     }
