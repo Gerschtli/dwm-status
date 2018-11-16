@@ -32,6 +32,7 @@ mod io;
 mod resume;
 mod settings;
 mod status_bar;
+mod utils;
 
 use error::*;
 use status_bar::StatusBar;
