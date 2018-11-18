@@ -10,7 +10,8 @@
   },
   "backlight": {
     "device": "intel_backlight",
-    "template": "L {BL}%"
+    "template": "L {BL}%",
+    "icons": []
   },
   "battery": {
     "charging": "▲",

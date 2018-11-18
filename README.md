@@ -77,7 +77,8 @@ Shows status of backlight value and watches `/sys/class/backlight` for changes.
 | name       | default             | description                                                                  |
 | ---------- | ------------------- | ---------------------------------------------------------------------------- |
 | `device`   | `"intel_backlight"` | Backlight device in `/sys/class/backlight`.                                  |
-| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value) |
+| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon) |
+| `icons`    | `[]`                | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.  |
 
 ### Feature: Battery
 
