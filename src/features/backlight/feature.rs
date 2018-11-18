@@ -34,6 +34,7 @@ impl feature::FeatureConfig for Backlight {
             data: BacklightData {
                 template: settings.template.clone(),
                 value: 0.,
+                icons: settings.icons.clone(),
             },
             device: BacklightDevice::new(&settings.device)?,
             id,
@@ -81,6 +82,7 @@ impl feature::Feature for Backlight {
         self.data = BacklightData {
             template: self.settings.template.clone(),
             value: self.device.value()?,
+            icons: self.settings.icons.clone(),
         };
 
         Ok(())

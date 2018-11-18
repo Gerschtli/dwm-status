@@ -25,6 +25,7 @@ pub struct Audio {
 pub struct Backlight {
     pub device: String,
     pub template: String,
+    pub icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -89,6 +90,7 @@ impl Settings {
             map!(
                 "device" => "intel_backlight",
                 "template" => "L {BL}%",
+                "icons" => Vec::<String>::new(),
             ),
         )?;
         config.set_default(
