@@ -84,6 +84,7 @@ impl feature::Feature for Battery {
             let info = BatteryInfo {
                 capacity: device.capacity()?,
                 estimation: device.estimation(ac_online)?,
+                icons: self.settings.icons.clone(),
             };
 
             batteries.insert(String::from(&name[..]), info);
@@ -99,6 +100,7 @@ impl feature::Feature for Battery {
             if let Some(&&BatteryInfo {
                 capacity,
                 estimation: Some(ref estimation),
+                ..
             }) = infos.get(0)
             {
                 self.notifier.update(capacity, estimation);

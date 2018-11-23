@@ -4,16 +4,24 @@ use feature;
 use settings;
 use std::collections::HashMap;
 use std::time;
+use utils::icon_by_float;
 
 #[derive(Clone, Debug)]
 pub struct BatteryInfo {
     pub capacity: f32,
     pub estimation: Option<time::Duration>,
+    pub icons: Vec<String>,
 }
 
 impl feature::Renderable for BatteryInfo {
     fn render(&self) -> String {
-        let mut rendered = fmt_capacity(self.capacity);
+        let mut rendered = String::with_capacity(16);
+
+        if let Some(icon) = icon_by_float(&self.icons, self.capacity) {
+            rendered.push_str(&format!("{} ", icon));
+        }
+
+        rendered.push_str(&fmt_capacity(self.capacity));
 
         if let Some(ref estimation) = self.estimation {
             rendered.push_str(&format!(" ({})", fmt_time(estimation)));
@@ -71,17 +79,21 @@ mod tests {
 
     #[test]
     fn test_display_data() {
+        let icons = vec![String::from("LOW"), String::from("HIGH")];
         let info1 = BatteryInfo {
             capacity: 0.56,
             estimation: Some(time::Duration::from_secs(600)),
+            icons: icons.clone(),
         };
         let info2 = BatteryInfo {
             capacity: 0.75,
             estimation: Some(time::Duration::from_secs(720)),
+            icons: icons.clone(),
         };
         let info3 = BatteryInfo {
             capacity: 0.21,
             estimation: Some(time::Duration::from_secs(1510)),
+            icons: icons.clone(),
         };
 
         assert_eq!(
@@ -97,6 +109,7 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
@@ -115,6 +128,7 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
@@ -134,10 +148,11 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
-            "charging 56% (00:10)"
+            "charging HIGH 56% (00:10)"
         );
         assert_eq!(
             BatteryData {
@@ -152,10 +167,11 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
-            "discharging 56% (00:10)"
+            "discharging HIGH 56% (00:10)"
         );
 
         assert_eq!(
@@ -174,10 +190,11 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
-            "charging 56% (00:10)-separator-75% (00:12)"
+            "charging HIGH 56% (00:10)-separator-HIGH 75% (00:12)"
         );
         assert_eq!(
             BatteryData {
@@ -195,10 +212,11 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
-            "discharging 56% (00:10)-separator-75% (00:12)"
+            "discharging HIGH 56% (00:10)-separator-HIGH 75% (00:12)"
         );
         assert_eq!(
             BatteryData {
@@ -217,38 +235,43 @@ mod tests {
                     notifier_critical: 1,
                     notifier_levels: vec![1, 2],
                     separator: String::from("-separator-"),
+                    icons: icons.clone(),
                 },
             }
             .render(),
-            "discharging 56% (00:10)-separator-75% (00:12)-separator-21% (00:25)"
+            "discharging HIGH 56% (00:10)-separator-HIGH 75% (00:12)-separator-LOW 21% (00:25)"
         );
     }
 
     #[test]
     fn test_display_info() {
+        let icons = vec![String::from("LOW"), String::from("HIGH")];
         assert_eq!(
             BatteryInfo {
                 capacity: 0.,
                 estimation: Some(time::Duration::from_secs(0)),
+                icons: icons.clone(),
             }
             .render(),
-            "0% (00:00)"
+            "LOW 0% (00:00)"
         );
         assert_eq!(
             BatteryInfo {
                 capacity: 0.356,
                 estimation: Some(time::Duration::from_secs(11759)),
+                icons: icons.clone(),
             }
             .render(),
-            "36% (03:15)"
+            "LOW 36% (03:15)"
         );
         assert_eq!(
             BatteryInfo {
-                capacity: 0.356,
+                capacity: 0.522,
                 estimation: None,
+                icons: icons.clone(),
             }
             .render(),
-            "36%"
+            "HIGH 52%"
         );
     }
 }

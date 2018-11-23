@@ -39,6 +39,7 @@ pub struct Battery {
     pub notifier_critical: u32,
     pub notifier_levels: Vec<u32>,
     pub separator: String,
+    pub icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -103,6 +104,7 @@ impl Settings {
                 "notifier_critical" => 10,
                 "notifier_levels" => vec![2, 5, 10, 15, 20],
                 "separator" => " · ",
+                "icons" => Vec::<String>::new(),
             ),
         )?;
         config.set_default(
