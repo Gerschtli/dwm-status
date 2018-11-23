@@ -1,5 +1,5 @@
 use feature;
-use utils::icon_by_percentage;
+use utils::icon_by_float;
 
 #[derive(Debug)]
 pub struct BacklightData {
@@ -10,12 +10,14 @@ pub struct BacklightData {
 
 impl feature::Renderable for BacklightData {
     fn render(&self) -> String {
-        let value = self.value * 100.;
-        let mut rendered = self.template.replace("{BL}", &format!("{:.0}", value));
-        let icon_optional = icon_by_percentage(&self.icons, value as u32);
-        if let Some(icon) = icon_optional {
+        let mut rendered = self
+            .template
+            .replace("{BL}", &format!("{:.0}", self.value * 100.));
+
+        if let Some(icon) = icon_by_float(&self.icons, self.value) {
             rendered = rendered.replace("{ICO}", icon);
         }
+
         rendered
     }
 }

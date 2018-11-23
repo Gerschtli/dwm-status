@@ -1,5 +1,9 @@
 use std::cmp;
 
+pub fn icon_by_float(icons: &[String], float: f32) -> Option<&str> {
+    icon_by_percentage(icons, (float * 100.) as u32)
+}
+
 pub fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
     if icons.is_empty() {
         return None;
@@ -56,5 +60,47 @@ mod tests {
         assert_eq!(icon_by_percentage(&icons, 66), Some("HIGH"));
         assert_eq!(icon_by_percentage(&icons, 100), Some("HIGH"));
         assert_eq!(icon_by_percentage(&icons, 120), Some("HIGH"));
+    }
+
+    #[test]
+    fn test_icon_by_float_with_no_element() {
+        let icons = Vec::<String>::new();
+        assert_eq!(icon_by_float(&icons, 0.), None);
+        assert_eq!(icon_by_float(&icons, 1.), None);
+    }
+
+    #[test]
+    fn test_icon_by_float_with_one_element() {
+        let icons = vec![String::from("ICON")];
+        assert_eq!(icon_by_float(&icons, 0.), Some("ICON"));
+        assert_eq!(icon_by_float(&icons, 0.5), Some("ICON"));
+        assert_eq!(icon_by_float(&icons, 1.), Some("ICON"));
+        assert_eq!(icon_by_float(&icons, 1.2), Some("ICON"));
+    }
+
+    #[test]
+    fn test_icon_by_float_with_two_elements() {
+        let icons = vec![String::from("LOW"), String::from("HIGH")];
+        assert_eq!(icon_by_float(&icons, 0.), Some("LOW"));
+        assert_eq!(icon_by_float(&icons, 0.4), Some("LOW"));
+        assert_eq!(icon_by_float(&icons, 0.5), Some("HIGH"));
+        assert_eq!(icon_by_float(&icons, 1.), Some("HIGH"));
+        assert_eq!(icon_by_float(&icons, 1.2), Some("HIGH"));
+    }
+
+    #[test]
+    fn test_icon_by_float_with_three_elements() {
+        let icons = vec![
+            String::from("LOW"),
+            String::from("MIDDLE"),
+            String::from("HIGH"),
+        ];
+        assert_eq!(icon_by_float(&icons, 0.), Some("LOW"));
+        assert_eq!(icon_by_float(&icons, 0.32), Some("LOW"));
+        assert_eq!(icon_by_float(&icons, 0.33), Some("MIDDLE"));
+        assert_eq!(icon_by_float(&icons, 0.65), Some("MIDDLE"));
+        assert_eq!(icon_by_float(&icons, 0.66), Some("HIGH"));
+        assert_eq!(icon_by_float(&icons, 1.), Some("HIGH"));
+        assert_eq!(icon_by_float(&icons, 1.2), Some("HIGH"));
     }
 }
