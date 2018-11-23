@@ -71,7 +71,7 @@ impl Settings {
     pub fn new(config_path: &str) -> Result<Self, ConfigError> {
         let mut config = Config::new();
 
-        // NOTE: if default values change, document in "examples/settings"
+        // NOTE: if default values change, document in "examples/default-settings"
 
         config.set_default("debug", false)?;
         config.set_default("order", Vec::<String>::new())?;

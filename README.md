@@ -42,8 +42,8 @@ $ ./result/bin/dwm_status <config-file>
 
 ## Configuration
 
-The `config-file` can be a HJSON, JSON, TOML or YAML file. See in `examples/settings` for how examples filled with the
-default values. The type of file is determined by its suffix.
+The `config-file` can be a HJSON, JSON, TOML or YAML file. For each possible format a config file filled with the
+default values can be found in `examples/default-settings`. The type of file is determined by its suffix.
 
 ### General options
 
