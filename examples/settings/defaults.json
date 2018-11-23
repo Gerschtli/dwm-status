@@ -26,7 +26,8 @@
       15,
       20
     ],
-    "separator": " · "
+    "separator": " · ",
+    "icons": []
   },
   "cpu_load": {
     "template": "{CL1} {CL5} {CL15}",

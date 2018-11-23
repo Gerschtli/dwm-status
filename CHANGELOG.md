@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Dynamic icons for audio and backlight feature (see `icons` setting in the respective feature documentation).
+- Dynamic icons for audio, backlight and battery feature (see `icons` setting in the respective feature documentation).
 
 ### Fixed
 - The `order` setting is now per default empty as documented. Previously this value defaulted to `["time"]`.

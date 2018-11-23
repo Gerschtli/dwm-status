@@ -78,7 +78,7 @@ Shows status of backlight value and watches `/sys/class/backlight` for changes.
 | ---------- | ------------------- | ---------------------------------------------------------------------------- |
 | `device`   | `"intel_backlight"` | Backlight device in `/sys/class/backlight`.                                  |
 | `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon) |
-| `icons`    | `[]`                | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.  |
+| `icons`    | `[]`                | List of icons, which represent different stages relative to the current value, e.g. `["LOW", "MIDDLE, "HIGH"]`.   |
 
 ### Feature: Battery
 
@@ -98,11 +98,11 @@ Shows following information per battery:
 
 Shows following information as feature block:
 
-| battery count | example               | notes                                    |
-| ------------- | --------------------- | ---------------------------------------- |
-| 0             | `NO BATT`             |                                          |
-| 1             | `▼ 50% (02:03)`       |                                          |
-| 2             | `▼ 50% (02:03) · 50%` | Batteries ordered alphabetically by name |
+| battery count | example                   | notes                                    |
+| ------------- | ------------------------- | ---------------------------------------- |
+| 0             | `NO BATT`                 |                                          |
+| 1             | `▼  50% (02:03)`         |                                          |
+| 2             | `▼  50% (02:03) ·  50%` | Batteries ordered alphabetically by name |
 
 #### Configuration options
 
@@ -115,6 +115,7 @@ Shows following information as feature block:
 | `notifier_critical` | `10`                 | Maximum battery value to notify via critical notification. |
 | `notifier_levels`   | `[2, 5, 10, 15, 20]` | Battery values to notify.                                  |
 | `separator`         | `" · "`              | Separator string between mutliple battery infos.           |
+| `icons`             | `[]`                 | List of icons, which represent different stages relative to the current battery state, e.g. `["LOW", "MIDDLE, "HIGH"]`. |
 
 ### Feature: CPU Load
 

@@ -21,6 +21,7 @@ battery:
   notifier_critical: 10
   notifier_levels: [2, 5, 10, 15, 20]
   separator: " · "
+  icons: []
 
 cpu_load:
   template: "{CL1} {CL5} {CL15}"
