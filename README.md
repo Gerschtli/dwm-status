@@ -45,6 +45,13 @@ $ ./result/bin/dwm_status <config-file>
 The `config-file` can be a HJSON, JSON, TOML or YAML file. For each possible format a config file filled with the
 default values can be found in `examples/default-settings`. The type of file is determined by its suffix.
 
+For an example how to use icons in the status bar see `examples/icon-settings/nerd-font.toml`. You need to install and
+specify one of the available [nerd fonts](https://nerdfonts.com) in your `config.h` in `dwm` to use the icons in the
+example config, e.g.:
+```c
+static const char *fonts[] = { "Ubuntu Mono Nerd Font:size=9" };
+```
+
 ### General options
 
 | name        | default | description                                      |
