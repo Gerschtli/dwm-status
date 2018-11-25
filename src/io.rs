@@ -1,4 +1,3 @@
-use libnotify;
 use std::fs;
 use std::io;
 use std::io::Read;
@@ -21,14 +20,4 @@ pub fn read_int_from_file(path: &str) -> io::Result<i32> {
                 format!("file \"{}\" doesn't contain an int value", &path),
             ))
         })
-}
-
-pub fn show_notification(summary: &str, body: &str, urgency: libnotify::Urgency) {
-    libnotify::init("dwm-status").expect("init libnotify failed");
-
-    let notification = libnotify::Notification::new(summary, Some(body), None);
-    notification.set_urgency(urgency);
-    notification.show().expect("show notification failed");
-
-    libnotify::uninit();
 }
