@@ -16,7 +16,6 @@ use uuid;
 
 #[derive(Debug)]
 pub struct Battery {
-    data: BatteryData,
     id: uuid::Uuid,
     manager: BatteryManager,
     notifier: BatteryNotifier,
@@ -24,8 +23,6 @@ pub struct Battery {
     tx_devices: mpsc::Sender<DeviceMessage>,
     tx: mpsc::Sender<async::Message>,
 }
-
-renderable_impl!(Battery);
 
 impl feature::FeatureConfig for Battery {
     type Settings = settings::Battery;
@@ -41,11 +38,6 @@ impl feature::FeatureConfig for Battery {
         manager.update_devices_list()?;
 
         Ok(Battery {
-            data: BatteryData {
-                ac_online: true,
-                batteries: HashMap::new(),
-                settings: settings.clone(),
-            },
             id,
             manager,
             notifier: BatteryNotifier::new(settings.clone()),
@@ -74,7 +66,7 @@ impl feature::Feature for Battery {
         Ok(())
     }
 
-    fn update(&mut self) -> Result<()> {
+    fn update(&mut self) -> Result<Box<dyn feature::Renderable>> {
         self.manager.update_devices_list()?;
 
         let ac_online = self.manager.is_ac_online()?;
@@ -84,7 +76,6 @@ impl feature::Feature for Battery {
             let info = BatteryInfo {
                 capacity: device.capacity()?,
                 estimation: device.estimation(ac_online)?,
-                icons: self.settings.icons.clone(),
             };
 
             batteries.insert(String::from(&name[..]), info);
@@ -100,16 +91,15 @@ impl feature::Feature for Battery {
             if let Some(&&BatteryInfo {
                 capacity,
                 estimation: Some(ref estimation),
-                ..
             }) = infos.get(0)
             {
                 self.notifier.update(capacity, estimation);
             }
         }
 
-        self.data.ac_online = ac_online;
-        self.data.batteries = batteries;
-
-        Ok(())
+        Ok(Box::new(BatteryData {
+            ac_online,
+            batteries,
+        }))
     }
 }

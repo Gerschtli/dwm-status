@@ -10,14 +10,13 @@ use utils::icon_by_float;
 pub struct BatteryInfo {
     pub capacity: f32,
     pub estimation: Option<time::Duration>,
-    pub icons: Vec<String>,
 }
 
 impl feature::Renderable for BatteryInfo {
-    fn render(&self) -> String {
+    fn render(&self, settings: &settings::Settings) -> String {
         let mut rendered = String::with_capacity(16);
 
-        if let Some(icon) = icon_by_float(&self.icons, self.capacity) {
+        if let Some(icon) = icon_by_float(&settings.battery.icons, self.capacity) {
             rendered.push_str(&format!("{} ", icon));
         }
 
@@ -35,35 +34,35 @@ impl feature::Renderable for BatteryInfo {
 pub struct BatteryData {
     pub ac_online: bool,
     pub batteries: HashMap<String, BatteryInfo>,
-    pub settings: settings::Battery,
 }
 
 impl feature::Renderable for BatteryData {
-    fn render(&self) -> String {
+    fn render(&self, settings: &settings::Settings) -> String {
         if self.batteries.is_empty() {
-            return self.settings.no_battery.clone();
+            return settings.battery.no_battery.clone();
         }
 
         let mut keys = self.batteries.keys().collect::<Vec<_>>();
         keys.sort();
         let batteries = keys
             .into_iter()
-            .map(|key| self.batteries[key].render())
+            .map(|key| self.batteries[key].render(settings))
             .collect::<Vec<_>>()
-            .join(&self.settings.separator);
+            .join(&settings.battery.separator);
 
         format!(
             "{} {}",
             if self.ac_online {
-                &self.settings.charging
+                &settings.battery.charging
             } else {
-                &self.settings.discharging
+                &settings.battery.discharging
             },
             batteries
         )
     }
 }
 
+/* temporarily disabled because missing mock possibilty in tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -275,3 +274,4 @@ mod tests {
         );
     }
 }
+*/
