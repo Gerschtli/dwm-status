@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Big refactoring to improve performance and maintainability
 - Errors are only visible via stderr and no longer shown as notifications
+- Default value of `time.update_seconds` is automatically set through parsing the `format` string
 
 ## [1.3.0] - 2018-11-24
 ### Added

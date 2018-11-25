@@ -128,6 +128,15 @@ impl Settings {
         let debug = config.get_bool("debug")?;
         config.set("battery.debug", debug)?;
 
+        // dynamically set time.update_seconds
+        let time_format = config.get_str("time.format")?.replace("%%", "");
+        if ["%f", "%r", "%S", "%s", "%T"]
+            .iter()
+            .any(|specifier| time_format.contains(specifier))
+        {
+            config.set_default("time.update_seconds", true)?;
+        }
+
         config.try_into()
     }
 }
