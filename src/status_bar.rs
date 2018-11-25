@@ -1,21 +1,16 @@
-#![allow(unsafe_code)]
-
 use async;
 use error::*;
 use feature;
 use settings;
 use std::collections::HashMap;
-use std::ffi::CString;
-use std::os::raw::c_char;
-use std::ptr;
 use uuid;
-use x11::xlib;
+use wrapper::xsetroot;
 
 pub struct StatusBar {
     feature_map: HashMap<uuid::Uuid, Box<dyn feature::Feature>>,
     order: Vec<uuid::Uuid>,
     string_map: HashMap<uuid::Uuid, String>,
-    xsetroot: XSetRoot,
+    xsetroot: xsetroot::XSetRoot,
 }
 
 impl StatusBar {
@@ -36,7 +31,7 @@ impl StatusBar {
             feature_map,
             order,
             string_map,
-            xsetroot: XSetRoot::new()?,
+            xsetroot: xsetroot::XSetRoot::new()?,
         })
     }
 
@@ -93,55 +88,5 @@ impl StatusBar {
             .join(&settings.separator);
 
         self.xsetroot.render(status)
-    }
-}
-
-struct XSetRoot {
-    display: *mut xlib::Display,
-    root_window: xlib::Window,
-}
-
-impl XSetRoot {
-    fn new() -> Result<Self> {
-        unsafe {
-            let display = xlib::XOpenDisplay(ptr::null());
-
-            if display.is_null() {
-                return Err(Error::new_custom("render", "cannot open display"));
-            }
-
-            let screen = xlib::XDefaultScreen(display);
-            let root_window = xlib::XRootWindow(display, screen);
-
-            Ok(XSetRoot {
-                display,
-                root_window,
-            })
-        }
-    }
-
-    fn render(&self, text: String) -> Result<()> {
-        let status_c = CString::new(text)
-            .wrap_error("render", "status text could not be converted to CString")?;
-
-        unsafe {
-            xlib::XStoreName(
-                self.display,
-                self.root_window,
-                status_c.as_ptr() as *mut c_char,
-            );
-
-            xlib::XFlush(self.display);
-        }
-
-        Ok(())
-    }
-}
-
-impl Drop for XSetRoot {
-    fn drop(&mut self) {
-        unsafe {
-            xlib::XCloseDisplay(self.display);
-        }
     }
 }
