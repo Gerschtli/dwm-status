@@ -15,13 +15,10 @@ const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
 pub struct Audio {
-    data: AudioData,
     id: uuid::Uuid,
     settings: settings::Audio,
     tx: mpsc::Sender<async::Message>,
 }
-
-renderable_impl!(Audio);
 
 impl feature::FeatureConfig for Audio {
     type Settings = settings::Audio;
@@ -31,14 +28,7 @@ impl feature::FeatureConfig for Audio {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(Audio {
-            data: AudioData::Mute {
-                template: settings.mute.clone(),
-            },
-            id,
-            settings,
-            tx,
-        })
+        Ok(Audio { id, settings, tx })
     }
 }
 
@@ -72,7 +62,7 @@ impl feature::Feature for Audio {
         Ok(())
     }
 
-    fn update(&mut self) -> Result<()> {
+    fn update(&mut self) -> Result<Box<dyn feature::Renderable>> {
         // originally taken from https://github.com/greshake/i3status-rust/blob/master/src/blocks/sound.rs
         let output = process::Command::new("amixer")
             .arg("get")
@@ -93,10 +83,7 @@ impl feature::Feature for Audio {
             .collect::<Vec<&str>>();
 
         if last.get(1).map(|muted| *muted == "off").unwrap_or(false) {
-            self.data = AudioData::Mute {
-                template: self.settings.mute.clone(),
-            };
-            return Ok(());
+            return Ok(Box::new(AudioData::Mute));
         }
 
         let volume = last
@@ -105,11 +92,6 @@ impl feature::Feature for Audio {
             .parse::<u32>()
             .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
-        self.data = AudioData::Volume {
-            template: self.settings.template.clone(),
-            volume,
-            icons: self.settings.icons.clone(),
-        };
-        Ok(())
+        Ok(Box::new(AudioData::Volume(volume)))
     }
 }

@@ -1,38 +1,34 @@
 use feature;
+use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
 pub enum AudioData {
-    Mute {
-        template: String,
-    },
-    Volume {
-        template: String,
-        volume: u32,
-        icons: Vec<String>,
-    },
+    Mute,
+    Volume(u32),
 }
 
 impl feature::Renderable for AudioData {
-    fn render(&self) -> String {
+    fn render(&self, settings: &settings::Settings) -> String {
         match *self {
-            AudioData::Mute { ref template } => template.clone(),
-            AudioData::Volume {
-                ref template,
-                volume,
-                ref icons,
-            } => {
-                let mut rendered = template.replace("{VOL}", &volume.to_string());
-                let icon_optional = icon_by_percentage(&icons, volume);
-                if let Some(icon) = icon_optional {
+            AudioData::Mute => settings.audio.mute.clone(),
+            AudioData::Volume(volume) => {
+                let mut rendered = settings
+                    .audio
+                    .template
+                    .replace("{VOL}", &volume.to_string());
+
+                if let Some(icon) = icon_by_percentage(&settings.audio.icons, volume) {
                     rendered = rendered.replace("{ICO}", icon);
                 }
+
                 rendered
             },
         }
     }
 }
 
+/* temporarily disabled because missing mock possibilty in tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -141,3 +137,4 @@ mod tests {
         );
     }
 }
+*/
