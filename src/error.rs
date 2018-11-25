@@ -1,5 +1,3 @@
-use io;
-use libnotify;
 use std::fmt;
 use std::result::Result as StdResult;
 
@@ -31,12 +29,6 @@ impl Error {
 
     pub fn show_error(self) {
         eprintln!("{}", self);
-
-        io::show_notification(
-            &format!("dwm-status: {}", self.name),
-            &self.description,
-            libnotify::Urgency::Critical,
-        );
     }
 }
 

@@ -8,8 +8,6 @@ Example status bar:
 L 30% / MUTE / ▼ 25% (01:05) / 2018-03-16 21:25
 ```
 
-If an error occurs, notifications are sent via libnotify.
-
 ## Requirements
 
 `cargo`, `rustc` and `lib{dbus,gdk-pixbuf,notify,x11}-dev` are required to build the binary.

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
 - Big refactoring to improve performance and maintainability
+- Errors are only visible via stderr and no longer shown as notifications
 
 ## [1.3.0] - 2018-11-24
 ### Added
