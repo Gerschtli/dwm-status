@@ -14,13 +14,10 @@ const PATH_LOADAVG: &str = "/proc/loadavg";
 
 #[derive(Debug)]
 pub struct CpuLoad {
-    data: CpuLoadData,
     id: uuid::Uuid,
     settings: settings::CpuLoad,
     tx: mpsc::Sender<async::Message>,
 }
-
-renderable_impl!(CpuLoad);
 
 impl feature::FeatureConfig for CpuLoad {
     type Settings = settings::CpuLoad;
@@ -30,17 +27,7 @@ impl feature::FeatureConfig for CpuLoad {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(CpuLoad {
-            data: CpuLoadData {
-                one: 0.,
-                five: 0.,
-                fifteen: 0.,
-                template: settings.template.clone(),
-            },
-            id,
-            settings,
-            tx,
-        })
+        Ok(CpuLoad { id, settings, tx })
     }
 }
 
@@ -61,20 +48,17 @@ impl feature::Feature for CpuLoad {
         Ok(())
     }
 
-    fn update(&mut self) -> Result<()> {
+    fn update(&mut self) -> Result<Box<dyn feature::Renderable>> {
         let content = io::read_file(PATH_LOADAVG)
             .wrap_error(FEATURE_NAME, &format!("failed to read {}", PATH_LOADAVG))?;
 
         let mut iterator = content.split_whitespace();
 
-        self.data = CpuLoadData {
+        Ok(Box::new(CpuLoadData {
             one: convert_to_float(iterator.next())?,
             five: convert_to_float(iterator.next())?,
             fifteen: convert_to_float(iterator.next())?,
-            template: self.settings.template.clone(),
-        };
-
-        Ok(())
+        }))
     }
 }
 

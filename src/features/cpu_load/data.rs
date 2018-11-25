@@ -1,22 +1,25 @@
 use feature;
+use settings;
 
 #[derive(Debug)]
 pub struct CpuLoadData {
     pub one: f32,
     pub five: f32,
     pub fifteen: f32,
-    pub template: String,
 }
 
 impl feature::Renderable for CpuLoadData {
-    fn render(&self) -> String {
-        self.template
+    fn render(&self, settings: &settings::Settings) -> String {
+        settings
+            .cpu_load
+            .template
             .replace("{CL1}", &format!("{:.2}", self.one))
             .replace("{CL5}", &format!("{:.2}", self.five))
             .replace("{CL15}", &format!("{:.2}", self.fifteen))
     }
 }
 
+/* temporarily disabled because missing mock possibilty in tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -34,3 +37,4 @@ mod tests {
         assert_eq!(data.render(), "1.52 0.50 2.12 {CL2} 0.50");
     }
 }
+*/
