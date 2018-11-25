@@ -13,13 +13,10 @@ use uuid;
 
 #[derive(Debug)]
 pub struct Time {
-    data: TimeData,
     id: uuid::Uuid,
     settings: settings::Time,
     tx: mpsc::Sender<async::Message>,
 }
-
-renderable_impl!(Time);
 
 impl feature::FeatureConfig for Time {
     type Settings = settings::Time;
@@ -29,15 +26,7 @@ impl feature::FeatureConfig for Time {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(Time {
-            data: TimeData {
-                format: settings.format.clone(),
-                time: chrono::Local::now(),
-            },
-            id,
-            settings,
-            tx,
-        })
+        Ok(Time { id, settings, tx })
     }
 }
 
@@ -64,12 +53,7 @@ impl feature::Feature for Time {
         Ok(())
     }
 
-    fn update(&mut self) -> Result<()> {
-        self.data = TimeData {
-            format: self.settings.format.clone(),
-            time: chrono::Local::now(),
-        };
-
-        Ok(())
+    fn update(&mut self) -> Result<Box<dyn feature::Renderable>> {
+        Ok(Box::new(TimeData(chrono::Local::now())))
     }
 }
