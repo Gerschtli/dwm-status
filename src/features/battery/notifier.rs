@@ -1,31 +1,33 @@
 use super::fmt_capacity;
 use super::fmt_time;
-use io;
-use libnotify;
+use error::*;
 use settings;
 use std::time;
+use wrapper::libnotify;
 
 #[derive(Debug)]
 pub struct BatteryNotifier {
     capacity: Option<f32>,
+    libnotify: libnotify::LibNotify,
     settings: settings::Battery,
 }
 
 impl BatteryNotifier {
-    pub fn new(settings: settings::Battery) -> Self {
-        BatteryNotifier {
+    pub fn new(settings: settings::Battery) -> Result<Self> {
+        Ok(BatteryNotifier {
             capacity: None,
+            libnotify: libnotify::LibNotify::new()?,
             settings,
-        }
+        })
     }
 
     pub fn reset(&mut self) {
         self.capacity = None;
     }
 
-    pub fn update(&mut self, capacity: f32, estimation: &time::Duration) {
+    pub fn update(&mut self, capacity: f32, estimation: &time::Duration) -> Result<()> {
         if !self.settings.enable_notifier {
-            return;
+            return Ok(());
         }
 
         for level in &self.settings.notifier_levels {
@@ -36,7 +38,7 @@ impl BatteryNotifier {
                     Some(value) if decimal_level >= value => false,
                     _ => true,
                 } {
-                    io::show_notification(
+                    self.libnotify.send_notification(
                         &format!("Battery under {}", fmt_capacity(decimal_level)),
                         &format!("{} remaining", fmt_time(estimation)),
                         if *level <= self.settings.notifier_critical {
@@ -44,7 +46,7 @@ impl BatteryNotifier {
                         } else {
                             libnotify::Urgency::Normal
                         },
-                    );
+                    )?;
                 }
 
                 break;
@@ -52,5 +54,7 @@ impl BatteryNotifier {
         }
 
         self.capacity = Some(capacity);
+
+        Ok(())
     }
 }

@@ -40,7 +40,7 @@ impl feature::FeatureConfig for Battery {
         Ok(Battery {
             id,
             manager,
-            notifier: BatteryNotifier::new(settings.clone()),
+            notifier: BatteryNotifier::new(settings.clone())?,
             settings,
             tx,
             tx_devices,
@@ -93,7 +93,7 @@ impl feature::Feature for Battery {
                 estimation: Some(ref estimation),
             }) = infos.get(0)
             {
-                self.notifier.update(capacity, estimation);
+                self.notifier.update(capacity, estimation)?;
             }
         }
 
