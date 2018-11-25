@@ -1,8 +1,10 @@
 pub mod data;
 
-use dbus_lib;
+use dbus;
 use error::*;
 use std::ffi;
+
+pub use dbus::Path;
 
 const ERROR_NAME: &str = "dbus";
 
@@ -21,7 +23,7 @@ macro_rules! compare_property {
 }
 
 pub struct Message {
-    message: dbus_lib::Message,
+    message: dbus::Message,
 }
 
 impl Message {
@@ -29,7 +31,7 @@ impl Message {
 
     compare_property!(is_member, member);
 
-    pub fn new(message: dbus_lib::Message) -> Self {
+    pub fn new(message: dbus::Message) -> Self {
         Message { message }
     }
 
@@ -40,18 +42,18 @@ impl Message {
         member: &'static str,
     ) -> Result<Self> {
         Ok(Message {
-            message: dbus_lib::Message::new_method_call(bus, path, interface, member)
+            message: dbus::Message::new_method_call(bus, path, interface, member)
                 .wrap_error(ERROR_NAME, "failed to create dbus method call message")?,
         })
     }
 
-    fn raw(self) -> dbus_lib::Message {
+    fn raw(self) -> dbus::Message {
         self.message
     }
 
     pub fn return_value<'a, T>(&'a self) -> Result<T>
     where
-        T: dbus_lib::arg::Arg + dbus_lib::arg::Get<'a>,
+        T: dbus::arg::Arg + dbus::arg::Get<'a>,
     {
         self.message
             .read1::<T>()
@@ -60,12 +62,12 @@ impl Message {
 }
 
 pub struct Connection {
-    connection: dbus_lib::Connection,
+    connection: dbus::Connection,
 }
 
 impl Connection {
     pub fn new() -> Result<Self> {
-        let connection = dbus_lib::Connection::get_private(dbus_lib::BusType::System)
+        let connection = dbus::Connection::get_private(dbus::BusType::System)
             .wrap_error(ERROR_NAME, "failed to connect to dbus")?;
 
         Ok(Connection { connection })
@@ -83,7 +85,7 @@ impl Connection {
     {
         // 300_000 seconds timeout before sending ConnectionItem::Nothing
         for item in self.connection.iter(300_000) {
-            if let dbus_lib::ConnectionItem::Signal(signal) = item {
+            if let dbus::ConnectionItem::Signal(signal) = item {
                 handle_signal(Message::new(signal))?;
             }
         }

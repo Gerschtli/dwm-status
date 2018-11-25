@@ -1,9 +1,9 @@
 use async;
-use dbus;
-use dbus::data;
 use error::*;
 use std::sync::mpsc;
 use std::thread;
+use wrapper::dbus;
+use wrapper::dbus::data;
 
 const ERROR_NAME: &str = "resume watcher";
 const INTERFACE_LOGIN1: &str = "org.freedesktop.login1.Manager";

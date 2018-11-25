@@ -1,14 +1,13 @@
 use super::FEATURE_NAME;
 use async;
-use dbus;
-use dbus::data;
-use dbus_lib;
 use error::*;
 use std::collections::HashSet;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
 use uuid;
+use wrapper::dbus;
+use wrapper::dbus::data;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
 const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
@@ -60,7 +59,7 @@ impl DbusWatcher {
 
         self.connection.listen_for_signals(|signal| {
             if signal.is_interface(INTERFACE_UPOWER)? {
-                let path = signal.return_value::<dbus_lib::Path>()?;
+                let path = signal.return_value::<dbus::Path>()?;
 
                 if signal.is_member(MEMBER_DEVICE_ADDED)? {
                     self.add_device(&mut devices, &path)?;
@@ -82,8 +81,8 @@ impl DbusWatcher {
 
     fn add_device<'a>(
         &self,
-        devices: &mut HashSet<dbus_lib::Path<'a>>,
-        path: &dbus_lib::Path<'a>,
+        devices: &mut HashSet<dbus::Path<'a>>,
+        path: &dbus::Path<'a>,
     ) -> Result<()> {
         let name = self.get_device_name(path)?;
 
@@ -107,7 +106,7 @@ impl DbusWatcher {
         Ok(())
     }
 
-    fn get_current_devices(&self) -> Result<Vec<dbus_lib::Path>> {
+    fn get_current_devices(&self) -> Result<Vec<dbus::Path>> {
         let message = dbus::Message::new_method_call(
             INTERFACE_UPOWER,
             PATH_UPOWER,
@@ -117,10 +116,10 @@ impl DbusWatcher {
 
         let response = self.connection.send_message(message)?;
 
-        response.return_value::<Vec<dbus_lib::Path>>()
+        response.return_value::<Vec<dbus::Path>>()
     }
 
-    fn get_device_name<'a>(&self, path: &'a dbus_lib::Path) -> Result<&'a str> {
+    fn get_device_name<'a>(&self, path: &'a dbus::Path) -> Result<&'a str> {
         let string = path.as_cstr().to_str().wrap_error(
             FEATURE_NAME,
             "failed to create utf8 string of dbus object path",
@@ -131,8 +130,8 @@ impl DbusWatcher {
 
     fn remove_device<'a>(
         &self,
-        devices: &mut HashSet<dbus_lib::Path<'a>>,
-        path: &dbus_lib::Path<'a>,
+        devices: &mut HashSet<dbus::Path<'a>>,
+        path: &dbus::Path<'a>,
     ) -> Result<()> {
         if !devices.contains(path) {
             return Ok(());

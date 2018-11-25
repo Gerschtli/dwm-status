@@ -13,7 +13,7 @@
 extern crate chrono;
 extern crate config;
 extern crate ctrlc;
-extern crate dbus as dbus_lib;
+extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
 extern crate serde;
@@ -26,13 +26,13 @@ mod async;
 mod error;
 #[macro_use]
 mod feature;
-mod dbus;
 mod features;
 mod io;
 mod resume;
 mod settings;
 mod status_bar;
 mod utils;
+mod wrapper;
 
 use error::*;
 use status_bar::StatusBar;
