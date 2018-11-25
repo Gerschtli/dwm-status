@@ -29,7 +29,7 @@ pub fn create_feature(
     name: &str,
     tx: &mpsc::Sender<async::Message>,
     settings: &settings::Settings,
-) -> Result<Box<feature::Feature>> {
+) -> Result<Box<dyn feature::Feature>> {
     match &name.to_string().to_lowercase()[..] {
         "audio" => feature!(Audio, tx, settings.audio),
         "backlight" => feature!(Backlight, tx, settings.backlight),
