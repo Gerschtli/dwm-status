@@ -1,5 +1,6 @@
 use async;
 use error::*;
+use settings;
 use std::sync::mpsc;
 use uuid;
 
@@ -15,38 +16,24 @@ macro_rules! feature_default {
     }
 }
 
-macro_rules! renderable_impl {
-    ($name:ident) => {
-        impl ::feature::Renderable for $name {
-            fn render(&self) -> String {
-                self.data.render()
-            }
-        }
-    };
-}
-
 pub trait Renderable {
-    fn render(&self) -> String;
+    fn render(&self, &settings::Settings) -> String;
 }
 
-pub trait Feature: Renderable {
+pub trait Feature {
     fn id(&self) -> uuid::Uuid;
 
     fn init_notifier(&self) -> Result<()>;
 
     fn name(&self) -> &str;
 
-    fn update(&mut self) -> Result<()>;
+    fn update(&mut self) -> Result<Box<dyn Renderable>>;
 }
 
 pub trait FeatureConfig: Feature {
     type Settings;
 
-    fn new(
-        id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
-        settings: Self::Settings,
-    ) -> Result<Self>
+    fn new(uuid::Uuid, mpsc::Sender<async::Message>, Self::Settings) -> Result<Self>
     where
         Self: Sized;
 }
