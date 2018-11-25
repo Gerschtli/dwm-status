@@ -13,14 +13,11 @@ use uuid;
 
 #[derive(Debug)]
 pub struct Backlight {
-    data: BacklightData,
     device: BacklightDevice,
     id: uuid::Uuid,
     settings: settings::Backlight,
     tx: mpsc::Sender<async::Message>,
 }
-
-renderable_impl!(Backlight);
 
 impl feature::FeatureConfig for Backlight {
     type Settings = settings::Backlight;
@@ -31,11 +28,6 @@ impl feature::FeatureConfig for Backlight {
         settings: Self::Settings,
     ) -> Result<Self> {
         Ok(Backlight {
-            data: BacklightData {
-                template: settings.template.clone(),
-                value: 0.,
-                icons: settings.icons.clone(),
-            },
             device: BacklightDevice::new(&settings.device)?,
             id,
             settings,
@@ -78,13 +70,7 @@ impl feature::Feature for Backlight {
         Ok(())
     }
 
-    fn update(&mut self) -> Result<()> {
-        self.data = BacklightData {
-            template: self.settings.template.clone(),
-            value: self.device.value()?,
-            icons: self.settings.icons.clone(),
-        };
-
-        Ok(())
+    fn update(&mut self) -> Result<Box<dyn feature::Renderable>> {
+        Ok(Box::new(BacklightData(self.device.value()?)))
     }
 }

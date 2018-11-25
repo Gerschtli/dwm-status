@@ -1,20 +1,18 @@
 use feature;
+use settings;
 use utils::icon_by_float;
 
-#[derive(Debug)]
-pub struct BacklightData {
-    pub template: String,
-    pub value: f32,
-    pub icons: Vec<String>,
-}
+#[derive(Debug, Default)]
+pub struct BacklightData(pub f32);
 
 impl feature::Renderable for BacklightData {
-    fn render(&self) -> String {
-        let mut rendered = self
+    fn render(&self, settings: &settings::Settings) -> String {
+        let mut rendered = settings
+            .backlight
             .template
-            .replace("{BL}", &format!("{:.0}", self.value * 100.));
+            .replace("{BL}", &format!("{:.0}", self.0 * 100.));
 
-        if let Some(icon) = icon_by_float(&self.icons, self.value) {
+        if let Some(icon) = icon_by_float(&settings.backlight.icons, self.0) {
             rendered = rendered.replace("{ICO}", icon);
         }
 
@@ -22,6 +20,7 @@ impl feature::Renderable for BacklightData {
     }
 }
 
+/* temporarily disabled because missing mock possibilty in tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -132,3 +131,4 @@ mod tests {
         );
     }
 }
+*/
