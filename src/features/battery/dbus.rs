@@ -56,6 +56,12 @@ impl DbusWatcher {
             self.add_device(&mut devices, &device)?;
         }
 
+        // Manually send message before listen because `get_current_devices` waits for
+        // dbus method call with a 2 seconds timeout. While waiting it's possible that
+        // the initial `update` has already been triggered, so the status bar would show
+        // the "no battery" information.
+        async::send_message(FEATURE_NAME, self.id, &self.tx);
+
         self.connection.listen_for_signals(|signal| {
             if signal.is_interface(INTERFACE_UPOWER)? {
                 let path = signal.return_value::<dbus::Path>()?;
