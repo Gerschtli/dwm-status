@@ -71,7 +71,7 @@ impl feature::Feature for Backlight {
                 }
 
                 // prevent event spamming
-                thread::sleep(time::Duration::from_millis(250));
+                thread::sleep(time::Duration::from_millis(100));
             }
         });
 
