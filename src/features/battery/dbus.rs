@@ -67,12 +67,15 @@ impl DbusWatcher {
                 } else {
                     self.remove_device(&mut devices, &path)?;
                 }
+
+                async::send_message(FEATURE_NAME, self.id, &self.tx);
             } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
                 // wait for /sys/class/power_supply files updates
                 thread::sleep(time::Duration::from_secs(2));
+
+                async::send_message(FEATURE_NAME, self.id, &self.tx);
             }
 
-            async::send_message(FEATURE_NAME, self.id, &self.tx);
             Ok(())
         })
     }
