@@ -7,7 +7,6 @@ use std::thread;
 use std::time;
 use uuid;
 use wrapper::dbus;
-use wrapper::dbus::data;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
 const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
@@ -45,7 +44,7 @@ impl DbusWatcher {
     }
 
     pub fn start(&self) -> Result<()> {
-        self.connection.add_match(data::Match {
+        self.connection.add_match(dbus::Match {
             interface: INTERFACE_UPOWER,
             member: None,
             path: PATH_UPOWER,
@@ -91,7 +90,7 @@ impl DbusWatcher {
             return Ok(());
         }
 
-        self.connection.add_match(data::Match {
+        self.connection.add_match(dbus::Match {
             interface: INTERFACE_DBUS_PROPERTIES,
             member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
@@ -139,7 +138,7 @@ impl DbusWatcher {
 
         let name = self.get_device_name(path)?;
 
-        self.connection.remove_match(data::Match {
+        self.connection.remove_match(dbus::Match {
             interface: INTERFACE_DBUS_PROPERTIES,
             member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
