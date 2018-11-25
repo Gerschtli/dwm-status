@@ -53,9 +53,9 @@ impl feature::Feature for CpuLoad {
         let update_interval = self.settings.update_interval;
 
         thread::spawn(move || loop {
-            async::send_message(FEATURE_NAME, id, &tx);
-
             thread::sleep(time::Duration::from_secs(update_interval));
+
+            async::send_message(FEATURE_NAME, id, &tx);
         });
 
         Ok(())

@@ -50,8 +50,6 @@ impl feature::Feature for Time {
         let update_seconds = self.settings.update_seconds;
 
         thread::spawn(move || loop {
-            async::send_message(FEATURE_NAME, id, &tx);
-
             let update_interval = if update_seconds {
                 1
             } else {
@@ -59,6 +57,8 @@ impl feature::Feature for Time {
             };
 
             thread::sleep(time::Duration::from_secs(update_interval));
+
+            async::send_message(FEATURE_NAME, id, &tx);
         });
 
         Ok(())
