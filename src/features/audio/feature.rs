@@ -50,7 +50,12 @@ impl feature::Feature for Audio {
 
             let mut buffer = [0; 1024];
             loop {
-                if monitor.read(&mut buffer).is_ok() {
+                if let Ok(bytes) = monitor.read(&mut buffer) {
+                    // reader has reached end-of-life -> thread gets killed
+                    if bytes == 0 {
+                        break;
+                    }
+
                     async::send_message(FEATURE_NAME, id, &tx);
                 }
 

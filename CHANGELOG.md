@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Errors are only visible via stderr and no longer shown as notifications
 - Default value of `time.update_seconds` is automatically set through parsing the `format` string
 
+# Fixed
+- Removed useless "notify thread killed" error message on `SIGTERM` when using audio feature
+
 ## [1.3.0] - 2018-11-24
 ### Added
 - Dynamic icons for audio, backlight and battery feature (see `icons` setting in the respective feature documentation)
