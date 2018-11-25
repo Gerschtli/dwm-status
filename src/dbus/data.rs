@@ -10,7 +10,7 @@ impl<'a> Match<'a> {
         let member = if let Some(ref member) = self.member {
             format!(",member='{}'", member)
         } else {
-            String::from("")
+            String::new()
         };
 
         format!(
