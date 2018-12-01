@@ -1,5 +1,13 @@
 with import <nixpkgs> { };
 
+let
+  binPath = stdenv.lib.makeBinPath [
+    alsaUtils
+    bash
+    coreutils
+  ];
+in
+
 rustPlatform.buildRustPackage rec {
   name = "dwm-status";
 
@@ -14,6 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/${name} \
-      --prefix "PATH" : "${alsaUtils}/bin"
+      --prefix "PATH" : "${binPath}"
   '';
 }

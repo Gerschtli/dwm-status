@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 # Fixed
 - Update README according to last changes (icons for battery, `time.update_seconds`)
+- Update `PATH` for executable in `default.nix`
 
 ## [1.4.0] - 2018-11-25
 ### Changed
