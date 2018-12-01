@@ -101,13 +101,13 @@ Shows following information per battery:
 | charging             | `▲ 10% (01:23)` | In parentheses time to full  |
 | discharging          | `▼ 50% (02:03)` | In parentheses time to empty |
 
-Shows following information as feature block:
+Shows following information as feature block (`ICO` gets replaced with an icon if any are defined):
 
-| battery count | example                   | notes                                    |
-| ------------- | ------------------------- | ---------------------------------------- |
-| 0             | `NO BATT`                 |                                          |
-| 1             | `▼  50% (02:03)`         |                                          |
-| 2             | `▼  50% (02:03) ·  50%` | Batteries ordered alphabetically by name |
+| battery count | example                       | notes                                    |
+| ------------- | ----------------------------- | ---------------------------------------- |
+| 0             | `NO BATT`                     |                                          |
+| 1             | `▼ ICO 50% (02:03)`           |                                          |
+| 2             | `▼ ICO 50% (02:03) · ICO 50%` | Batteries ordered alphabetically by name |
 
 #### Configuration options
 
@@ -142,7 +142,7 @@ Shows time in configured format and refreshes every second or minute.
 | name             | default             | description                                                          |
 | ---------------- | ------------------- | -------------------------------------------------------------------- |
 | `format`         | `"%Y-%m-%d %H:%M"`  | Time format of [chrono crate](https://github.com/chronotope/chrono). |
-| `update_seconds` | `false`             | Whether to update time feature every second or minute.               |
+| `update_seconds` | `false`             | Whether to update time feature every second or minute, automatically set by parsing `format`. |
 
 ## Contributing
 
