@@ -1,3 +1,4 @@
 result
 target/
+test-config.toml
 **/*.rs.bk
