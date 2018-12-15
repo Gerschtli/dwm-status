@@ -55,7 +55,7 @@ pub fn run() -> Result<()> {
     let mut features = Vec::new();
 
     for feature_name in &settings.order {
-        let mut feature = features::create_feature(&feature_name, &tx, &settings)?;
+        let mut feature = features::create_feature(feature_name, &tx, &settings)?;
         feature.init_notifier()?;
         features.push(feature);
     }

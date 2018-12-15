@@ -8,7 +8,7 @@ pub(crate) struct Match<'a> {
 
 impl Match<'_> {
     pub(crate) fn build(self) -> String {
-        let member = if let Some(ref member) = self.member {
+        let member = if let Some(member) = self.member {
             format!(",member='{}'", member)
         } else {
             String::new()

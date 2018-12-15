@@ -42,8 +42,8 @@ impl StatusBar {
     ) -> Result<()> {
         match message {
             async::Message::FeatureUpdate(id) if self.feature_map.contains_key(id) => {
-                self.update_feature(*id, &settings)?;
-                self.render(&settings)?;
+                self.update_feature(*id, settings)?;
+                self.render(settings)?;
             },
             async::Message::FeatureUpdate(id) => {
                 return Err(Error::new_custom(
@@ -57,9 +57,9 @@ impl StatusBar {
                 }
 
                 for id in self.order.clone() {
-                    self.update_feature(id, &settings)?;
+                    self.update_feature(id, settings)?;
                 }
-                self.render(&settings)?;
+                self.render(settings)?;
             },
             _ => (),
         }
@@ -69,7 +69,7 @@ impl StatusBar {
 
     fn update_feature(&mut self, id: uuid::Uuid, settings: &settings::Settings) -> Result<()> {
         let feature = self.feature_map.get_mut(&id).unwrap();
-        let rendered = feature.update()?.render(&settings);
+        let rendered = feature.update()?.render(settings);
 
         if settings.debug {
             println!("update {}: {}", feature.name(), &rendered);
