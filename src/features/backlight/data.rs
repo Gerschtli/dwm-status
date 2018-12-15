@@ -2,7 +2,7 @@ use feature;
 use settings;
 use utils::icon_by_percentage;
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub(super) struct BacklightData(pub(super) u16);
 
 impl feature::Renderable for BacklightData {
