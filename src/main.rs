@@ -1,10 +1,8 @@
 #![deny(
     anonymous_parameters,
     bare_trait_objects,
-    elided_lifetimes_in_paths,
     missing_copy_implementations,
     missing_debug_implementations,
-    single_use_lifetimes,
     trivial_casts,
     trivial_numeric_casts,
     unreachable_pub,
@@ -14,6 +12,24 @@
     unused_qualifications,
     variant_size_differences,
     warnings
+)]
+#![cfg_attr(
+    feature = "rust-1-31",
+    deny(
+        clippy::all,
+        clippy::complexity,
+        clippy::correctness,
+        clippy::nursery,
+        clippy::pedantic,
+        clippy::perf,
+        clippy::style,
+        elided_lifetimes_in_paths,
+        single_use_lifetimes
+    )
+)]
+#![cfg_attr(
+    feature = "rust-1-31",
+    allow(clippy::filter_map, clippy::non_ascii_literal)
 )]
 
 extern crate dwm_status;
