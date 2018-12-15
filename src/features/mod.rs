@@ -25,7 +25,7 @@ macro_rules! feature {
     }};
 }
 
-pub fn create_feature(
+pub(crate) fn create_feature(
     name: &str,
     tx: &mpsc::Sender<async::Message>,
     settings: &settings::Settings,

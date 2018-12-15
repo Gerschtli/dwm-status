@@ -13,7 +13,7 @@ use uuid;
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
 #[derive(Debug)]
-pub struct CpuLoad {
+pub(crate) struct CpuLoad {
     id: uuid::Uuid,
     settings: settings::CpuLoad,
     tx: mpsc::Sender<async::Message>,

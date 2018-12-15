@@ -4,7 +4,7 @@ use error::*;
 
 macro_rules! compare_property {
     ( $method:ident, $property:ident ) => {
-        pub fn $method(&self, compare: &'static str) -> Result<bool> {
+        pub(crate) fn $method(&self, compare: &'static str) -> Result<bool> {
             Ok(if let Some(interface) = self.message.$property() {
                 interface.as_cstr() == ::std::ffi::CString::new(compare)
                     .wrap_error(::wrapper::dbus::ERROR_NAME, "failed to create CString")?
@@ -17,7 +17,7 @@ macro_rules! compare_property {
 }
 
 #[derive(Debug)]
-pub struct Message {
+pub(crate) struct Message {
     message: dbus::Message,
 }
 
@@ -26,11 +26,11 @@ impl Message {
 
     compare_property!(is_member, member);
 
-    pub fn new(message: dbus::Message) -> Self {
+    pub(crate) fn new(message: dbus::Message) -> Self {
         Message { message }
     }
 
-    pub fn new_method_call<'a>(
+    pub(crate) fn new_method_call<'a>(
         bus: &'static str,
         path: &'a str,
         interface: &'static str,
@@ -42,11 +42,11 @@ impl Message {
         })
     }
 
-    pub fn raw(self) -> dbus::Message {
+    pub(super) fn raw(self) -> dbus::Message {
         self.message
     }
 
-    pub fn return_value<'a, T>(&'a self) -> Result<T>
+    pub(crate) fn return_value<'a, T>(&'a self) -> Result<T>
     where
         T: dbus::arg::Arg + dbus::arg::Get<'a>,
     {

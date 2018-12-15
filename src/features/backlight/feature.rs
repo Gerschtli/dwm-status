@@ -12,7 +12,7 @@ use std::time;
 use uuid;
 
 #[derive(Debug)]
-pub struct Backlight {
+pub(crate) struct Backlight {
     device: BacklightDevice,
     id: uuid::Uuid,
     settings: settings::Backlight,

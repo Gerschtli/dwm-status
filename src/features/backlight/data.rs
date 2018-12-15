@@ -3,7 +3,7 @@ use settings;
 use utils::icon_by_float;
 
 #[derive(Debug, Default)]
-pub struct BacklightData(pub f32);
+pub(super) struct BacklightData(pub(super) f32);
 
 impl feature::Renderable for BacklightData {
     fn render(&self, settings: &settings::Settings) -> String {

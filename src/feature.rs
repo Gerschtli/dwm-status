@@ -16,11 +16,11 @@ macro_rules! feature_default {
     }
 }
 
-pub trait Renderable {
+pub(crate) trait Renderable {
     fn render(&self, &settings::Settings) -> String;
 }
 
-pub trait Feature {
+pub(crate) trait Feature {
     fn id(&self) -> uuid::Uuid;
 
     fn init_notifier(&self) -> Result<()>;
@@ -30,7 +30,7 @@ pub trait Feature {
     fn update(&mut self) -> Result<Box<dyn Renderable>>;
 }
 
-pub trait FeatureConfig: Feature {
+pub(crate) trait FeatureConfig: Feature {
     type Settings;
 
     fn new(uuid::Uuid, mpsc::Sender<async::Message>, Self::Settings) -> Result<Self>

@@ -14,7 +14,7 @@ use uuid;
 const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
-pub struct Audio {
+pub(crate) struct Audio {
     id: uuid::Uuid,
     settings: settings::Audio,
     tx: mpsc::Sender<async::Message>,

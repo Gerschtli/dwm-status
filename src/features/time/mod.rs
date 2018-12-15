@@ -1,7 +1,7 @@
 mod data;
 mod feature;
 
-pub use self::data::TimeData;
-pub use self::feature::Time;
+pub(self) use self::data::TimeData;
+pub(crate) use self::feature::Time;
 
-pub const FEATURE_NAME: &str = "time";
+pub(self) const FEATURE_NAME: &str = "time";

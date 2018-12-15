@@ -1,10 +1,10 @@
 use std::cmp;
 
-pub fn icon_by_float(icons: &[String], float: f32) -> Option<&str> {
+pub(crate) fn icon_by_float(icons: &[String], float: f32) -> Option<&str> {
     icon_by_percentage(icons, (float * 100.) as u32)
 }
 
-pub fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
+pub(crate) fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
     if icons.is_empty() {
         return None;
     }

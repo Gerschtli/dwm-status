@@ -3,7 +3,7 @@ use feature;
 use settings;
 
 #[derive(Debug)]
-pub struct TimeData(pub chrono::DateTime<chrono::Local>);
+pub(super) struct TimeData(pub(super) chrono::DateTime<chrono::Local>);
 
 impl feature::Renderable for TimeData {
     fn render(&self, settings: &settings::Settings) -> String {

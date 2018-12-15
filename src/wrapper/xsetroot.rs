@@ -6,13 +6,13 @@ use std::os::raw::c_char;
 use std::ptr;
 use x11::xlib;
 
-pub struct XSetRoot {
+pub(crate) struct XSetRoot {
     display: *mut xlib::Display,
     root_window: xlib::Window,
 }
 
 impl XSetRoot {
-    pub fn new() -> Result<Self> {
+    pub(crate) fn new() -> Result<Self> {
         unsafe {
             let display = xlib::XOpenDisplay(ptr::null());
 
@@ -30,7 +30,7 @@ impl XSetRoot {
         }
     }
 
-    pub fn render(&self, text: String) -> Result<()> {
+    pub(crate) fn render(&self, text: String) -> Result<()> {
         let status_c = CString::new(text)
             .wrap_error("render", "status text could not be converted to CString")?;
 

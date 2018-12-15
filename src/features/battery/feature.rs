@@ -15,7 +15,7 @@ use std::thread;
 use uuid;
 
 #[derive(Debug)]
-pub struct Battery {
+pub(crate) struct Battery {
     id: uuid::Uuid,
     manager: BatteryManager,
     notifier: BatteryNotifier,

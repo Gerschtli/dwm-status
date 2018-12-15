@@ -3,13 +3,13 @@ use error::*;
 use io;
 
 #[derive(Debug)]
-pub struct BacklightDevice {
+pub(super) struct BacklightDevice {
     max: i32,
     path: String,
 }
 
 impl BacklightDevice {
-    pub fn new(device: &str) -> Result<Self> {
+    pub(super) fn new(device: &str) -> Result<Self> {
         let mut device = BacklightDevice {
             max: 0,
             path: format!("/sys/class/backlight/{}", device),
@@ -20,11 +20,11 @@ impl BacklightDevice {
         Ok(device)
     }
 
-    pub fn brightness_file(&self) -> String {
+    pub(super) fn brightness_file(&self) -> String {
         self.build_path("actual")
     }
 
-    pub fn value(&self) -> Result<f32> {
+    pub(super) fn value(&self) -> Result<f32> {
         let current = self.get_brightness("actual")?;
         let value = current as f32 / self.max as f32;
 

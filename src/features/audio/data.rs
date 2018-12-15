@@ -3,7 +3,7 @@ use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
-pub enum AudioData {
+pub(super) enum AudioData {
     Mute,
     Volume(u32),
 }

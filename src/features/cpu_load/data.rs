@@ -2,10 +2,10 @@ use feature;
 use settings;
 
 #[derive(Debug)]
-pub struct CpuLoadData {
-    pub one: f32,
-    pub five: f32,
-    pub fifteen: f32,
+pub(super) struct CpuLoadData {
+    pub(super) one: f32,
+    pub(super) five: f32,
+    pub(super) fifteen: f32,
 }
 
 impl feature::Renderable for CpuLoadData {

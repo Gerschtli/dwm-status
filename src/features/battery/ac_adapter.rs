@@ -6,10 +6,10 @@ use std::path::Path;
 const AC1: &str = "AC";
 const AC2: &str = "ACAD";
 
-pub struct AcAdapter;
+pub(super) struct AcAdapter;
 
 impl AcAdapter {
-    pub fn get_current() -> Result<String> {
+    pub(super) fn get_current() -> Result<String> {
         let ac_exists = |name| Path::new(&format!("{}/{}", POWER_SUPPLY_PATH, name)).exists();
 
         let ac_name = if ac_exists(AC1) {

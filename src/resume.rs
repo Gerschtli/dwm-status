@@ -9,7 +9,7 @@ const INTERFACE_LOGIN1: &str = "org.freedesktop.login1.Manager";
 const MEMBER_PREPARE_FOR_SLEEP: &str = "PrepareForSleep";
 const PATH_LOGIN1: &str = "/org/freedesktop/login1";
 
-pub fn init_resume_notifier(tx: &mpsc::Sender<async::Message>) -> Result<()> {
+pub(crate) fn init_resume_notifier(tx: &mpsc::Sender<async::Message>) -> Result<()> {
     let tx_ = tx.clone();
 
     thread::spawn(move || {

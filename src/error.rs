@@ -1,7 +1,7 @@
 use std::fmt;
 use std::result::Result as StdResult;
 
-pub type Result<T> = StdResult<T, Error>;
+pub(crate) type Result<T> = StdResult<T, Error>;
 
 #[derive(Debug)]
 pub struct Error {
@@ -19,7 +19,7 @@ impl Error {
         }
     }
 
-    pub fn new_custom(name: &str, description: &str) -> Self {
+    pub(crate) fn new_custom(name: &str, description: &str) -> Self {
         Error {
             name: String::from(name),
             description: String::from(description),
@@ -44,7 +44,7 @@ impl fmt::Display for Error {
     }
 }
 
-pub trait WrapErrorExt<T> {
+pub(crate) trait WrapErrorExt<T> {
     fn wrap_error(self, name: &str, description: &str) -> Result<T>;
 
     fn wrap_error_kill(self, name: &str, description: &str) -> T
@@ -67,7 +67,7 @@ impl<T> WrapErrorExt<T> for Option<T> {
     }
 }
 
-pub trait ResultExt<T> {
+pub(crate) trait ResultExt<T> {
     fn show_error(self) -> StdResult<T, ()>;
 }
 

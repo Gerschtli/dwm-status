@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::sync::mpsc;
 
 #[derive(Debug)]
-pub struct BatteryManager {
+pub(super) struct BatteryManager {
     ac_name: String,
     debug: bool,
     devices: HashMap<String, BatteryDevice>,
@@ -16,7 +16,7 @@ pub struct BatteryManager {
 }
 
 impl BatteryManager {
-    pub fn new(debug: bool, rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
+    pub(super) fn new(debug: bool, rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
         Ok(BatteryManager {
             ac_name: AcAdapter::get_current()?,
             debug,
@@ -25,15 +25,15 @@ impl BatteryManager {
         })
     }
 
-    pub fn get_devices(&mut self) -> &mut HashMap<String, BatteryDevice> {
+    pub(super) fn get_devices(&mut self) -> &mut HashMap<String, BatteryDevice> {
         &mut self.devices
     }
 
-    pub fn is_ac_online(&self) -> Result<bool> {
+    pub(super) fn is_ac_online(&self) -> Result<bool> {
         Ok(get_value(&self.ac_name, "online")? == 1)
     }
 
-    pub fn update_devices_list(&mut self) -> Result<()> {
+    pub(super) fn update_devices_list(&mut self) -> Result<()> {
         while let Ok(message) = self.rx_devices.try_recv() {
             match message {
                 DeviceMessage::Added(name) => {

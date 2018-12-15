@@ -1,21 +1,26 @@
 use error::*;
 use libnotify;
 
-pub use libnotify::Urgency;
+pub(crate) use libnotify::Urgency;
 
 const ERROR_NAME: &str = "libnotify";
 
 #[derive(Debug)]
-pub struct LibNotify {}
+pub(crate) struct LibNotify {}
 
 impl LibNotify {
-    pub fn new() -> Result<Self> {
+    pub(crate) fn new() -> Result<Self> {
         libnotify::init("dwm-status").wrap_error(ERROR_NAME, "init failed")?;
 
         Ok(LibNotify {})
     }
 
-    pub fn send_notification(&self, summary: &str, body: &str, urgency: Urgency) -> Result<()> {
+    pub(crate) fn send_notification(
+        &self,
+        summary: &str,
+        body: &str,
+        urgency: Urgency,
+    ) -> Result<()> {
         let notification = libnotify::Notification::new(summary, Some(body), None);
         notification.set_urgency(urgency);
         notification

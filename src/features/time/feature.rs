@@ -12,7 +12,7 @@ use std::time;
 use uuid;
 
 #[derive(Debug)]
-pub struct Time {
+pub(crate) struct Time {
     id: uuid::Uuid,
     settings: settings::Time,
     tx: mpsc::Sender<async::Message>,

@@ -1,12 +1,12 @@
 #[derive(Debug)]
-pub struct Match<'a> {
-    pub interface: &'static str,
-    pub member: Option<&'static str>,
-    pub path: &'a str,
+pub(crate) struct Match<'a> {
+    pub(crate) interface: &'static str,
+    pub(crate) member: Option<&'static str>,
+    pub(crate) path: &'a str,
 }
 
 impl<'a> Match<'a> {
-    pub fn build(self) -> String {
+    pub(crate) fn build(self) -> String {
         let member = if let Some(ref member) = self.member {
             format!(",member='{}'", member)
         } else {

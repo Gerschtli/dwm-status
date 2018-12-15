@@ -6,14 +6,14 @@ use std::time;
 use wrapper::libnotify;
 
 #[derive(Debug)]
-pub struct BatteryNotifier {
+pub(super) struct BatteryNotifier {
     capacity: Option<f32>,
     libnotify: libnotify::LibNotify,
     settings: settings::Battery,
 }
 
 impl BatteryNotifier {
-    pub fn new(settings: settings::Battery) -> Result<Self> {
+    pub(super) fn new(settings: settings::Battery) -> Result<Self> {
         Ok(BatteryNotifier {
             capacity: None,
             libnotify: libnotify::LibNotify::new()?,
@@ -21,11 +21,11 @@ impl BatteryNotifier {
         })
     }
 
-    pub fn reset(&mut self) {
+    pub(super) fn reset(&mut self) {
         self.capacity = None;
     }
 
-    pub fn update(&mut self, capacity: f32, estimation: &time::Duration) -> Result<()> {
+    pub(super) fn update(&mut self, capacity: f32, estimation: &time::Duration) -> Result<()> {
         if !self.settings.enable_notifier {
             return Ok(());
         }

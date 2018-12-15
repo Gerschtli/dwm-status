@@ -1,3 +1,3 @@
-pub mod dbus;
-pub mod libnotify;
-pub mod xsetroot;
+pub(crate) mod dbus;
+pub(crate) mod libnotify;
+pub(crate) mod xsetroot;

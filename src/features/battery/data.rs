@@ -7,9 +7,9 @@ use std::time;
 use utils::icon_by_float;
 
 #[derive(Clone, Debug)]
-pub struct BatteryInfo {
-    pub capacity: f32,
-    pub estimation: Option<time::Duration>,
+pub(super) struct BatteryInfo {
+    pub(super) capacity: f32,
+    pub(super) estimation: Option<time::Duration>,
 }
 
 impl feature::Renderable for BatteryInfo {
@@ -31,9 +31,9 @@ impl feature::Renderable for BatteryInfo {
 }
 
 #[derive(Debug)]
-pub struct BatteryData {
-    pub ac_online: bool,
-    pub batteries: HashMap<String, BatteryInfo>,
+pub(super) struct BatteryData {
+    pub(super) ac_online: bool,
+    pub(super) batteries: HashMap<String, BatteryInfo>,
 }
 
 impl feature::Renderable for BatteryData {

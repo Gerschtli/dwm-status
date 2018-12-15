@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use uuid;
 use wrapper::xsetroot;
 
-pub struct StatusBar {
+pub(crate) struct StatusBar {
     feature_map: HashMap<uuid::Uuid, Box<dyn feature::Feature>>,
     order: Vec<uuid::Uuid>,
     string_map: HashMap<uuid::Uuid, String>,
@@ -14,7 +14,7 @@ pub struct StatusBar {
 }
 
 impl StatusBar {
-    pub fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
+    pub(crate) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
         let order: Vec<_> = features.iter().map(|feature| feature.id()).collect();
 
         let string_map: HashMap<_, _> = features
@@ -35,7 +35,7 @@ impl StatusBar {
         })
     }
 
-    pub fn update(
+    pub(crate) fn update(
         &mut self,
         message: &async::Message,
         settings: &settings::Settings,
@@ -79,7 +79,7 @@ impl StatusBar {
         Ok(())
     }
 
-    pub fn render(&self, settings: &settings::Settings) -> Result<()> {
+    pub(crate) fn render(&self, settings: &settings::Settings) -> Result<()> {
         let status = self
             .order
             .iter()

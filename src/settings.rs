@@ -14,61 +14,61 @@ macro_rules! map {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Audio {
-    pub control: String,
-    pub mute: String,
-    pub template: String,
-    pub icons: Vec<String>,
+pub(crate) struct Audio {
+    pub(crate) control: String,
+    pub(crate) mute: String,
+    pub(crate) template: String,
+    pub(crate) icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Backlight {
-    pub device: String,
-    pub template: String,
-    pub icons: Vec<String>,
+pub(crate) struct Backlight {
+    pub(crate) device: String,
+    pub(crate) template: String,
+    pub(crate) icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Battery {
-    pub charging: String,
+pub(crate) struct Battery {
+    pub(crate) charging: String,
     #[doc(hidden)]
-    pub debug: bool,
-    pub discharging: String,
-    pub enable_notifier: bool,
-    pub no_battery: String,
-    pub notifier_critical: u32,
-    pub notifier_levels: Vec<u32>,
-    pub separator: String,
-    pub icons: Vec<String>,
+    pub(crate) debug: bool,
+    pub(crate) discharging: String,
+    pub(crate) enable_notifier: bool,
+    pub(crate) no_battery: String,
+    pub(crate) notifier_critical: u32,
+    pub(crate) notifier_levels: Vec<u32>,
+    pub(crate) separator: String,
+    pub(crate) icons: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct CpuLoad {
-    pub template: String,
-    pub update_interval: u64,
+pub(crate) struct CpuLoad {
+    pub(crate) template: String,
+    pub(crate) update_interval: u64,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Time {
-    pub format: String,
-    pub update_seconds: bool,
+pub(crate) struct Time {
+    pub(crate) format: String,
+    pub(crate) update_seconds: bool,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Settings {
-    pub debug: bool,
-    pub order: Vec<String>,
-    pub separator: String,
+pub(crate) struct Settings {
+    pub(crate) debug: bool,
+    pub(crate) order: Vec<String>,
+    pub(crate) separator: String,
 
-    pub audio: Audio,
-    pub backlight: Backlight,
-    pub battery: Battery,
-    pub cpu_load: CpuLoad,
-    pub time: Time,
+    pub(crate) audio: Audio,
+    pub(crate) backlight: Backlight,
+    pub(crate) battery: Battery,
+    pub(crate) cpu_load: CpuLoad,
+    pub(crate) time: Time,
 }
 
 impl Settings {
-    pub fn new(config_path: &str) -> Result<Self, ConfigError> {
+    pub(crate) fn new(config_path: &str) -> Result<Self, ConfigError> {
         let mut config = Config::new();
 
         // NOTE: if default values change, document in "examples/default-settings"

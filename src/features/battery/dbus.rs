@@ -17,12 +17,12 @@ const PATH_BATTERY_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices/batte
 const PATH_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices";
 const PATH_UPOWER: &str = "/org/freedesktop/UPower";
 
-pub enum DeviceMessage {
+pub(super) enum DeviceMessage {
     Added(String),
     Removed(String),
 }
 
-pub struct DbusWatcher {
+pub(super) struct DbusWatcher {
     connection: dbus::Connection,
     id: uuid::Uuid,
     tx: mpsc::Sender<async::Message>,
@@ -30,7 +30,7 @@ pub struct DbusWatcher {
 }
 
 impl DbusWatcher {
-    pub fn new(
+    pub(super) fn new(
         id: uuid::Uuid,
         tx: mpsc::Sender<async::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
@@ -43,7 +43,7 @@ impl DbusWatcher {
         })
     }
 
-    pub fn start(&self) -> Result<()> {
+    pub(super) fn start(&self) -> Result<()> {
         self.connection.add_match(dbus::Match {
             interface: INTERFACE_UPOWER,
             member: None,
