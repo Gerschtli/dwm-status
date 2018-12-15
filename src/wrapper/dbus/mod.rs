@@ -22,7 +22,7 @@ impl Connection {
         Ok(Connection { connection })
     }
 
-    pub(crate) fn add_match(&self, match_: Match) -> Result<()> {
+    pub(crate) fn add_match(&self, match_: Match<'_>) -> Result<()> {
         self.connection
             .add_match(&match_.build())
             .wrap_error(ERROR_NAME, "failed to add match")
@@ -42,7 +42,7 @@ impl Connection {
         Ok(())
     }
 
-    pub(crate) fn remove_match(&self, match_: Match) -> Result<()> {
+    pub(crate) fn remove_match(&self, match_: Match<'_>) -> Result<()> {
         self.connection
             .remove_match(&match_.build())
             .wrap_error(ERROR_NAME, "failed to remove match")

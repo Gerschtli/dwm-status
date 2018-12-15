@@ -1,3 +1,4 @@
+#[allow(single_use_lifetimes)] // seems to be a bug in rustc
 #[derive(Debug)]
 pub(crate) struct Match<'a> {
     pub(crate) interface: &'static str,
@@ -5,7 +6,7 @@ pub(crate) struct Match<'a> {
     pub(crate) path: &'a str,
 }
 
-impl<'a> Match<'a> {
+impl Match<'_> {
     pub(crate) fn build(self) -> String {
         let member = if let Some(ref member) = self.member {
             format!(",member='{}'", member)

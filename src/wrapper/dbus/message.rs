@@ -30,9 +30,9 @@ impl Message {
         Message { message }
     }
 
-    pub(crate) fn new_method_call<'a>(
+    pub(crate) fn new_method_call(
         bus: &'static str,
-        path: &'a str,
+        path: &'_ str,
         interface: &'static str,
         member: &'static str,
     ) -> Result<Self> {
