@@ -1,14 +1,20 @@
 #![deny(
-    missing_debug_implementations,
+    anonymous_parameters,
+    bare_trait_objects,
+    elided_lifetimes_in_paths,
     missing_copy_implementations,
+    missing_debug_implementations,
+    single_use_lifetimes,
     trivial_casts,
     trivial_numeric_casts,
+    unreachable_pub,
     unsafe_code,
-    unstable_features,
+    unused_extern_crates,
     unused_import_braces,
-    unused_qualifications
+    unused_qualifications,
+    variant_size_differences,
+    warnings
 )]
-#![cfg_attr(feature = "cargo-clippy", deny(warnings))]
 
 extern crate dwm_status;
 
