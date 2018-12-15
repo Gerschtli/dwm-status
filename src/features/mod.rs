@@ -16,7 +16,7 @@ use settings;
 use std::sync::mpsc;
 
 macro_rules! feature {
-    ( $name:ident, $tx:expr, $settings:expr ) => {{
+    ($name:ident, $tx:expr, $settings:expr) => {{
         Ok(Box::new(<$name as ::feature::FeatureConfig>::new(
             ::uuid::Uuid::new_v4(),
             $tx.clone(),
