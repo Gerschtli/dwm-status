@@ -12,7 +12,7 @@ pub struct Error {
 
 impl Error {
     fn new<E: fmt::Debug>(name: &str, description: &str, cause: E) -> Self {
-        Error {
+        Self {
             name: String::from(name),
             description: String::from(description),
             cause: Some(format!("{:?}", cause)),
@@ -20,7 +20,7 @@ impl Error {
     }
 
     pub(crate) fn new_custom(name: &str, description: &str) -> Self {
-        Error {
+        Self {
             name: String::from(name),
             description: String::from(description),
             cause: None,

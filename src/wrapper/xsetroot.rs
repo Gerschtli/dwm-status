@@ -23,7 +23,7 @@ impl XSetRoot {
             let screen = xlib::XDefaultScreen(display);
             let root_window = xlib::XRootWindow(display, screen);
 
-            Ok(XSetRoot {
+            Ok(Self {
                 display,
                 root_window,
             })

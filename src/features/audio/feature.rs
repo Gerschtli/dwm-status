@@ -28,7 +28,7 @@ impl feature::FeatureConfig for Audio {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(Audio { id, settings, tx })
+        Ok(Self { id, settings, tx })
     }
 }
 

@@ -27,7 +27,7 @@ impl StatusBar {
             .map(|feature| (feature.id(), feature))
             .collect();
 
-        Ok(StatusBar {
+        Ok(Self {
             feature_map,
             order,
             string_map,

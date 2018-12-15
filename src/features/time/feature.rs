@@ -26,7 +26,7 @@ impl feature::FeatureConfig for Time {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(Time { id, settings, tx })
+        Ok(Self { id, settings, tx })
     }
 }
 

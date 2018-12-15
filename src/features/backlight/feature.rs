@@ -27,7 +27,7 @@ impl feature::FeatureConfig for Backlight {
         tx: mpsc::Sender<async::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
-        Ok(Backlight {
+        Ok(Self {
             device: BacklightDevice::new(&settings.device)?,
             id,
             settings,

@@ -19,7 +19,7 @@ impl Connection {
         let connection = dbus::Connection::get_private(dbus::BusType::System)
             .wrap_error(ERROR_NAME, "failed to connect to dbus")?;
 
-        Ok(Connection { connection })
+        Ok(Self { connection })
     }
 
     pub(crate) fn add_match(&self, match_: Match<'_>) -> Result<()> {

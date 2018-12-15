@@ -16,7 +16,7 @@ pub(super) struct BatteryDevice {
 
 impl BatteryDevice {
     pub(super) fn new(name: &str) -> Result<Self> {
-        Ok(BatteryDevice {
+        Ok(Self {
             name: String::from(name),
         })
     }

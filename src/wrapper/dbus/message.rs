@@ -27,7 +27,7 @@ impl Message {
     compare_property!(is_member, member);
 
     pub(crate) fn new(message: dbus::Message) -> Self {
-        Message { message }
+        Self { message }
     }
 
     pub(crate) fn new_method_call(
@@ -36,7 +36,7 @@ impl Message {
         interface: &'static str,
         member: &'static str,
     ) -> Result<Self> {
-        Ok(Message {
+        Ok(Self {
             message: dbus::Message::new_method_call(bus, path, interface, member)
                 .wrap_error(ERROR_NAME, "failed to create dbus method call message")?,
         })

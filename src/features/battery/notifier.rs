@@ -14,7 +14,7 @@ pub(super) struct BatteryNotifier {
 
 impl BatteryNotifier {
     pub(super) fn new(settings: settings::Battery) -> Result<Self> {
-        Ok(BatteryNotifier {
+        Ok(Self {
             capacity: None,
             libnotify: libnotify::LibNotify::new()?,
             settings,

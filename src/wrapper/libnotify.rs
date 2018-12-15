@@ -12,7 +12,7 @@ impl LibNotify {
     pub(crate) fn new() -> Result<Self> {
         libnotify::init("dwm-status").wrap_error(ERROR_NAME, "init failed")?;
 
-        Ok(LibNotify {})
+        Ok(Self {})
     }
 
     pub(crate) fn send_notification(

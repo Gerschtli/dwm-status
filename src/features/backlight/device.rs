@@ -10,7 +10,7 @@ pub(super) struct BacklightDevice {
 
 impl BacklightDevice {
     pub(super) fn new(device: &str) -> Result<Self> {
-        let mut device = BacklightDevice {
+        let mut device = Self {
             max: 0,
             path: format!("/sys/class/backlight/{}", device),
         };

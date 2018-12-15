@@ -35,7 +35,7 @@ impl DbusWatcher {
         tx: mpsc::Sender<async::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {
-        Ok(DbusWatcher {
+        Ok(Self {
             connection: dbus::Connection::new()?,
             id,
             tx,

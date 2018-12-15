@@ -17,7 +17,7 @@ pub(super) struct BatteryManager {
 
 impl BatteryManager {
     pub(super) fn new(debug: bool, rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
-        Ok(BatteryManager {
+        Ok(Self {
             ac_name: AcAdapter::get_current()?,
             debug,
             devices: HashMap::new(),

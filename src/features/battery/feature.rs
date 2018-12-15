@@ -37,7 +37,7 @@ impl feature::FeatureConfig for Battery {
         let mut manager = BatteryManager::new(settings.debug, rx_devices)?;
         manager.update_devices_list()?;
 
-        Ok(Battery {
+        Ok(Self {
             id,
             manager,
             notifier: BatteryNotifier::new(settings.clone())?,
