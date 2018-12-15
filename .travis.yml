@@ -1,29 +1,29 @@
 sudo: required
 language: rust
 cache: cargo
-rust:
-  - nightly
-  - beta
-  - stable
-  - 1.27.0 # current stable version in nixpkgs
-before_script:
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      rustup component add clippy-preview || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
-      rustup component add rustfmt-preview || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt-nightly
-    fi
+
+# feature rust-1-31 is only used to enable more lints checked by rustc and clippy
+matrix:
+  include:
+    - rust: nightly
+      env: FEATURES=rust-1-31
+      before_script:
+        - rustup component add clippy-preview || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
+        - rustup component add rustfmt-preview || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt-nightly
+    - rust: beta
+      env: FEATURES=rust-1-31
+    - rust: stable
+      env: FEATURES=rust-1-31
+    - rust: 1.27.0 # current stable version in nixpkgs
+      env: FEATURES=
+
 script:
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      cargo fmt -- --check
-    fi
-  - cargo build --verbose
+  - hash cargo-fmt 2> /dev/null && cargo fmt -- --check
+  - cargo build --verbose --features "$FEATURES"
   - cargo check
-  - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
-      cargo clippy
-    fi
+  - hash cargo-clippy 2> /dev/null && cargo clippy --features "$FEATURES"
   - cargo test --verbose
+
 addons:
   apt:
     packages:
@@ -31,6 +31,7 @@ addons:
       - libgdk-pixbuf2.0-dev
       - libglib2.0-dev
       - libnotify-dev
+
 notifications:
   email:
     on_success: never
