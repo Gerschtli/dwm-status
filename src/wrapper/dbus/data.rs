@@ -6,7 +6,8 @@ pub(crate) struct Match<'a> {
     pub(crate) path: &'a str,
 }
 
-impl Match<'_> {
+#[allow(single_use_lifetimes)] // seems to be a bug in rustc
+impl<'a> Match<'a> {
     pub(crate) fn build(self) -> String {
         let member = if let Some(member) = self.member {
             format!(",member='{}'", member)
