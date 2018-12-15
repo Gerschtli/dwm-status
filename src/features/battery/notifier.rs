@@ -7,7 +7,7 @@ use wrapper::libnotify;
 
 #[derive(Debug)]
 pub(super) struct BatteryNotifier {
-    capacity: Option<f32>,
+    capacity: Option<u16>,
     libnotify: libnotify::LibNotify,
     settings: settings::Battery,
 }
@@ -25,21 +25,19 @@ impl BatteryNotifier {
         self.capacity = None;
     }
 
-    pub(super) fn update(&mut self, capacity: f32, estimation: &time::Duration) -> Result<()> {
+    pub(super) fn update(&mut self, capacity: u16, estimation: &time::Duration) -> Result<()> {
         if !self.settings.enable_notifier {
             return Ok(());
         }
 
         for level in &self.settings.notifier_levels {
-            let decimal_level = *level as f32 / 100.;
-
-            if decimal_level >= capacity {
+            if *level >= capacity {
                 if match self.capacity {
-                    Some(value) if decimal_level >= value => false,
+                    Some(value) if *level >= value => false,
                     _ => true,
                 } {
                     self.libnotify.send_notification(
-                        &format!("Battery under {}", fmt_capacity(decimal_level)),
+                        &format!("Battery under {}", fmt_capacity(*level)),
                         &format!("{} remaining", fmt_time(estimation)),
                         if *level <= self.settings.notifier_critical {
                             libnotify::Urgency::Critical

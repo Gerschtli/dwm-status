@@ -1,5 +1,6 @@
 use super::get_value2;
 use error::*;
+use std::cmp;
 use std::time;
 
 const CHARGE_FULL: &str = "charge_full";
@@ -21,17 +22,13 @@ impl BatteryDevice {
         })
     }
 
-    pub(super) fn capacity(&self) -> Result<f32> {
+    pub(super) fn capacity(&self) -> Result<u16> {
         let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
         let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
 
-        let capacity = charge_now as f32 / charge_full as f32;
+        let capacity = charge_now * 100 / charge_full;
 
-        if capacity > 1. {
-            return Ok(1.);
-        }
-
-        Ok(capacity)
+        Ok(cmp::min(capacity, 100))
     }
 
     pub(super) fn estimation(&self, is_ac_online: bool) -> Result<Option<time::Duration>> {
@@ -45,9 +42,9 @@ impl BatteryDevice {
 
         let seconds = if is_ac_online {
             let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
-            (charge_full - charge_now).abs() as u64 * 3600_u64 / current_now as u64
+            u64::from(charge_full - charge_now) * 3600 / u64::from(current_now)
         } else {
-            charge_now as u64 * 3600_u64 / current_now as u64
+            u64::from(charge_now) * 3600 / u64::from(current_now)
         };
 
         Ok(Some(time::Duration::from_secs(seconds)))

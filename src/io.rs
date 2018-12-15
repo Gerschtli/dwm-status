@@ -10,7 +10,10 @@ pub(crate) fn read_file(path: &str) -> io::Result<String> {
     Ok(s)
 }
 
-pub(crate) fn read_int_from_file(path: &str) -> io::Result<i32> {
+pub(crate) fn read_int_from_file<T>(path: &str) -> io::Result<T>
+where
+    T: str::FromStr,
+{
     read_file(path)?
         .trim_right_matches('\n')
         .parse()

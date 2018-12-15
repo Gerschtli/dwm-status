@@ -94,7 +94,7 @@ impl feature::Feature for Audio {
         let volume = last
             .get(0)
             .wrap_error(FEATURE_NAME, "no volume part found")?
-            .parse::<u32>()
+            .parse()
             .wrap_error(FEATURE_NAME, "volume not parsable")?;
 
         Ok(Box::new(AudioData::Volume(volume)))

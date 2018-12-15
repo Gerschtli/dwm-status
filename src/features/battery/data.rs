@@ -4,11 +4,11 @@ use feature;
 use settings;
 use std::collections::HashMap;
 use std::time;
-use utils::icon_by_float;
+use utils::icon_by_percentage;
 
 #[derive(Clone, Debug)]
 pub(super) struct BatteryInfo {
-    pub(super) capacity: f32,
+    pub(super) capacity: u16,
     pub(super) estimation: Option<time::Duration>,
 }
 
@@ -16,7 +16,7 @@ impl feature::Renderable for BatteryInfo {
     fn render(&self, settings: &settings::Settings) -> String {
         let mut rendered = String::with_capacity(16);
 
-        if let Some(icon) = icon_by_float(&settings.battery.icons, self.capacity) {
+        if let Some(icon) = icon_by_percentage(&settings.battery.icons, self.capacity) {
             rendered.push_str(&format!("{} ", icon));
         }
 

@@ -36,8 +36,8 @@ pub(crate) struct Battery {
     pub(crate) discharging: String,
     pub(crate) enable_notifier: bool,
     pub(crate) no_battery: String,
-    pub(crate) notifier_critical: u32,
-    pub(crate) notifier_levels: Vec<u32>,
+    pub(crate) notifier_critical: u16,
+    pub(crate) notifier_levels: Vec<u16>,
     pub(crate) separator: String,
     pub(crate) icons: Vec<String>,
 }
