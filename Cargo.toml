@@ -32,3 +32,6 @@ version = "0.7.1"
 [dependencies.x11]
 features = ["xlib"]
 version = "2.18.1"
+
+[features]
+rust-1-31 = []
