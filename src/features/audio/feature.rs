@@ -87,7 +87,7 @@ impl feature::Feature for Audio {
             .map(|s| s.trim_matches(FILTER))
             .collect::<Vec<&str>>();
 
-        if last.get(1).map(|muted| *muted == "off").unwrap_or(false) {
+        if last.get(1).map_or(false, |muted| *muted == "off") {
             return Ok(Box::new(AudioData::Mute));
         }
 
