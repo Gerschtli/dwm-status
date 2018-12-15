@@ -19,13 +19,13 @@ matrix:
 
 script:
   - |
-    if $(hash cargo-fmt 2> /dev/null); then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
       cargo fmt -- --check
     fi
   - cargo build --verbose --features "$FEATURES"
   - cargo check
   - |
-    if $(hash cargo-clippy 2> /dev/null); then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
       cargo clippy --features "$FEATURES"
     fi
   - cargo test --verbose
