@@ -16,7 +16,6 @@ extern crate ctrlc;
 extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
-extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate uuid;
