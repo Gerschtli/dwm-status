@@ -10,8 +10,7 @@
     unused_extern_crates,
     unused_import_braces,
     unused_qualifications,
-    variant_size_differences,
-    warnings
+    variant_size_differences
 )]
 #![cfg_attr(
     feature = "rust-1-31",
