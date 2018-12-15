@@ -17,7 +17,7 @@ macro_rules! feature_default {
 }
 
 pub(crate) trait Renderable {
-    fn render(&self, &settings::Settings) -> String;
+    fn render(&self, _: &settings::Settings) -> String;
 }
 
 pub(crate) trait Feature {
@@ -33,7 +33,7 @@ pub(crate) trait Feature {
 pub(crate) trait FeatureConfig: Feature {
     type Settings;
 
-    fn new(uuid::Uuid, mpsc::Sender<async::Message>, Self::Settings) -> Result<Self>
+    fn new(_: uuid::Uuid, _: mpsc::Sender<async::Message>, _: Self::Settings) -> Result<Self>
     where
         Self: Sized;
 }
