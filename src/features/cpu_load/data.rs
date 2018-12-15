@@ -18,23 +18,3 @@ impl feature::Renderable for CpuLoadData {
             .replace("{CL15}", &format!("{:.2}", self.fifteen))
     }
 }
-
-/* temporarily disabled because missing mock possibilty in tests
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use feature::Renderable;
-
-    #[test]
-    fn test_display() {
-        let data = CpuLoadData {
-            one: 0.5,
-            five: 1.52,
-            fifteen: 2.1234,
-            template: String::from("{CL5} {CL1} {CL15} {CL2} {CL1}"),
-        };
-
-        assert_eq!(data.render(), "1.52 0.50 2.12 {CL2} 0.50");
-    }
-}
-*/
