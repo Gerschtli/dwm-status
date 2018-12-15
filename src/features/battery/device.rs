@@ -45,9 +45,9 @@ impl BatteryDevice {
 
         let seconds = if is_ac_online {
             let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
-            (charge_full - charge_now).abs() as u64 * 3600u64 / current_now as u64
+            (charge_full - charge_now).abs() as u64 * 3600_u64 / current_now as u64
         } else {
-            charge_now as u64 * 3600u64 / current_now as u64
+            charge_now as u64 * 3600_u64 / current_now as u64
         };
 
         Ok(Some(time::Duration::from_secs(seconds)))
