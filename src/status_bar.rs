@@ -1,4 +1,4 @@
-use async;
+use communication;
 use error::*;
 use feature;
 use settings;
@@ -37,21 +37,21 @@ impl StatusBar {
 
     pub(crate) fn update(
         &mut self,
-        message: &async::Message,
+        message: &communication::Message,
         settings: &settings::Settings,
     ) -> Result<()> {
         match message {
-            async::Message::FeatureUpdate(id) if self.feature_map.contains_key(id) => {
+            communication::Message::FeatureUpdate(id) if self.feature_map.contains_key(id) => {
                 self.update_feature(*id, settings)?;
                 self.render(settings)?;
             },
-            async::Message::FeatureUpdate(id) => {
+            communication::Message::FeatureUpdate(id) => {
                 return Err(Error::new_custom(
                     "invalid message",
                     &format!("message id {} does not exist", id),
                 ));
             },
-            async::Message::UpdateAll => {
+            communication::Message::UpdateAll => {
                 if settings.debug {
                     println!("update all");
                 }

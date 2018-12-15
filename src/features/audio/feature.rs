@@ -1,6 +1,6 @@
 use super::AudioData;
 use super::FEATURE_NAME;
-use async;
+use communication;
 use error::*;
 use feature;
 use settings;
@@ -17,7 +17,7 @@ const FILTER: &[char] = &['[', ']', '%'];
 pub(crate) struct Audio {
     id: uuid::Uuid,
     settings: settings::Audio,
-    tx: mpsc::Sender<async::Message>,
+    tx: mpsc::Sender<communication::Message>,
 }
 
 impl feature::FeatureConfig for Audio {
@@ -25,7 +25,7 @@ impl feature::FeatureConfig for Audio {
 
     fn new(
         id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
+        tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
         Ok(Self { id, settings, tx })
@@ -56,7 +56,7 @@ impl feature::Feature for Audio {
                         break;
                     }
 
-                    async::send_message(FEATURE_NAME, id, &tx);
+                    communication::send_message(FEATURE_NAME, id, &tx);
                 }
 
                 // prevent event spamming

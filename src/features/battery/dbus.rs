@@ -1,5 +1,5 @@
 use super::FEATURE_NAME;
-use async;
+use communication;
 use error::*;
 use std::collections::HashSet;
 use std::sync::mpsc;
@@ -25,14 +25,14 @@ pub(super) enum DeviceMessage {
 pub(super) struct DbusWatcher {
     connection: dbus::Connection,
     id: uuid::Uuid,
-    tx: mpsc::Sender<async::Message>,
+    tx: mpsc::Sender<communication::Message>,
     tx_devices: mpsc::Sender<DeviceMessage>,
 }
 
 impl DbusWatcher {
     pub(super) fn new(
         id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
+        tx: mpsc::Sender<communication::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {
         Ok(Self {
@@ -60,7 +60,7 @@ impl DbusWatcher {
         // dbus method call with a 2 seconds timeout. While waiting it's possible that
         // the initial `update` has already been triggered, so the status bar would show
         // the "no battery" information.
-        async::send_message(FEATURE_NAME, self.id, &self.tx);
+        communication::send_message(FEATURE_NAME, self.id, &self.tx);
 
         self.connection.listen_for_signals(|signal| {
             if signal.is_interface(INTERFACE_UPOWER)? {
@@ -72,12 +72,12 @@ impl DbusWatcher {
                     self.remove_device(&mut devices, &path)?;
                 }
 
-                async::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx);
             } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
                 // wait for /sys/class/power_supply files updates
                 thread::sleep(time::Duration::from_secs(2));
 
-                async::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx);
             }
 
             Ok(())

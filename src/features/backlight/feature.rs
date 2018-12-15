@@ -1,7 +1,7 @@
 use super::BacklightData;
 use super::BacklightDevice;
 use super::FEATURE_NAME;
-use async;
+use communication;
 use error::*;
 use feature;
 use inotify;
@@ -16,7 +16,7 @@ pub(crate) struct Backlight {
     device: BacklightDevice,
     id: uuid::Uuid,
     settings: settings::Backlight,
-    tx: mpsc::Sender<async::Message>,
+    tx: mpsc::Sender<communication::Message>,
 }
 
 impl feature::FeatureConfig for Backlight {
@@ -24,7 +24,7 @@ impl feature::FeatureConfig for Backlight {
 
     fn new(
         id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
+        tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
         Ok(Self {
@@ -59,7 +59,7 @@ impl feature::Feature for Backlight {
                     .wrap_error_kill(FEATURE_NAME, "error while reading inotify events");
 
                 if events.any(|event| event.mask.contains(inotify::EventMask::MODIFY)) {
-                    async::send_message(FEATURE_NAME, id, &tx);
+                    communication::send_message(FEATURE_NAME, id, &tx);
                 }
 
                 // prevent event spamming

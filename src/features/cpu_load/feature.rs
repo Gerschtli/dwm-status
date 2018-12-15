@@ -1,6 +1,6 @@
 use super::CpuLoadData;
 use super::FEATURE_NAME;
-use async;
+use communication;
 use error::*;
 use feature;
 use io;
@@ -16,7 +16,7 @@ const PATH_LOADAVG: &str = "/proc/loadavg";
 pub(crate) struct CpuLoad {
     id: uuid::Uuid,
     settings: settings::CpuLoad,
-    tx: mpsc::Sender<async::Message>,
+    tx: mpsc::Sender<communication::Message>,
 }
 
 impl feature::FeatureConfig for CpuLoad {
@@ -24,7 +24,7 @@ impl feature::FeatureConfig for CpuLoad {
 
     fn new(
         id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
+        tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
         Ok(Self { id, settings, tx })
@@ -42,7 +42,7 @@ impl feature::Feature for CpuLoad {
         thread::spawn(move || loop {
             thread::sleep(time::Duration::from_secs(update_interval));
 
-            async::send_message(FEATURE_NAME, id, &tx);
+            communication::send_message(FEATURE_NAME, id, &tx);
         });
 
         Ok(())

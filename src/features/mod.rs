@@ -9,7 +9,7 @@ use self::backlight::Backlight;
 use self::battery::Battery;
 use self::cpu_load::CpuLoad;
 use self::time::Time;
-use async;
+use communication;
 use error::*;
 use feature;
 use settings;
@@ -27,7 +27,7 @@ macro_rules! feature {
 
 pub(crate) fn create_feature(
     name: &str,
-    tx: &mpsc::Sender<async::Message>,
+    tx: &mpsc::Sender<communication::Message>,
     settings: &settings::Settings,
 ) -> Result<Box<dyn feature::Feature>> {
     match &name.to_string().to_lowercase()[..] {

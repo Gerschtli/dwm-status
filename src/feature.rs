@@ -1,4 +1,4 @@
-use async;
+use communication;
 use error::*;
 use settings;
 use std::sync::mpsc;
@@ -33,7 +33,11 @@ pub(crate) trait Feature {
 pub(crate) trait FeatureConfig: Feature {
     type Settings;
 
-    fn new(_: uuid::Uuid, _: mpsc::Sender<async::Message>, _: Self::Settings) -> Result<Self>
+    fn new(
+        _: uuid::Uuid,
+        _: mpsc::Sender<communication::Message>,
+        _: Self::Settings,
+    ) -> Result<Self>
     where
         Self: Sized;
 }

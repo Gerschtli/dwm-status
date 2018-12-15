@@ -5,7 +5,7 @@ use super::BatteryNotifier;
 use super::DbusWatcher;
 use super::DeviceMessage;
 use super::FEATURE_NAME;
-use async;
+use communication;
 use error::*;
 use feature;
 use settings;
@@ -21,7 +21,7 @@ pub(crate) struct Battery {
     notifier: BatteryNotifier,
     settings: settings::Battery,
     tx_devices: mpsc::Sender<DeviceMessage>,
-    tx: mpsc::Sender<async::Message>,
+    tx: mpsc::Sender<communication::Message>,
 }
 
 impl feature::FeatureConfig for Battery {
@@ -29,7 +29,7 @@ impl feature::FeatureConfig for Battery {
 
     fn new(
         id: uuid::Uuid,
-        tx: mpsc::Sender<async::Message>,
+        tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {
         let (tx_devices, rx_devices) = mpsc::channel();

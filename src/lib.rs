@@ -43,7 +43,7 @@ extern crate serde_derive;
 extern crate uuid;
 extern crate x11;
 
-mod async;
+mod communication;
 mod error;
 #[macro_use]
 mod feature;
@@ -88,11 +88,11 @@ pub fn run() -> Result<()> {
 
     resume::init_resume_notifier(&tx)?;
 
-    tx.send(async::Message::UpdateAll)
+    tx.send(communication::Message::UpdateAll)
         .wrap_error("init", "initial update message failed")?;
 
     ctrlc::set_handler(move || {
-        tx.send(async::Message::Kill)
+        tx.send(communication::Message::Kill)
             .wrap_error_kill("termination", "notify thread killed");
     })
     .wrap_error("termination", "failed to set termination handler")?;
@@ -101,7 +101,7 @@ pub fn run() -> Result<()> {
 
     for message in rx {
         match message {
-            async::Message::Kill => break,
+            communication::Message::Kill => break,
             _ => status_bar.update(&message, &settings)?,
         }
     }

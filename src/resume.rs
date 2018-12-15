@@ -1,4 +1,4 @@
-use async;
+use communication;
 use error::*;
 use std::sync::mpsc;
 use std::thread;
@@ -9,7 +9,7 @@ const INTERFACE_LOGIN1: &str = "org.freedesktop.login1.Manager";
 const MEMBER_PREPARE_FOR_SLEEP: &str = "PrepareForSleep";
 const PATH_LOGIN1: &str = "/org/freedesktop/login1";
 
-pub(crate) fn init_resume_notifier(tx: &mpsc::Sender<async::Message>) -> Result<()> {
+pub(crate) fn init_resume_notifier(tx: &mpsc::Sender<communication::Message>) -> Result<()> {
     let tx_ = tx.clone();
 
     thread::spawn(move || {
@@ -19,7 +19,7 @@ pub(crate) fn init_resume_notifier(tx: &mpsc::Sender<async::Message>) -> Result<
     Ok(())
 }
 
-fn start_listener(tx: &mpsc::Sender<async::Message>) -> Result<()> {
+fn start_listener(tx: &mpsc::Sender<communication::Message>) -> Result<()> {
     let connection = dbus::Connection::new()?;
 
     connection.add_match(dbus::Match {
@@ -31,7 +31,7 @@ fn start_listener(tx: &mpsc::Sender<async::Message>) -> Result<()> {
     connection.listen_for_signals(|signal| {
         // return value is true if going to sleep, false if waking up
         if signal.is_interface(INTERFACE_LOGIN1)? && !signal.return_value::<bool>()? {
-            tx.send(async::Message::UpdateAll)
+            tx.send(communication::Message::UpdateAll)
                 .wrap_error(ERROR_NAME, "send update failed")?
         }
 
