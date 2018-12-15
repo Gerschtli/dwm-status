@@ -29,7 +29,7 @@
 )]
 #![cfg_attr(
     feature = "rust-1-31",
-    allow(clippy::filter_map, clippy::non_ascii_literal)
+    allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)
 )]
 
 extern crate chrono;
