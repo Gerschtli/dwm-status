@@ -54,11 +54,11 @@ impl feature::Feature for CpuLoad {
 
         let mut iterator = content.split_whitespace();
 
-        Ok(Box::new(CpuLoadData {
-            one: convert_to_float(iterator.next())?,
-            five: convert_to_float(iterator.next())?,
-            fifteen: convert_to_float(iterator.next())?,
-        }))
+        let one = convert_to_float(iterator.next())?;
+        let five = convert_to_float(iterator.next())?;
+        let fifteen = convert_to_float(iterator.next())?;
+
+        Ok(Box::new(CpuLoadData { one, five, fifteen }))
     }
 }
 
