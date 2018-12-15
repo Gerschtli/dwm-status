@@ -18,10 +18,16 @@ matrix:
       env: FEATURES=
 
 script:
-  - hash cargo-fmt 2> /dev/null && cargo fmt -- --check
+  - |
+    if $(hash cargo-fmt 2> /dev/null); then
+      cargo fmt -- --check
+    fi
   - cargo build --verbose --features "$FEATURES"
   - cargo check
-  - hash cargo-clippy 2> /dev/null && cargo clippy --features "$FEATURES"
+  - |
+    if $(hash cargo-clippy 2> /dev/null); then
+      cargo clippy --features "$FEATURES"
+    fi
   - cargo test --verbose
 
 addons:
