@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- The super useless case of having one feature at least twice in the `order` list now throws an exception.. Why would
+  anyone ever want to see one feature twice in their status bar?
 
 ## [1.4.1] - 2018-12-01
 # Fixed
