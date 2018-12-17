@@ -2,35 +2,23 @@ use communication;
 use error::*;
 use feature;
 use settings;
-use std::collections::HashMap;
-use uuid;
+use std::iter;
+use std::iter::FromIterator;
 use wrapper::xsetroot;
 
 pub(crate) struct StatusBar {
-    feature_map: HashMap<uuid::Uuid, Box<dyn feature::Feature>>,
-    order: Vec<uuid::Uuid>,
-    string_map: HashMap<uuid::Uuid, String>,
+    features: Vec<Box<dyn feature::Feature>>,
+    string_list: Vec<String>,
     xsetroot: xsetroot::XSetRoot,
 }
 
 impl StatusBar {
     pub(crate) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
-        let order: Vec<_> = features.iter().map(|feature| feature.id()).collect();
-
-        let string_map: HashMap<_, _> = features
-            .iter()
-            .map(|feature| (feature.id(), String::new()))
-            .collect();
-
-        let feature_map: HashMap<_, _> = features
-            .into_iter()
-            .map(|feature| (feature.id(), feature))
-            .collect();
+        let string_list = Vec::from_iter(iter::repeat(String::new()).take(features.len()));
 
         Ok(Self {
-            feature_map,
-            order,
-            string_map,
+            features,
+            string_list,
             xsetroot: xsetroot::XSetRoot::new()?,
         })
     }
@@ -41,14 +29,14 @@ impl StatusBar {
         settings: &settings::Settings,
     ) -> Result<()> {
         match message {
-            communication::Message::FeatureUpdate(id) if self.feature_map.contains_key(id) => {
+            communication::Message::FeatureUpdate(id) if *id < self.features.len() => {
                 self.update_feature(*id, settings)?;
                 self.render(settings)?;
             },
             communication::Message::FeatureUpdate(id) => {
                 return Err(Error::new_custom(
                     "invalid message",
-                    &format!("message id {} does not exist", id),
+                    &format!("feature id {} does not exist", id),
                 ));
             },
             communication::Message::UpdateAll => {
@@ -56,7 +44,7 @@ impl StatusBar {
                     println!("update all");
                 }
 
-                for id in self.order.clone() {
+                for id in 0..self.features.len() {
                     self.update_feature(id, settings)?;
                 }
                 self.render(settings)?;
@@ -67,25 +55,20 @@ impl StatusBar {
         Ok(())
     }
 
-    fn update_feature(&mut self, id: uuid::Uuid, settings: &settings::Settings) -> Result<()> {
-        let feature = self.feature_map.get_mut(&id).unwrap();
+    fn update_feature(&mut self, id: usize, settings: &settings::Settings) -> Result<()> {
+        let feature = self.features.get_mut(id).unwrap();
         let rendered = feature.update()?.render(settings);
 
         if settings.debug {
             println!("update {}: {}", feature.name(), &rendered);
         }
 
-        self.string_map.insert(id, rendered);
+        self.string_list[id] = rendered;
         Ok(())
     }
 
     pub(crate) fn render(&self, settings: &settings::Settings) -> Result<()> {
-        let status = self
-            .order
-            .iter()
-            .map(|id| &self.string_map[id][..])
-            .collect::<Vec<_>>()
-            .join(&settings.separator);
+        let status = self.string_list.join(&settings.separator);
 
         self.xsetroot.render(status)
     }

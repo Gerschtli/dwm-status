@@ -2,11 +2,10 @@ use communication;
 use error::*;
 use settings;
 use std::sync::mpsc;
-use uuid;
 
 macro_rules! feature_default {
     () => {
-        fn id(&self) -> ::uuid::Uuid {
+        fn id(&self) -> usize {
             self.id
         }
 
@@ -21,7 +20,7 @@ pub(crate) trait Renderable {
 }
 
 pub(crate) trait Feature {
-    fn id(&self) -> uuid::Uuid;
+    fn id(&self) -> usize;
 
     fn init_notifier(&self) -> Result<()>;
 
@@ -33,11 +32,7 @@ pub(crate) trait Feature {
 pub(crate) trait FeatureConfig: Feature {
     type Settings;
 
-    fn new(
-        _: uuid::Uuid,
-        _: mpsc::Sender<communication::Message>,
-        _: Self::Settings,
-    ) -> Result<Self>
+    fn new(_: usize, _: mpsc::Sender<communication::Message>, _: Self::Settings) -> Result<Self>
     where
         Self: Sized;
 }

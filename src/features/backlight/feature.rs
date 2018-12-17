@@ -9,12 +9,11 @@ use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub(crate) struct Backlight {
     device: BacklightDevice,
-    id: uuid::Uuid,
+    id: usize,
     settings: settings::Backlight,
     tx: mpsc::Sender<communication::Message>,
 }
@@ -23,7 +22,7 @@ impl feature::FeatureConfig for Backlight {
     type Settings = settings::Backlight;
 
     fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {

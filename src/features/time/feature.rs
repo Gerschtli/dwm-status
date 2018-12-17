@@ -9,11 +9,10 @@ use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-use uuid;
 
 #[derive(Debug)]
 pub(crate) struct Time {
-    id: uuid::Uuid,
+    id: usize,
     settings: settings::Time,
     tx: mpsc::Sender<communication::Message>,
 }
@@ -22,7 +21,7 @@ impl feature::FeatureConfig for Time {
     type Settings = settings::Time;
 
     fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {

@@ -16,9 +16,9 @@ use settings;
 use std::sync::mpsc;
 
 macro_rules! feature {
-    ($name:ident, $tx:expr, $settings:expr) => {{
+    ($name:ident, $id:expr, $tx:expr, $settings:expr) => {{
         Ok(Box::new(<$name as ::feature::FeatureConfig>::new(
-            ::uuid::Uuid::new_v4(),
+            $id,
             $tx.clone(),
             $settings.clone(),
         )?))
@@ -26,16 +26,17 @@ macro_rules! feature {
 }
 
 pub(crate) fn create_feature(
+    id: usize,
     name: &str,
     tx: &mpsc::Sender<communication::Message>,
     settings: &settings::Settings,
 ) -> Result<Box<dyn feature::Feature>> {
     match &name.to_string().to_lowercase()[..] {
-        "audio" => feature!(Audio, tx, settings.audio),
-        "backlight" => feature!(Backlight, tx, settings.backlight),
-        "battery" => feature!(Battery, tx, settings.battery),
-        "cpu_load" => feature!(CpuLoad, tx, settings.cpu_load),
-        "time" => feature!(Time, tx, settings.time),
+        "audio" => feature!(Audio, id, tx, settings.audio),
+        "backlight" => feature!(Backlight, id, tx, settings.backlight),
+        "battery" => feature!(Battery, id, tx, settings.battery),
+        "cpu_load" => feature!(CpuLoad, id, tx, settings.cpu_load),
+        "time" => feature!(Time, id, tx, settings.time),
         _ => Err(Error::new_custom(
             "create feature",
             &format!("feature {} does not exist", name),

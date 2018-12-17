@@ -12,11 +12,10 @@ use settings;
 use std::collections::HashMap;
 use std::sync::mpsc;
 use std::thread;
-use uuid;
 
 #[derive(Debug)]
 pub(crate) struct Battery {
-    id: uuid::Uuid,
+    id: usize,
     manager: BatteryManager,
     notifier: BatteryNotifier,
     settings: settings::Battery,
@@ -28,7 +27,7 @@ impl feature::FeatureConfig for Battery {
     type Settings = settings::Battery;
 
     fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {

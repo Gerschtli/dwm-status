@@ -9,13 +9,12 @@ use std::process;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-use uuid;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
 pub(crate) struct Audio {
-    id: uuid::Uuid,
+    id: usize,
     settings: settings::Audio,
     tx: mpsc::Sender<communication::Message>,
 }
@@ -24,7 +23,7 @@ impl feature::FeatureConfig for Audio {
     type Settings = settings::Audio;
 
     fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {

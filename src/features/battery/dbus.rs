@@ -5,7 +5,6 @@ use std::collections::HashSet;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-use uuid;
 use wrapper::dbus;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
@@ -24,14 +23,14 @@ pub(super) enum DeviceMessage {
 
 pub(super) struct DbusWatcher {
     connection: dbus::Connection,
-    id: uuid::Uuid,
+    id: usize,
     tx: mpsc::Sender<communication::Message>,
     tx_devices: mpsc::Sender<DeviceMessage>,
 }
 
 impl DbusWatcher {
     pub(super) fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {

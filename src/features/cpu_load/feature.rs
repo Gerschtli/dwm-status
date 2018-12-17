@@ -8,13 +8,12 @@ use settings;
 use std::sync::mpsc;
 use std::thread;
 use std::time;
-use uuid;
 
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
 #[derive(Debug)]
 pub(crate) struct CpuLoad {
-    id: uuid::Uuid,
+    id: usize,
     settings: settings::CpuLoad,
     tx: mpsc::Sender<communication::Message>,
 }
@@ -23,7 +22,7 @@ impl feature::FeatureConfig for CpuLoad {
     type Settings = settings::CpuLoad;
 
     fn new(
-        id: uuid::Uuid,
+        id: usize,
         tx: mpsc::Sender<communication::Message>,
         settings: Self::Settings,
     ) -> Result<Self> {

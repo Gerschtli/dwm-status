@@ -39,7 +39,6 @@ extern crate inotify;
 extern crate libnotify;
 #[macro_use]
 extern crate serde_derive;
-extern crate uuid;
 extern crate x11;
 
 mod communication;
@@ -56,7 +55,9 @@ mod wrapper;
 
 use error::*;
 use status_bar::StatusBar;
+use std::collections::HashSet;
 use std::env;
+use std::iter::FromIterator;
 use std::sync::mpsc;
 
 fn get_settings() -> Result<settings::Settings> {
@@ -69,20 +70,34 @@ fn get_settings() -> Result<settings::Settings> {
     settings::Settings::new(&path).wrap_error("settings", "error creating settings object")
 }
 
+fn validate_settings(settings: &settings::Settings) -> Result<()> {
+    if settings.order.is_empty() {
+        return Err(Error::new_custom("settings", "no features enabled"));
+    }
+
+    let set: HashSet<&String> = HashSet::from_iter(settings.order.iter());
+    if set.len() < settings.order.len() {
+        return Err(Error::new_custom(
+            "settings",
+            "order must not have more than one entry of one feature",
+        ));
+    }
+
+    Ok(())
+}
+
 pub fn run() -> Result<()> {
     let (tx, rx) = mpsc::channel();
 
     let settings = get_settings()?;
+    validate_settings(&settings)?;
+
     let mut features = Vec::new();
 
-    for feature_name in &settings.order {
-        let mut feature = features::create_feature(feature_name, &tx, &settings)?;
+    for (index, feature_name) in settings.order.iter().enumerate() {
+        let feature = features::create_feature(index, feature_name, &tx, &settings)?;
         feature.init_notifier()?;
         features.push(feature);
-    }
-
-    if features.is_empty() {
-        return Err(Error::new_custom("settings", "no features enabled"));
     }
 
     resume::init_resume_notifier(&tx)?;
