@@ -77,7 +77,7 @@ impl feature::Feature for Battery {
                 estimation: device.estimation(ac_online)?,
             };
 
-            batteries.insert(String::from(&name[..]), info);
+            batteries.insert(name.clone(), info);
         }
 
         if ac_online {

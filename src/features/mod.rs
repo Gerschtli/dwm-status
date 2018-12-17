@@ -31,7 +31,7 @@ pub(crate) fn create_feature(
     tx: &mpsc::Sender<communication::Message>,
     settings: &settings::Settings,
 ) -> Result<Box<dyn feature::Feature>> {
-    match &name.to_string().to_lowercase()[..] {
+    match &name.to_lowercase()[..] {
         "audio" => feature!(Audio, id, tx, settings.audio),
         "backlight" => feature!(Backlight, id, tx, settings.backlight),
         "battery" => feature!(Battery, id, tx, settings.battery),
