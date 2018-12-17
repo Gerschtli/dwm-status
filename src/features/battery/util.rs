@@ -4,7 +4,7 @@ use error::*;
 use io;
 use std::time;
 
-pub(super) fn fmt_capacity(capacity: u16) -> String {
+pub(super) fn fmt_capacity(capacity: u32) -> String {
     format!("{}%", capacity)
 }
 
@@ -13,12 +13,12 @@ pub(super) fn fmt_time(duration: &time::Duration) -> String {
     format!("{:02}:{:02}", minutes / 60, minutes % 60)
 }
 
-pub(super) fn get_value(device: &str, name: &str) -> Result<u16> {
+pub(super) fn get_value(device: &str, name: &str) -> Result<u32> {
     io::read_int_from_file(&format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
         .wrap_error(FEATURE_NAME, &format!("error reading {}/{}", device, name))
 }
 
-pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u16> {
+pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u32> {
     if let Ok(result) = get_value(device, name1) {
         return Ok(result);
     }

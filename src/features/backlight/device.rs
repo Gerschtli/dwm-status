@@ -4,7 +4,7 @@ use io;
 
 #[derive(Debug)]
 pub(super) struct BacklightDevice {
-    max: u16,
+    max: u32,
     path: String,
 }
 
@@ -24,7 +24,7 @@ impl BacklightDevice {
         self.build_path("actual")
     }
 
-    pub(super) fn value(&self) -> Result<u16> {
+    pub(super) fn value(&self) -> Result<u32> {
         let current = self.get_brightness("actual")?;
         let value = current * 100 / self.max;
 
@@ -35,7 +35,7 @@ impl BacklightDevice {
         format!("{}/{}_brightness", self.path, name)
     }
 
-    fn get_brightness(&self, name: &str) -> Result<u16> {
+    fn get_brightness(&self, name: &str) -> Result<u32> {
         let brightness = io::read_int_from_file(&self.build_path(name))
             .wrap_error(FEATURE_NAME, &format!("error reading {} brightness", name))?;
 

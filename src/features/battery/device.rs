@@ -22,7 +22,7 @@ impl BatteryDevice {
         })
     }
 
-    pub(super) fn capacity(&self) -> Result<u16> {
+    pub(super) fn capacity(&self) -> Result<u32> {
         let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
         let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
 

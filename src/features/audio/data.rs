@@ -5,7 +5,7 @@ use utils::icon_by_percentage;
 #[derive(Debug)]
 pub(super) enum AudioData {
     Mute,
-    Volume(u16),
+    Volume(u32),
 }
 
 impl feature::Renderable for AudioData {

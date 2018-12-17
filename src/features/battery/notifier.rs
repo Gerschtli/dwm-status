@@ -7,7 +7,7 @@ use wrapper::libnotify;
 
 #[derive(Debug)]
 pub(super) struct BatteryNotifier {
-    capacity: Option<u16>,
+    capacity: Option<u32>,
     libnotify: libnotify::LibNotify,
     settings: settings::Battery,
 }
@@ -25,7 +25,7 @@ impl BatteryNotifier {
         self.capacity = None;
     }
 
-    pub(super) fn update(&mut self, capacity: u16, estimation: &time::Duration) -> Result<()> {
+    pub(super) fn update(&mut self, capacity: u32, estimation: &time::Duration) -> Result<()> {
         if !self.settings.enable_notifier {
             return Ok(());
         }

@@ -1,6 +1,6 @@
 use std::cmp;
 
-pub(crate) fn icon_by_percentage(icons: &[String], percentage: u16) -> Option<&str> {
+pub(crate) fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
     if icons.is_empty() {
         return None;
     }
