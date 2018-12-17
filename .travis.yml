@@ -17,6 +17,21 @@ matrix:
     - rust: 1.27.0 # current stable version in nixpkgs
       env: FEATURES=
 
+    - language: nix
+      name: nix build on nixpkgs-unstable
+      before_script:
+        - nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+        - nix eval nixpkgs.rustc.version
+      script:
+        - nix build --verbose
+    - language: nix
+      name: nix build on nixos-18.09
+      before_script:
+        - nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+        - nix eval nixpkgs.rustc.version
+      script:
+        - nix build --verbose
+
 script:
   - |
     if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
