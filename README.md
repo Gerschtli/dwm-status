@@ -28,12 +28,12 @@ $ cargo install dwm-status
 
 Build:
 ```sh
-$ nix-build
+$ nix build
 ```
 
 And run:
 ```sh
-$ ./result/bin/dwm_status <config-file>
+$ ./result/bin/dwm-status <config-file>
 ```
 
 ## Configuration
