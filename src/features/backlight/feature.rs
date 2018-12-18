@@ -11,14 +11,14 @@ use std::thread;
 use std::time;
 
 #[derive(Debug)]
-pub(crate) struct Backlight {
+pub(crate) struct Feature {
     device: BacklightDevice,
     id: usize,
     settings: settings::Backlight,
     tx: mpsc::Sender<communication::Message>,
 }
 
-impl feature::FeatureConfig for Backlight {
+impl feature::FeatureConfig for Feature {
     type Settings = settings::Backlight;
 
     fn new(
@@ -35,7 +35,7 @@ impl feature::FeatureConfig for Backlight {
     }
 }
 
-impl feature::Feature for Backlight {
+impl feature::Feature for Feature {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {

@@ -14,7 +14,7 @@ use std::sync::mpsc;
 use std::thread;
 
 #[derive(Debug)]
-pub(crate) struct Battery {
+pub(crate) struct Feature {
     id: usize,
     manager: BatteryManager,
     notifier: BatteryNotifier,
@@ -23,7 +23,7 @@ pub(crate) struct Battery {
     tx: mpsc::Sender<communication::Message>,
 }
 
-impl feature::FeatureConfig for Battery {
+impl feature::FeatureConfig for Feature {
     type Settings = settings::Battery;
 
     fn new(
@@ -47,7 +47,7 @@ impl feature::FeatureConfig for Battery {
     }
 }
 
-impl feature::Feature for Battery {
+impl feature::Feature for Feature {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {

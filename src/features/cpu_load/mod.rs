@@ -2,6 +2,6 @@ mod data;
 mod feature;
 
 pub(self) use self::data::CpuLoadData;
-pub(crate) use self::feature::CpuLoad;
+pub(super) use self::feature::Feature;
 
-pub(self) const FEATURE_NAME: &str = "cpu_load";
+pub(super) const FEATURE_NAME: &str = "cpu_load";

@@ -2,6 +2,6 @@ mod data;
 mod feature;
 
 pub(self) use self::data::AudioData;
-pub(crate) use self::feature::Audio;
+pub(super) use self::feature::Feature;
 
-pub(self) const FEATURE_NAME: &str = "audio";
+pub(super) const FEATURE_NAME: &str = "audio";

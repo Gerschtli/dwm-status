@@ -4,6 +4,6 @@ mod feature;
 
 pub(self) use self::data::BacklightData;
 pub(self) use self::device::BacklightDevice;
-pub(crate) use self::feature::Backlight;
+pub(super) use self::feature::Feature;
 
-pub(self) const FEATURE_NAME: &str = "backlight";
+pub(super) const FEATURE_NAME: &str = "backlight";

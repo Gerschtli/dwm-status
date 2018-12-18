@@ -13,13 +13,13 @@ use std::time;
 const FILTER: &[char] = &['[', ']', '%'];
 
 #[derive(Debug)]
-pub(crate) struct Audio {
+pub(crate) struct Feature {
     id: usize,
     settings: settings::Audio,
     tx: mpsc::Sender<communication::Message>,
 }
 
-impl feature::FeatureConfig for Audio {
+impl feature::FeatureConfig for Feature {
     type Settings = settings::Audio;
 
     fn new(
@@ -31,7 +31,7 @@ impl feature::FeatureConfig for Audio {
     }
 }
 
-impl feature::Feature for Audio {
+impl feature::Feature for Feature {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {

@@ -11,13 +11,13 @@ use std::thread;
 use std::time;
 
 #[derive(Debug)]
-pub(crate) struct Time {
+pub(crate) struct Feature {
     id: usize,
     settings: settings::Time,
     tx: mpsc::Sender<communication::Message>,
 }
 
-impl feature::FeatureConfig for Time {
+impl feature::FeatureConfig for Feature {
     type Settings = settings::Time;
 
     fn new(
@@ -29,7 +29,7 @@ impl feature::FeatureConfig for Time {
     }
 }
 
-impl feature::Feature for Time {
+impl feature::Feature for Feature {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {

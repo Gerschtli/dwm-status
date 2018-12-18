@@ -12,13 +12,13 @@ use std::time;
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
 #[derive(Debug)]
-pub(crate) struct CpuLoad {
+pub(crate) struct Feature {
     id: usize,
     settings: settings::CpuLoad,
     tx: mpsc::Sender<communication::Message>,
 }
 
-impl feature::FeatureConfig for CpuLoad {
+impl feature::FeatureConfig for Feature {
     type Settings = settings::CpuLoad;
 
     fn new(
@@ -30,7 +30,7 @@ impl feature::FeatureConfig for CpuLoad {
     }
 }
 
-impl feature::Feature for CpuLoad {
+impl feature::Feature for Feature {
     feature_default!();
 
     fn init_notifier(&self) -> Result<()> {
