@@ -4,9 +4,7 @@ DWM status service which dynamically updates when needed.
 Heavily inspired by [i3status-rust](https://github.com/greshake/i3status-rust).
 
 Example status bar:
-```
-L 30% / MUTE / ▼ 25% (01:05) / 2018-03-16 21:25
-```
+![example-sceenshot](examples/images/preview.png)
 
 ## Requirements
 
