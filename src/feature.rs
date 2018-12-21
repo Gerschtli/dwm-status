@@ -1,38 +1,68 @@
-use communication;
 use error::*;
 use settings;
-use std::sync::mpsc;
-
-macro_rules! feature_default {
-    () => {
-        fn id(&self) -> usize {
-            self.id
-        }
-
-        fn name(&self) -> &str {
-            FEATURE_NAME
-        }
-    }
-}
+use wrapper::thread;
 
 pub(crate) trait Renderable {
     fn render(&self, _: &settings::Settings) -> String;
 }
 
 pub(crate) trait Feature {
-    fn id(&self) -> usize;
+    fn init_notifier(&mut self) -> Result<()>;
 
-    fn init_notifier(&self) -> Result<()>;
-
-    fn name(&self) -> &str;
+    fn name(&self) -> &'static str;
 
     fn update(&mut self) -> Result<Box<dyn Renderable>>;
 }
 
-pub(crate) trait FeatureConfig: Feature {
-    type Settings;
+pub(crate) trait Updatable {
+    type Data: Renderable + 'static;
 
-    fn new(_: usize, _: mpsc::Sender<communication::Message>, _: Self::Settings) -> Result<Self>
-    where
-        Self: Sized;
+    fn update(&mut self) -> Result<Self::Data>;
+}
+
+pub(crate) struct Composer<N, U>
+where
+    N: thread::Runnable + Send + 'static,
+    U: Updatable,
+{
+    name: &'static str,
+    notifier: Option<N>,
+    updater: U,
+}
+
+impl<N, U> Composer<N, U>
+where
+    N: thread::Runnable + Send + 'static,
+    U: Updatable,
+{
+    pub(crate) fn new(name: &'static str, notifier: N, updater: U) -> Self {
+        Self {
+            name,
+            notifier: Some(notifier),
+            updater,
+        }
+    }
+}
+
+impl<N, U> Feature for Composer<N, U>
+where
+    N: thread::Runnable + Send + 'static,
+    U: Updatable,
+{
+    fn init_notifier(&mut self) -> Result<()> {
+        if let Some(notifier) = self.notifier.take() {
+            let thread = thread::Thread::new(self.name, notifier);
+            thread.run()
+        } else {
+            Err(Error::new_custom("feature", "can not start notifier twice"))
+        }
+    }
+
+    fn name(&self) -> &'static str {
+        self.name
+    }
+
+    fn update(&mut self) -> Result<Box<dyn Renderable>> {
+        Ok(Box::new(self.updater.update()?))
+    }
 }

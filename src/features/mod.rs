@@ -10,41 +10,21 @@ use feature;
 use settings;
 use std::sync::mpsc;
 
-macro_rules! features {
-    ( $id:expr, $name:expr, $tx:expr, $settings:expr; $( $feature:ident, )* ) => {{
-        match &$name.to_lowercase()[..] {
-            $(
-                $feature::FEATURE_NAME => {
-                    Ok(
-                        Box::new(
-                            <$feature::Feature as feature::FeatureConfig>::new(
-                                $id,
-                                $tx.clone(),
-                                $settings.$feature.clone(),
-                            )?
-                        )
-                    )
-                }
-            )*,
-            _ => Err(Error::new_custom(
-                "create feature",
-                &format!("feature {} does not exist", $name),
-            )),
-        }
-    }};
-}
-
 pub(super) fn create_feature(
     id: usize,
     name: &str,
     tx: &mpsc::Sender<communication::Message>,
     settings: &settings::Settings,
 ) -> Result<Box<dyn feature::Feature>> {
-    features!(id, name, tx, settings;
-        audio,
-        backlight,
-        battery,
-        cpu_load,
-        time,
-    )
+    match &name.to_lowercase()[..] {
+        audio::FEATURE_NAME => audio::create(id, tx, settings),
+        backlight::FEATURE_NAME => backlight::create(id, tx, settings),
+        battery::FEATURE_NAME => battery::create(id, tx, settings),
+        cpu_load::FEATURE_NAME => cpu_load::create(id, tx, settings),
+        time::FEATURE_NAME => time::create(id, tx, settings),
+        _ => Err(Error::new_custom(
+            "create feature",
+            &format!("feature {} does not exist", name),
+        )),
+    }
 }
