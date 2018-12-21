@@ -14,8 +14,8 @@ use settings;
 use std::sync::mpsc;
 
 pub(self) use self::ac_adapter::AcAdapter;
-pub(self) use self::data::Data;
 pub(self) use self::data::BatteryInfo;
+pub(self) use self::data::Data;
 pub(self) use self::dbus::DbusWatcher;
 pub(self) use self::dbus::DeviceMessage;
 pub(self) use self::device::BatteryDevice;

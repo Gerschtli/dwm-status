@@ -1,5 +1,5 @@
-use super::Data;
 use super::BacklightDevice;
+use super::Data;
 use error::*;
 use feature::Updatable;
 
