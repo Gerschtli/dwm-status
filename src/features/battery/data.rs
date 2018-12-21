@@ -31,12 +31,12 @@ impl feature::Renderable for BatteryInfo {
 }
 
 #[derive(Debug)]
-pub(super) struct BatteryData {
+pub(super) struct Data {
     pub(super) ac_online: bool,
     pub(super) batteries: HashMap<String, BatteryInfo>,
 }
 
-impl feature::Renderable for BatteryData {
+impl feature::Renderable for Data {
     fn render(&self, settings: &settings::Settings) -> String {
         if self.batteries.is_empty() {
             return settings.battery.no_battery.clone();

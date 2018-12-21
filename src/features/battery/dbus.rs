@@ -3,9 +3,8 @@ use communication;
 use error::*;
 use std::collections::HashSet;
 use std::sync::mpsc;
-use std::thread;
-use std::time;
 use wrapper::dbus;
+use wrapper::thread;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
 const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";
@@ -22,7 +21,6 @@ pub(super) enum DeviceMessage {
 }
 
 pub(super) struct DbusWatcher {
-    connection: dbus::Connection,
     id: usize,
     tx: mpsc::Sender<communication::Message>,
     tx_devices: mpsc::Sender<DeviceMessage>,
@@ -34,57 +32,12 @@ impl DbusWatcher {
         tx: mpsc::Sender<communication::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
     ) -> Result<Self> {
-        Ok(Self {
-            connection: dbus::Connection::new()?,
-            id,
-            tx,
-            tx_devices,
-        })
-    }
-
-    pub(super) fn start(&self) -> Result<()> {
-        self.connection.add_match(dbus::Match {
-            interface: INTERFACE_UPOWER,
-            member: None,
-            path: PATH_UPOWER,
-        })?;
-
-        let mut devices = HashSet::new();
-
-        for device in self.get_current_devices()? {
-            self.add_device(&mut devices, &device)?;
-        }
-
-        // Manually send message before listen because `get_current_devices` waits for
-        // dbus method call with a 2 seconds timeout. While waiting it's possible that
-        // the initial `update` has already been triggered, so the status bar would show
-        // the "no battery" information.
-        communication::send_message(FEATURE_NAME, self.id, &self.tx);
-
-        self.connection.listen_for_signals(|signal| {
-            if signal.is_interface(INTERFACE_UPOWER)? {
-                let path = signal.return_value::<dbus::Path<'_>>()?;
-
-                if signal.is_member(MEMBER_DEVICE_ADDED)? {
-                    self.add_device(&mut devices, &path)?;
-                } else {
-                    self.remove_device(&mut devices, &path)?;
-                }
-
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
-            } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
-                // wait for /sys/class/power_supply files updates
-                thread::sleep(time::Duration::from_secs(2));
-
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
-            }
-
-            Ok(())
-        })
+        Ok(Self { id, tx, tx_devices })
     }
 
     fn add_device<'a>(
         &self,
+        connection: &dbus::Connection,
         devices: &mut HashSet<dbus::Path<'a>>,
         path: &dbus::Path<'a>,
     ) -> Result<()> {
@@ -95,7 +48,7 @@ impl DbusWatcher {
             return Ok(());
         }
 
-        self.connection.add_match(dbus::Match {
+        connection.add_match(dbus::Match {
             interface: INTERFACE_DBUS_PROPERTIES,
             member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
@@ -110,7 +63,7 @@ impl DbusWatcher {
         Ok(())
     }
 
-    fn get_current_devices(&self) -> Result<Vec<dbus::Path<'_>>> {
+    fn get_current_devices(&self, connection: &dbus::Connection) -> Result<Vec<dbus::Path<'_>>> {
         let message = dbus::Message::new_method_call(
             INTERFACE_UPOWER,
             PATH_UPOWER,
@@ -118,7 +71,7 @@ impl DbusWatcher {
             MEMBER_ENUMERATE_DEVICES,
         )?;
 
-        let response = self.connection.send_message(message)?;
+        let response = connection.send_message(message)?;
 
         response.return_value::<Vec<dbus::Path<'_>>>()
     }
@@ -134,6 +87,7 @@ impl DbusWatcher {
 
     fn remove_device<'a>(
         &self,
+        connection: &dbus::Connection,
         devices: &mut HashSet<dbus::Path<'a>>,
         path: &dbus::Path<'a>,
     ) -> Result<()> {
@@ -143,7 +97,7 @@ impl DbusWatcher {
 
         let name = self.get_device_name(path)?;
 
-        self.connection.remove_match(dbus::Match {
+        connection.remove_match(dbus::Match {
             interface: INTERFACE_DBUS_PROPERTIES,
             member: Some(MEMBER_PROPERTIES_CHANGED),
             path,
@@ -156,5 +110,50 @@ impl DbusWatcher {
         devices.remove(path);
 
         Ok(())
+    }
+}
+
+impl thread::Runnable for DbusWatcher {
+    fn run(&self) -> Result<()> {
+        let connection = dbus::Connection::new()?;
+
+        connection.add_match(dbus::Match {
+            interface: INTERFACE_UPOWER,
+            member: None,
+            path: PATH_UPOWER,
+        })?;
+
+        let mut devices = HashSet::new();
+
+        for device in self.get_current_devices(&connection)? {
+            self.add_device(&connection, &mut devices, &device)?;
+        }
+
+        // Manually send message before listen because `get_current_devices` waits for
+        // dbus method call with a 2 seconds timeout. While waiting it's possible that
+        // the initial `update` has already been triggered, so the status bar would show
+        // the "no battery" information.
+        communication::send_message(FEATURE_NAME, self.id, &self.tx);
+
+        connection.listen_for_signals(|signal| {
+            if signal.is_interface(INTERFACE_UPOWER)? {
+                let path = signal.return_value::<dbus::Path<'_>>()?;
+
+                if signal.is_member(MEMBER_DEVICE_ADDED)? {
+                    self.add_device(&connection, &mut devices, &path)?;
+                } else {
+                    self.remove_device(&connection, &mut devices, &path)?;
+                }
+
+                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+            } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
+                // wait for /sys/class/power_supply files updates
+                thread::sleep_secs(2);
+
+                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+            }
+
+            Ok(())
+        })
     }
 }
