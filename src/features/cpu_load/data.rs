@@ -2,13 +2,13 @@ use feature;
 use settings;
 
 #[derive(Debug)]
-pub(super) struct CpuLoadData {
+pub(super) struct Data {
     pub(super) one: f32,
     pub(super) five: f32,
     pub(super) fifteen: f32,
 }
 
-impl feature::Renderable for CpuLoadData {
+impl feature::Renderable for Data {
     fn render(&self, settings: &settings::Settings) -> String {
         settings
             .cpu_load
