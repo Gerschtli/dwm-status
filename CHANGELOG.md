@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - The super useless case of having one feature at least twice in the `order` list now throws an exception.. Why would
   anyone ever want to see one feature twice in their status bar?
+- Update for 1.31 rust and added more lints to improve code quality
+- Big refactoring to provide a better interface to plug in new features and to be able to encapsulate logic better.
 
 ## [1.4.1] - 2018-12-01
 # Fixed
