@@ -3,16 +3,16 @@ use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
-pub(super) enum AudioData {
+pub(super) enum Data {
     Mute,
     Volume(u32),
 }
 
-impl feature::Renderable for AudioData {
+impl feature::Renderable for Data {
     fn render(&self, settings: &settings::Settings) -> String {
         match *self {
-            AudioData::Mute => settings.audio.mute.clone(),
-            AudioData::Volume(volume) => {
+            Data::Mute => settings.audio.mute.clone(),
+            Data::Volume(volume) => {
                 let mut rendered = settings
                     .audio
                     .template
