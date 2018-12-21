@@ -3,9 +3,9 @@ use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
-pub(super) struct BacklightData(pub(super) u32);
+pub(super) struct Data(pub(super) u32);
 
-impl feature::Renderable for BacklightData {
+impl feature::Renderable for Data {
     fn render(&self, settings: &settings::Settings) -> String {
         let mut rendered = settings
             .backlight
