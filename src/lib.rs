@@ -66,11 +66,12 @@ use std::sync::mpsc;
 fn get_settings() -> Result<settings::Settings> {
     let mut args = env::args();
 
-    let path = args
-        .nth(1)
-        .wrap_error("usage", "first parameter config file")?;
+    let path = args.nth(1).wrap_error(
+        "usage",
+        "first parameter needs to be the path to config file",
+    )?;
 
-    settings::Settings::new(&path).wrap_error("settings", "error creating settings object")
+    settings::Settings::new(&path).wrap_error("settings", "creation of settings object failed")
 }
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
@@ -90,11 +91,10 @@ fn validate_settings(settings: &settings::Settings) -> Result<()> {
 }
 
 pub fn run() -> Result<()> {
-    let (tx, rx) = mpsc::channel();
-
     let settings = get_settings()?;
     validate_settings(&settings)?;
 
+    let (tx, rx) = mpsc::channel();
     let mut features = Vec::new();
 
     for (index, feature_name) in settings.general.order.iter().enumerate() {
