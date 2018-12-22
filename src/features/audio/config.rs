@@ -5,11 +5,17 @@ use config::Value;
 use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
+pub(crate) struct RenderConfig {
+    pub(super) icons: Vec<String>,
+    pub(super) mute: String,
+    pub(super) template: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
-    pub(crate) control: String,
-    pub(crate) icons: Vec<String>,
-    pub(crate) mute: String,
-    pub(crate) template: String,
+    pub(super) control: String,
+    #[serde(flatten)]
+    pub(super) render: RenderConfig,
 }
 
 impl ConfigType for ConfigEntry {

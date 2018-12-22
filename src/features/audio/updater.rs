@@ -2,25 +2,28 @@ use super::ConfigEntry;
 use super::Data;
 use super::FEATURE_NAME;
 use error::*;
-use feature::Updatable;
+use feature;
 use std::process;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
 pub(super) struct Updater {
+    data: Data,
     settings: ConfigEntry,
 }
 
 impl Updater {
-    pub(super) fn new(settings: ConfigEntry) -> Self {
-        Self { settings }
+    pub(super) fn new(data: Data, settings: ConfigEntry) -> Self {
+        Self { data, settings }
     }
 }
 
-impl Updatable for Updater {
-    type Data = Data;
+impl feature::Updatable for Updater {
+    fn renderable(&self) -> Box<&dyn feature::Renderable> {
+        Box::new(&self.data)
+    }
 
-    fn update(&mut self) -> Result<Self::Data> {
+    fn update(&mut self) -> Result<()> {
         // originally taken from https://github.com/greshake/i3status-rust/blob/master/src/blocks/sound.rs
         let output = process::Command::new("amixer")
             .arg("get")
@@ -41,15 +44,17 @@ impl Updatable for Updater {
             .collect::<Vec<&str>>();
 
         if last.get(1).map_or(false, |muted| *muted == "off") {
-            return Ok(Data::Mute);
+            self.data.update_mute();
+        } else {
+            let volume = last
+                .get(0)
+                .wrap_error(FEATURE_NAME, "no volume part found")?
+                .parse()
+                .wrap_error(FEATURE_NAME, "volume not parsable")?;
+
+            self.data.update_volume(volume);
         }
 
-        let volume = last
-            .get(0)
-            .wrap_error(FEATURE_NAME, "no volume part found")?
-            .parse()
-            .wrap_error(FEATURE_NAME, "volume not parsable")?;
-
-        Ok(Data::Volume(volume))
+        Ok(())
     }
 }

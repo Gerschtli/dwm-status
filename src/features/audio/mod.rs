@@ -6,10 +6,10 @@ mod updater;
 use communication;
 use error::*;
 use feature;
-use settings;
 use std::sync::mpsc;
 
 pub(crate) use self::config::ConfigEntry;
+pub(self) use self::config::RenderConfig;
 pub(self) use self::data::Data;
 pub(self) use self::notifier::Notifier;
 pub(self) use self::updater::Updater;
@@ -19,11 +19,13 @@ pub(super) const FEATURE_NAME: &str = "audio";
 pub(super) fn create(
     id: usize,
     tx: &mpsc::Sender<communication::Message>,
-    settings: &settings::Settings,
+    settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
+    let data = Data::new(settings.render.clone());
+
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
         Notifier::new(id, tx.clone()),
-        Updater::new(settings.audio.clone()),
+        Updater::new(data, settings.clone()),
     )))
 }

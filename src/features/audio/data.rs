@@ -1,29 +1,41 @@
+use super::RenderConfig;
 use feature;
-use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
-pub(super) enum Data {
-    Mute,
-    Volume(u32),
+pub(super) struct Data {
+    cache: String,
+    config: RenderConfig,
+}
+
+impl Data {
+    pub(super) fn new(config: RenderConfig) -> Self {
+        Self {
+            cache: String::new(),
+            config,
+        }
+    }
+
+    pub(super) fn update_mute(&mut self) {
+        self.cache = self.config.mute.clone()
+    }
+
+    pub(super) fn update_volume(&mut self, volume: u32) {
+        let mut rendered = self
+            .config
+            .template
+            .replace("{VOL}", &format!("{}", volume));
+
+        if let Some(icon) = icon_by_percentage(&self.config.icons, volume) {
+            rendered = rendered.replace("{ICO}", icon);
+        }
+
+        self.cache = rendered;
+    }
 }
 
 impl feature::Renderable for Data {
-    fn render(&self, settings: &settings::Settings) -> String {
-        match *self {
-            Data::Mute => settings.audio.mute.clone(),
-            Data::Volume(volume) => {
-                let mut rendered = settings
-                    .audio
-                    .template
-                    .replace("{VOL}", &volume.to_string());
-
-                if let Some(icon) = icon_by_percentage(&settings.audio.icons, volume) {
-                    rendered = rendered.replace("{ICO}", icon);
-                }
-
-                rendered
-            },
-        }
+    fn render(&self) -> &str {
+        &self.cache
     }
 }
