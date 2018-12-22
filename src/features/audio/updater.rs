@@ -3,7 +3,7 @@ use super::Data;
 use super::FEATURE_NAME;
 use error::*;
 use feature;
-use std::process;
+use wrapper::process;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
@@ -25,12 +25,7 @@ impl feature::Updatable for Updater {
 
     fn update(&mut self) -> Result<()> {
         // originally taken from https://github.com/greshake/i3status-rust/blob/master/src/blocks/sound.rs
-        let output = process::Command::new("amixer")
-            .arg("get")
-            .arg(&self.settings.control)
-            .output()
-            .map(|o| String::from(String::from_utf8_lossy(&o.stdout).trim()))
-            .wrap_error(FEATURE_NAME, "getting amixer info failed")?;
+        let output = process::Command::new("amixer", &["get", &self.settings.control]).output()?;
 
         let last_line = &output
             .lines()
@@ -41,7 +36,7 @@ impl feature::Updatable for Updater {
             .split_whitespace()
             .filter(|x| x.starts_with('[') && !x.contains("dB"))
             .map(|s| s.trim_matches(FILTER))
-            .collect::<Vec<&str>>();
+            .collect::<Vec<_>>();
 
         if last.get(1).map_or(false, |muted| *muted == "off") {
             self.data.update_mute();
