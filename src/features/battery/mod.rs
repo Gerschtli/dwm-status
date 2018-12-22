@@ -1,4 +1,5 @@
 mod ac_adapter;
+mod config;
 mod data;
 mod dbus;
 mod device;
@@ -14,6 +15,7 @@ use settings;
 use std::sync::mpsc;
 
 pub(self) use self::ac_adapter::AcAdapter;
+pub(crate) use self::config::ConfigEntry;
 pub(self) use self::data::BatteryInfo;
 pub(self) use self::data::Data;
 pub(self) use self::dbus::DbusWatcher;
@@ -37,7 +39,7 @@ pub(super) fn create(
 ) -> Result<Box<dyn feature::Feature>> {
     let (tx_devices, rx_devices) = mpsc::channel();
 
-    let manager = BatteryManager::new(settings.debug, rx_devices)?;
+    let manager = BatteryManager::new(settings.battery.debug, rx_devices)?;
     let notifier = BatteryNotifier::new(settings.battery.clone())?;
 
     Ok(Box::new(feature::Composer::new(
