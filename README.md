@@ -50,11 +50,11 @@ static const char *fonts[] = { "Ubuntu Mono Nerd Font:size=9" };
 
 ### General options
 
-| name        | default | description                                      |
-| ----------- | ------- | ------------------------------------------------ |
-| `debug`     | `false` | Whether to print to stdout when the bar updates. |
-| `order`     | `[]`    | List of enabled features in order.               |
-| `separator` | `" / "` | Separator string between each feature.           |
+| name        | default | description                                                             |
+| ----------- | ------- | ----------------------------------------------------------------------- |
+| `debug`     | -       | Deprecated, will be removed in 2.0.0. Log level is now INFO by default. |
+| `order`     | `[]`    | List of enabled features in order.                                      |
+| `separator` | `" / "` | Separator string between each feature.                                  |
 
 ### Feature: Audio
 
