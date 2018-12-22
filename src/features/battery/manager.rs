@@ -2,7 +2,6 @@ use super::get_value;
 use super::AcAdapter;
 use super::BatteryDevice;
 use super::DeviceMessage;
-use super::FEATURE_NAME;
 use error::*;
 use std::collections::HashMap;
 use std::sync::mpsc;
