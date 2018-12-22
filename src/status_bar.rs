@@ -20,7 +20,7 @@ impl StatusBar {
     pub(crate) fn update(
         &mut self,
         message: &communication::Message,
-        settings: &settings::Settings,
+        settings: &settings::General,
     ) -> Result<()> {
         match message {
             communication::Message::FeatureUpdate(id) if *id < self.features.len() => {
@@ -34,7 +34,7 @@ impl StatusBar {
                 ));
             },
             communication::Message::UpdateAll => {
-                if settings.general.debug {
+                if settings.debug {
                     println!("update all");
                 }
 
@@ -49,11 +49,11 @@ impl StatusBar {
         Ok(())
     }
 
-    fn update_feature(&mut self, id: usize, settings: &settings::Settings) -> Result<()> {
+    fn update_feature(&mut self, id: usize, settings: &settings::General) -> Result<()> {
         let feature = &mut self.features[id];
         feature.update()?;
 
-        if settings.general.debug {
+        if settings.debug {
             println!(
                 "update {}: {}",
                 feature.name(),
@@ -64,13 +64,13 @@ impl StatusBar {
         Ok(())
     }
 
-    pub(crate) fn render(&self, settings: &settings::Settings) -> Result<()> {
+    pub(crate) fn render(&self, settings: &settings::General) -> Result<()> {
         let status = self
             .features
             .iter()
             .map(|f| f.renderable().render())
             .collect::<Vec<_>>()
-            .join(&settings.general.separator);
+            .join(&settings.separator);
 
         self.xsetroot.render(status)
     }

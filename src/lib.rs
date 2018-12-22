@@ -119,7 +119,7 @@ pub fn run() -> Result<()> {
     for message in rx {
         match message {
             communication::Message::Kill => break,
-            _ => status_bar.update(&message, &settings)?,
+            _ => status_bar.update(&message, &settings.general)?,
         }
     }
 
