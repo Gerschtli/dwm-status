@@ -67,9 +67,9 @@ Shows status of configured alsa control device. Listens on `alsactl monitor` for
 | name       | default      | description                                                                     |
 | ---------- | ------------ | ------------------------------------------------------------------------------- |
 | `control`  | `"Master"`   | Alsa control device to listen for.                                              |
+| `icons`    | `[]`         | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.     |
 | `mute`     | `"MUTE"`     | Text representation if muted.                                                   |
 | `template` | `"S {VOL}%"` | Text representation if unmuted. (`{VOL}` gets replaced with the current volume, `{ICO}` gets replaced with the icon) |
-| `icons`    | `[]`         | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.     |
 
 ### Feature: Backlight
 
@@ -80,8 +80,8 @@ Shows status of backlight value and watches `/sys/class/backlight` for changes.
 | name       | default             | description                                                                  |
 | ---------- | ------------------- | ---------------------------------------------------------------------------- |
 | `device`   | `"intel_backlight"` | Backlight device in `/sys/class/backlight`.                                  |
-| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon) |
 | `icons`    | `[]`                | List of icons, which represent different stages relative to the current value, e.g. `["LOW", "MIDDLE, "HIGH"]`.   |
+| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon) |
 
 ### Feature: Battery
 
@@ -114,11 +114,11 @@ Shows following information as feature block (`ICO` gets replaced with an icon i
 | `charging`          | `"▲"`               | Text representation for status charging.                   |
 | `discharging`       | `"▼"`               | Text representation for status discharging.                |
 | `enable_notifier`   | `true`               | Whether to enable the notifier.                            |
+| `icons`             | `[]`                 | List of icons, which represent different stages relative to the current battery state, e.g. `["LOW", "MIDDLE, "HIGH"]`. |
 | `no_battery`        | `"NO BATT"`          | Text representation if no battery present.                 |
 | `notifier_critical` | `10`                 | Maximum battery value to notify via critical notification. |
 | `notifier_levels`   | `[2, 5, 10, 15, 20]` | Battery values to notify.                                  |
 | `separator`         | `" · "`              | Separator string between mutliple battery infos.           |
-| `icons`             | `[]`                 | List of icons, which represent different stages relative to the current battery state, e.g. `["LOW", "MIDDLE, "HIGH"]`. |
 
 ### Feature: CPU Load
 
