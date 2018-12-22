@@ -6,8 +6,8 @@ use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
-    pub(crate) format: String,
-    pub(crate) update_seconds: bool,
+    pub(super) format: String,
+    pub(super) update_seconds: bool,
 }
 
 impl ConfigType for ConfigEntry {
@@ -15,7 +15,7 @@ impl ConfigType for ConfigEntry {
         config.set_default(
             FEATURE_NAME,
             map!(
-                "format" => "%Y-%m-%d %H:%M",
+                "format"         => "%Y-%m-%d %H:%M",
                 "update_seconds" => false,
             ),
         )?;

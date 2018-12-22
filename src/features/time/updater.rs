@@ -1,14 +1,26 @@
 use super::Data;
 use chrono;
 use error::*;
-use feature::Updatable;
+use feature;
 
-pub(super) struct Updater;
+pub(super) struct Updater {
+    data: Data,
+}
 
-impl Updatable for Updater {
-    type Data = Data;
+impl Updater {
+    pub(super) fn new(data: Data) -> Self {
+        Self { data }
+    }
+}
 
-    fn update(&mut self) -> Result<Self::Data> {
-        Ok(Data(chrono::Local::now()))
+impl feature::Updatable for Updater {
+    fn renderable(&self) -> Box<&dyn feature::Renderable> {
+        Box::new(&self.data)
+    }
+
+    fn update(&mut self) -> Result<()> {
+        self.data.update(chrono::Local::now());
+
+        Ok(())
     }
 }

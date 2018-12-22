@@ -1,12 +1,27 @@
 use chrono;
 use feature;
-use settings;
 
 #[derive(Debug)]
-pub(super) struct Data(pub(super) chrono::DateTime<chrono::Local>);
+pub(super) struct Data {
+    cache: String,
+    format: String,
+}
+
+impl Data {
+    pub(super) fn new(format: String) -> Self {
+        Self {
+            cache: String::new(),
+            format,
+        }
+    }
+
+    pub(super) fn update(&mut self, datetime: chrono::DateTime<chrono::Local>) {
+        self.cache = format!("{}", datetime.format(&self.format));
+    }
+}
 
 impl feature::Renderable for Data {
-    fn render(&self, settings: &settings::Settings) -> String {
-        format!("{}", self.0.format(&settings.time.format))
+    fn render(&self) -> &str {
+        &self.cache
     }
 }
