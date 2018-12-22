@@ -1,21 +1,34 @@
+use super::RenderConfig;
 use feature;
-use settings;
 use utils::icon_by_percentage;
 
 #[derive(Debug)]
-pub(super) struct Data(pub(super) u32);
+pub(super) struct Data {
+    cache: String,
+    config: RenderConfig,
+}
 
-impl feature::Renderable for Data {
-    fn render(&self, settings: &settings::Settings) -> String {
-        let mut rendered = settings
-            .backlight
-            .template
-            .replace("{BL}", &format!("{}", self.0));
+impl Data {
+    pub(super) fn new(config: RenderConfig) -> Self {
+        Self {
+            cache: String::new(),
+            config,
+        }
+    }
 
-        if let Some(icon) = icon_by_percentage(&settings.backlight.icons, self.0) {
+    pub(super) fn update(&mut self, value: u32) {
+        let mut rendered = self.config.template.replace("{BL}", &format!("{}", value));
+
+        if let Some(icon) = icon_by_percentage(&self.config.icons, value) {
             rendered = rendered.replace("{ICO}", icon);
         }
 
-        rendered
+        self.cache = rendered;
+    }
+}
+
+impl feature::Renderable for Data {
+    fn render(&self) -> &str {
+        &self.cache
     }
 }
