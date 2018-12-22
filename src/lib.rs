@@ -38,6 +38,8 @@ extern crate dbus;
 extern crate inotify;
 extern crate libnotify;
 #[macro_use]
+extern crate log;
+#[macro_use]
 extern crate serde_derive;
 extern crate x11;
 

@@ -32,10 +32,14 @@
 )]
 
 extern crate dwm_status;
+extern crate simplelog;
 
+use simplelog::*;
 use std::process;
 
 fn main() {
+    let _ = SimpleLogger::init(LevelFilter::Info, Config::default());
+
     if let Err(error) = dwm_status::run() {
         error.show_error();
         process::exit(1);
