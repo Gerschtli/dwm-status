@@ -37,16 +37,12 @@ impl BatteryManager {
         while let Ok(message) = self.rx_devices.try_recv() {
             match message {
                 DeviceMessage::Added(name) => {
-                    if self.debug {
-                        println!("update {} add: {}", FEATURE_NAME, &name);
-                    }
+                    info!("Detected connected battery: adding {}", &name);
                     let device = BatteryDevice::new(&name)?;
                     self.devices.insert(name, device);
                 },
                 DeviceMessage::Removed(name) => {
-                    if self.debug {
-                        println!("update {} remove: {}", FEATURE_NAME, &name);
-                    }
+                    info!("Detected disconnected battery: removing {}", &name);
                     self.devices.remove(&name);
                 },
             }

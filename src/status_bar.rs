@@ -24,7 +24,9 @@ impl StatusBar {
     ) -> Result<()> {
         match message {
             communication::Message::FeatureUpdate(id) if *id < self.features.len() => {
-                self.update_feature(*id, settings)?;
+                info!("Update feature {}", self.features[*id].name());
+
+                self.features[*id].update()?;
                 self.render(settings)?;
             },
             communication::Message::FeatureUpdate(id) => {
@@ -34,31 +36,14 @@ impl StatusBar {
                 ));
             },
             communication::Message::UpdateAll => {
-                if settings.debug {
-                    println!("update all");
-                }
+                info!("Update all features");
 
                 for id in 0..self.features.len() {
-                    self.update_feature(id, settings)?;
+                    self.features[id].update()?;
                 }
                 self.render(settings)?;
             },
             _ => (),
-        }
-
-        Ok(())
-    }
-
-    fn update_feature(&mut self, id: usize, settings: &settings::General) -> Result<()> {
-        let feature = &mut self.features[id];
-        feature.update()?;
-
-        if settings.debug {
-            println!(
-                "update {}: {}",
-                feature.name(),
-                feature.renderable().render()
-            );
         }
 
         Ok(())

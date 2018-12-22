@@ -28,13 +28,13 @@ impl Error {
     }
 
     pub fn show_error(self) {
-        eprintln!("{}", self);
+        error!("{}", self);
     }
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Error => {}: {}", self.name, self.description)?;
+        write!(f, "Error in {}: {}", self.name, self.description)?;
 
         if let Some(ref cause) = self.cause {
             write!(f, " ({})", cause)?;
