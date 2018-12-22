@@ -6,13 +6,13 @@ pub(crate) use libnotify::Urgency;
 const ERROR_NAME: &str = "libnotify";
 
 #[derive(Debug)]
-pub(crate) struct LibNotify {}
+pub(crate) struct LibNotify;
 
 impl LibNotify {
     pub(crate) fn new() -> Result<Self> {
         libnotify::init("dwm-status").wrap_error(ERROR_NAME, "init failed")?;
 
-        Ok(Self {})
+        Ok(Self)
     }
 
     pub(crate) fn send_notification(
