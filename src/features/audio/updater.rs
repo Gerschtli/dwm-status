@@ -1,18 +1,18 @@
+use super::ConfigEntry;
 use super::Data;
 use super::FEATURE_NAME;
 use error::*;
 use feature::Updatable;
-use settings;
 use std::process;
 
 const FILTER: &[char] = &['[', ']', '%'];
 
 pub(super) struct Updater {
-    settings: settings::Audio,
+    settings: ConfigEntry,
 }
 
 impl Updater {
-    pub(super) fn new(settings: settings::Audio) -> Self {
+    pub(super) fn new(settings: ConfigEntry) -> Self {
         Self { settings }
     }
 }
