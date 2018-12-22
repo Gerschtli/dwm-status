@@ -5,20 +5,16 @@ pub(crate) trait Renderable {
     fn render(&self) -> &str;
 }
 
-pub(crate) trait Feature {
-    fn init_notifier(&mut self) -> Result<()>;
-
-    fn name(&self) -> &'static str;
-
+pub(crate) trait Updatable {
     fn renderable(&self) -> Box<&dyn Renderable>;
 
     fn update(&mut self) -> Result<()>;
 }
 
-pub(crate) trait Updatable {
-    fn renderable(&self) -> Box<&dyn Renderable>;
+pub(crate) trait Feature: Updatable {
+    fn init_notifier(&mut self) -> Result<()>;
 
-    fn update(&mut self) -> Result<()>;
+    fn name(&self) -> &'static str;
 }
 
 pub(crate) struct Composer<N, U>
@@ -62,7 +58,13 @@ where
     fn name(&self) -> &'static str {
         self.name
     }
+}
 
+impl<N, U> Updatable for Composer<N, U>
+where
+    N: thread::Runnable,
+    U: Updatable,
+{
     fn renderable(&self) -> Box<&dyn Renderable> {
         self.updater.renderable()
     }
