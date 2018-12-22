@@ -1,3 +1,4 @@
+mod config;
 mod data;
 mod notifier;
 mod updater;
@@ -8,6 +9,7 @@ use feature;
 use settings;
 use std::sync::mpsc;
 
+pub(crate) use self::config::ConfigEntry;
 pub(self) use self::data::Data;
 pub(self) use self::notifier::Notifier;
 pub(self) use self::updater::Updater;
