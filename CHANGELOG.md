@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   anyone ever want to see one feature twice in their status bar?
 - Update for 1.31 rust and added more lints to improve code quality
 - Big refactoring to provide a better interface to plug in new features and to be able to encapsulate logic better.
+- Improved log messages adding timestamp and log level
+
+### Deprecated
+- The `debug` config option is deprecated and will be removed in 2.0.0. Log level is set to info by default.
 
 ### Fixed
 - Always restarting notifier threads after an error occured. This fixes the bug, that the notifier thread of the `audio`
