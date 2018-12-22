@@ -37,7 +37,7 @@ impl BacklightDevice {
 
     fn get_brightness(&self, name: &str) -> Result<u32> {
         let brightness = io::read_int_from_file(&self.build_path(name))
-            .wrap_error(FEATURE_NAME, &format!("error reading {} brightness", name))?;
+            .wrap_error(FEATURE_NAME, format!("error reading {} brightness", name))?;
 
         Ok(brightness)
     }

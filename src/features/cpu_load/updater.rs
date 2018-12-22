@@ -23,7 +23,7 @@ impl feature::Updatable for Updater {
 
     fn update(&mut self) -> Result<()> {
         let content = io::read_file(PATH_LOADAVG)
-            .wrap_error(FEATURE_NAME, &format!("failed to read {}", PATH_LOADAVG))?;
+            .wrap_error(FEATURE_NAME, format!("failed to read {}", PATH_LOADAVG))?;
 
         let mut iterator = content.split_whitespace();
 

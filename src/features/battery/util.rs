@@ -15,7 +15,7 @@ pub(super) fn fmt_time(duration: &time::Duration) -> String {
 
 pub(super) fn get_value(device: &str, name: &str) -> Result<u32> {
     io::read_int_from_file(&format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
-        .wrap_error(FEATURE_NAME, &format!("error reading {}/{}", device, name))
+        .wrap_error(FEATURE_NAME, format!("error reading {}/{}", device, name))
 }
 
 pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u32> {
@@ -29,6 +29,6 @@ pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u32> 
 
     Err(Error::new_custom(
         FEATURE_NAME,
-        &format!("error reading {}/{} or {}/{}", device, name1, device, name2),
+        format!("error reading {}/{} or {}/{}", device, name1, device, name2),
     ))
 }

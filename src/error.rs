@@ -11,18 +11,27 @@ pub struct Error {
 }
 
 impl Error {
-    fn new<E: fmt::Debug>(name: &str, description: &str, cause: E) -> Self {
+    fn new<N, D, E>(name: N, description: D, cause: E) -> Self
+    where
+        N: Into<String>,
+        D: Into<String>,
+        E: fmt::Debug,
+    {
         Self {
-            name: String::from(name),
-            description: String::from(description),
+            name: name.into(),
+            description: description.into(),
             cause: Some(format!("{:?}", cause)),
         }
     }
 
-    pub(crate) fn new_custom(name: &str, description: &str) -> Self {
+    pub(crate) fn new_custom<N, D>(name: N, description: D) -> Self
+    where
+        N: Into<String>,
+        D: Into<String>,
+    {
         Self {
-            name: String::from(name),
-            description: String::from(description),
+            name: name.into(),
+            description: description.into(),
             cause: None,
         }
     }
@@ -45,17 +54,28 @@ impl fmt::Display for Error {
 }
 
 pub(crate) trait WrapErrorExt<T> {
-    fn wrap_error(self, name: &str, description: &str) -> Result<T>;
+    fn wrap_error<N, D>(self, name: N, description: D) -> Result<T>
+    where
+        N: Into<String>,
+        D: Into<String>;
 }
 
 impl<T, E: fmt::Debug> WrapErrorExt<T> for StdResult<T, E> {
-    fn wrap_error(self, name: &str, description: &str) -> Result<T> {
+    fn wrap_error<N, D>(self, name: N, description: D) -> Result<T>
+    where
+        N: Into<String>,
+        D: Into<String>,
+    {
         self.map_err(|error| Error::new(name, description, error))
     }
 }
 
 impl<T> WrapErrorExt<T> for Option<T> {
-    fn wrap_error(self, name: &str, description: &str) -> Result<T> {
+    fn wrap_error<N, D>(self, name: N, description: D) -> Result<T>
+    where
+        N: Into<String>,
+        D: Into<String>,
+    {
         self.ok_or_else(|| Error::new_custom(name, description))
     }
 }

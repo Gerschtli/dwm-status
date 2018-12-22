@@ -18,7 +18,7 @@ macro_rules! features {
             )*
             _ => Err(Error::new_custom(
                 "create feature",
-                &format!("feature {} does not exist", $name),
+                format!("feature {} does not exist", $name),
             )),
         }
     }

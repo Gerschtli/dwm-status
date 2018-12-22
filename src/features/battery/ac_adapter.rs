@@ -19,7 +19,7 @@ impl AcAdapter {
         } else {
             return Err(Error::new_custom(
                 FEATURE_NAME,
-                &format!(
+                format!(
                     "no ac name ({} or {}) matched in {}",
                     AC1, AC2, POWER_SUPPLY_PATH
                 ),

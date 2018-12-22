@@ -32,7 +32,7 @@ impl StatusBar {
             communication::Message::FeatureUpdate(id) => {
                 return Err(Error::new_custom(
                     "invalid message",
-                    &format!("feature id {} does not exist", id),
+                    format!("feature id {} does not exist", id),
                 ));
             },
             communication::Message::UpdateAll => {
