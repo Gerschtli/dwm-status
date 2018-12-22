@@ -56,7 +56,7 @@ impl StatusBar {
     }
 
     fn update_feature(&mut self, id: usize, settings: &settings::Settings) -> Result<()> {
-        let feature = self.features.get_mut(id).unwrap();
+        let feature = &mut self.features[id];
         let rendered = feature.update()?.render(settings);
 
         if settings.general.debug {
