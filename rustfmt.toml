@@ -3,7 +3,6 @@ comment_width = 100
 condense_wildcard_suffixes = true
 format_doc_comments = true
 format_macro_bodies = true
-format_macro_matchers = true
 format_strings = true
 match_block_trailing_comma = true
 max_width = 100
