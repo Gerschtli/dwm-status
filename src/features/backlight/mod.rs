@@ -1,3 +1,4 @@
+mod config;
 mod data;
 mod device;
 mod notifier;
@@ -9,6 +10,7 @@ use feature;
 use settings;
 use std::sync::mpsc;
 
+pub(crate) use self::config::ConfigEntry;
 pub(self) use self::data::Data;
 pub(self) use self::device::BacklightDevice;
 pub(self) use self::notifier::Notifier;
