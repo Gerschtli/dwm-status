@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update for 1.31 rust and added more lints to improve code quality
 - Big refactoring to provide a better interface to plug in new features and to be able to encapsulate logic better.
 
+# fixed
+- Always restarting notifier threads after an error occured. This fixes the bug, that the notifier thread of the `audio`
+  feature dies after a hibernate or suspend.
+
 ## [1.4.1] - 2018-12-01
 # Fixed
 - Update README according to last changes (icons for battery, `time.update_seconds`)
