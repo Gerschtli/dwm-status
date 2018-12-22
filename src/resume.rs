@@ -23,11 +23,11 @@ impl thread::Runnable for Notifier {
     fn run(&self) -> Result<()> {
         let connection = dbus::Connection::new()?;
 
-        connection.add_match(dbus::Match {
-            interface: INTERFACE_LOGIN1,
-            member: Some(MEMBER_PREPARE_FOR_SLEEP),
-            path: PATH_LOGIN1,
-        })?;
+        connection.add_match(dbus::Match::new(
+            INTERFACE_LOGIN1,
+            MEMBER_PREPARE_FOR_SLEEP,
+            PATH_LOGIN1,
+        ))?;
 
         connection.listen_for_signals(|signal| {
             // return value is true if going to sleep, false if waking up

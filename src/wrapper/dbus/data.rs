@@ -1,13 +1,25 @@
 #[allow(single_use_lifetimes)] // seems to be a bug in rustc
 #[derive(Debug)]
 pub(crate) struct Match<'a> {
-    pub(crate) interface: &'static str,
-    pub(crate) member: Option<&'static str>,
-    pub(crate) path: &'a str,
+    interface: &'static str,
+    member: Option<&'static str>,
+    path: &'a str,
 }
 
 #[allow(single_use_lifetimes)] // seems to be a bug in rustc
 impl<'a> Match<'a> {
+    pub(crate) fn new<M: Into<Option<&'static str>>>(
+        interface: &'static str,
+        member: M,
+        path: &'a str,
+    ) -> Self {
+        Self {
+            interface,
+            member: member.into(),
+            path,
+        }
+    }
+
     pub(crate) fn build(self) -> String {
         let member = if let Some(member) = self.member {
             format!(",member='{}'", member)

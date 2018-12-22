@@ -48,11 +48,11 @@ impl DbusWatcher {
             return Ok(());
         }
 
-        connection.add_match(dbus::Match {
-            interface: INTERFACE_DBUS_PROPERTIES,
-            member: Some(MEMBER_PROPERTIES_CHANGED),
+        connection.add_match(dbus::Match::new(
+            INTERFACE_DBUS_PROPERTIES,
+            MEMBER_PROPERTIES_CHANGED,
             path,
-        })?;
+        ))?;
 
         self.tx_devices
             .send(DeviceMessage::Added(String::from(name)))
@@ -97,11 +97,11 @@ impl DbusWatcher {
 
         let name = self.get_device_name(path)?;
 
-        connection.remove_match(dbus::Match {
-            interface: INTERFACE_DBUS_PROPERTIES,
-            member: Some(MEMBER_PROPERTIES_CHANGED),
+        connection.remove_match(dbus::Match::new(
+            INTERFACE_DBUS_PROPERTIES,
+            MEMBER_PROPERTIES_CHANGED,
             path,
-        })?;
+        ))?;
 
         self.tx_devices
             .send(DeviceMessage::Removed(String::from(name)))
@@ -117,11 +117,7 @@ impl thread::Runnable for DbusWatcher {
     fn run(&self) -> Result<()> {
         let connection = dbus::Connection::new()?;
 
-        connection.add_match(dbus::Match {
-            interface: INTERFACE_UPOWER,
-            member: None,
-            path: PATH_UPOWER,
-        })?;
+        connection.add_match(dbus::Match::new(INTERFACE_UPOWER, None, PATH_UPOWER))?;
 
         let mut devices = HashSet::new();
 
