@@ -41,9 +41,10 @@ extern crate libnotify;
 extern crate serde_derive;
 extern crate x11;
 
+#[macro_use]
+mod macros;
 mod communication;
 mod error;
-#[macro_use]
 mod feature;
 mod features;
 mod io;
