@@ -40,7 +40,7 @@ impl StatusBar {
                 ));
             },
             communication::Message::UpdateAll => {
-                if settings.debug {
+                if settings.general.debug {
                     println!("update all");
                 }
 
@@ -59,7 +59,7 @@ impl StatusBar {
         let feature = self.features.get_mut(id).unwrap();
         let rendered = feature.update()?.render(settings);
 
-        if settings.debug {
+        if settings.general.debug {
             println!("update {}: {}", feature.name(), &rendered);
         }
 
@@ -68,7 +68,7 @@ impl StatusBar {
     }
 
     pub(crate) fn render(&self, settings: &settings::Settings) -> Result<()> {
-        let status = self.string_list.join(&settings.separator);
+        let status = self.string_list.join(&settings.general.separator);
 
         self.xsetroot.render(status)
     }

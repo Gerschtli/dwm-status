@@ -72,12 +72,12 @@ fn get_settings() -> Result<settings::Settings> {
 }
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
-    if settings.order.is_empty() {
+    if settings.general.order.is_empty() {
         return Err(Error::new_custom("settings", "no features enabled"));
     }
 
-    let set: HashSet<&String> = HashSet::from_iter(settings.order.iter());
-    if set.len() < settings.order.len() {
+    let set: HashSet<&String> = HashSet::from_iter(settings.general.order.iter());
+    if set.len() < settings.general.order.len() {
         return Err(Error::new_custom(
             "settings",
             "order must not have more than one entry of one feature",
@@ -95,7 +95,7 @@ pub fn run() -> Result<()> {
 
     let mut features = Vec::new();
 
-    for (index, feature_name) in settings.order.iter().enumerate() {
+    for (index, feature_name) in settings.general.order.iter().enumerate() {
         let mut feature = features::create_feature(index, feature_name, &tx, &settings)?;
         feature.init_notifier()?;
         features.push(feature);
