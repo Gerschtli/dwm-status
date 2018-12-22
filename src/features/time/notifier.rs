@@ -37,7 +37,7 @@ impl thread::Runnable for Notifier {
 
             thread::sleep_secs(update_interval);
 
-            communication::send_message(FEATURE_NAME, self.id, &self.tx);
+            communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
         }
     }
 }

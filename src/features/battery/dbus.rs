@@ -133,7 +133,7 @@ impl thread::Runnable for DbusWatcher {
         // dbus method call with a 2 seconds timeout. While waiting it's possible that
         // the initial `update` has already been triggered, so the status bar would show
         // the "no battery" information.
-        communication::send_message(FEATURE_NAME, self.id, &self.tx);
+        communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
 
         connection.listen_for_signals(|signal| {
             if signal.is_interface(INTERFACE_UPOWER)? {
@@ -145,12 +145,12 @@ impl thread::Runnable for DbusWatcher {
                     self.remove_device(&connection, &mut devices, &path)?;
                 }
 
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
             } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
                 // wait for /sys/class/power_supply files updates
                 thread::sleep_secs(2);
 
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
             }
 
             Ok(())

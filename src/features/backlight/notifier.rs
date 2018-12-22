@@ -41,7 +41,7 @@ impl thread::Runnable for Notifier {
                 .wrap_error(FEATURE_NAME, "error while reading inotify events")?;
 
             if events.any(|event| event.mask.contains(inotify::EventMask::MODIFY)) {
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
             }
 
             // prevent event spamming

@@ -46,13 +46,6 @@ impl fmt::Display for Error {
 
 pub(crate) trait WrapErrorExt<T> {
     fn wrap_error(self, name: &str, description: &str) -> Result<T>;
-
-    fn wrap_error_kill(self, name: &str, description: &str) -> T
-    where
-        Self: Sized,
-    {
-        self.wrap_error(name, description).show_error().unwrap()
-    }
 }
 
 impl<T, E: fmt::Debug> WrapErrorExt<T> for StdResult<T, E> {

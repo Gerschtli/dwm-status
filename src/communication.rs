@@ -8,9 +8,8 @@ pub(crate) enum Message {
     UpdateAll,
 }
 
-pub(crate) fn send_message(feature: &str, id: usize, tx: &mpsc::Sender<Message>) {
+pub(crate) fn send_message(feature: &str, id: usize, tx: &mpsc::Sender<Message>) -> Result<()> {
     let message = Message::FeatureUpdate(id);
 
-    tx.send(message)
-        .wrap_error_kill(feature, "notify thread killed");
+    tx.send(message).wrap_error(feature, "notify thread killed")
 }

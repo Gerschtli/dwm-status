@@ -108,7 +108,9 @@ pub fn run() -> Result<()> {
 
     ctrlc::set_handler(move || {
         tx.send(communication::Message::Kill)
-            .wrap_error_kill("termination", "notify thread killed");
+            .wrap_error("termination", "notify thread killed")
+            .show_error()
+            .unwrap();
     })
     .wrap_error("termination", "failed to set termination handler")?;
 

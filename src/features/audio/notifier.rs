@@ -35,7 +35,7 @@ impl thread::Runnable for Notifier {
                     break Ok(());
                 }
 
-                communication::send_message(FEATURE_NAME, self.id, &self.tx);
+                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
             }
 
             // prevent event spamming
