@@ -1,8 +1,8 @@
-mod audio;
-mod backlight;
-mod battery;
-mod cpu_load;
-mod time;
+pub(super) mod audio;
+pub(super) mod backlight;
+pub(super) mod battery;
+pub(super) mod cpu_load;
+pub(super) mod time;
 
 use communication;
 use error::*;
