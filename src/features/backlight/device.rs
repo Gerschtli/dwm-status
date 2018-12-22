@@ -1,6 +1,6 @@
 use super::FEATURE_NAME;
 use error::*;
-use io;
+use wrapper::file;
 
 #[derive(Debug)]
 pub(super) struct BacklightDevice {
@@ -36,7 +36,7 @@ impl BacklightDevice {
     }
 
     fn get_brightness(&self, name: &str) -> Result<u32> {
-        let brightness = io::read_int_from_file(&self.build_path(name))
+        let brightness = file::parse_file_content(self.build_path(name))
             .wrap_error(FEATURE_NAME, format!("error reading {} brightness", name))?;
 
         Ok(brightness)

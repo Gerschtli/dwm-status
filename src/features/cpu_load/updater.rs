@@ -2,7 +2,7 @@ use super::Data;
 use super::FEATURE_NAME;
 use error::*;
 use feature;
-use io;
+use wrapper::file;
 
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
@@ -22,7 +22,7 @@ impl feature::Updatable for Updater {
     }
 
     fn update(&mut self) -> Result<()> {
-        let content = io::read_file(PATH_LOADAVG)
+        let content = file::read(PATH_LOADAVG)
             .wrap_error(FEATURE_NAME, format!("failed to read {}", PATH_LOADAVG))?;
 
         let mut iterator = content.split_whitespace();

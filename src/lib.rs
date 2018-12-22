@@ -49,7 +49,6 @@ mod communication;
 mod error;
 mod feature;
 mod features;
-mod io;
 mod resume;
 mod settings;
 mod status_bar;

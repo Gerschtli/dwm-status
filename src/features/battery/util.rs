@@ -1,8 +1,8 @@
 use super::FEATURE_NAME;
 use super::POWER_SUPPLY_PATH;
 use error::*;
-use io;
 use std::time;
+use wrapper::file;
 
 pub(super) fn fmt_capacity(capacity: u32) -> String {
     format!("{}%", capacity)
@@ -14,7 +14,7 @@ pub(super) fn fmt_time(duration: &time::Duration) -> String {
 }
 
 pub(super) fn get_value(device: &str, name: &str) -> Result<u32> {
-    io::read_int_from_file(&format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
+    file::parse_file_content(format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
         .wrap_error(FEATURE_NAME, format!("error reading {}/{}", device, name))
 }
 
