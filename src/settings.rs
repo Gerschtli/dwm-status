@@ -17,7 +17,7 @@ pub(crate) trait ConfigType {
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct General {
-    pub(crate) debug: bool,
+    pub(crate) debug: Option<bool>,
     pub(crate) order: Vec<String>,
     pub(crate) separator: String,
 }
@@ -25,9 +25,22 @@ pub(crate) struct General {
 impl ConfigType for General {
     fn set_default(config: &mut Config) -> Result<(), ConfigError> {
         config
-            .set_default("debug", false)?
+            .set_default("debug", None::<bool>)?
             .set_default("order", Vec::<String>::new())?
             .set_default("separator", " / ")?;
+
+        Ok(())
+    }
+
+    fn set_values(config: &mut Config) -> Result<(), ConfigError> {
+        let debug: Option<bool> = config.get("debug")?;
+
+        if debug.is_some() {
+            warn!(
+                "Config option 'debug' is deprecated and will be removed in 2.0.0. Log level is \
+                 set to info by default."
+            );
+        }
 
         Ok(())
     }
