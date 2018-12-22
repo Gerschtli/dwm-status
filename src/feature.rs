@@ -1,9 +1,8 @@
 use error::*;
-use settings;
 use wrapper::thread;
 
 pub(crate) trait Renderable {
-    fn render(&self, _: &settings::Settings) -> String;
+    fn render(&self) -> &str;
 }
 
 pub(crate) trait Feature {
@@ -11,13 +10,15 @@ pub(crate) trait Feature {
 
     fn name(&self) -> &'static str;
 
-    fn update(&mut self) -> Result<Box<dyn Renderable>>;
+    fn renderable(&self) -> Box<&dyn Renderable>;
+
+    fn update(&mut self) -> Result<()>;
 }
 
 pub(crate) trait Updatable {
-    type Data: Renderable + 'static;
+    fn renderable(&self) -> Box<&dyn Renderable>;
 
-    fn update(&mut self) -> Result<Self::Data>;
+    fn update(&mut self) -> Result<()>;
 }
 
 pub(crate) struct Composer<N, U>
@@ -62,7 +63,11 @@ where
         self.name
     }
 
-    fn update(&mut self) -> Result<Box<dyn Renderable>> {
-        Ok(Box::new(self.updater.update()?))
+    fn renderable(&self) -> Box<&dyn Renderable> {
+        self.updater.renderable()
+    }
+
+    fn update(&mut self) -> Result<()> {
+        self.updater.update()
     }
 }

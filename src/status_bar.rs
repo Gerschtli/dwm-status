@@ -2,23 +2,17 @@ use communication;
 use error::*;
 use feature;
 use settings;
-use std::iter;
-use std::iter::FromIterator;
 use wrapper::xsetroot;
 
 pub(crate) struct StatusBar {
     features: Vec<Box<dyn feature::Feature>>,
-    string_list: Vec<String>,
     xsetroot: xsetroot::XSetRoot,
 }
 
 impl StatusBar {
     pub(crate) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
-        let string_list = Vec::from_iter(iter::repeat(String::new()).take(features.len()));
-
         Ok(Self {
             features,
-            string_list,
             xsetroot: xsetroot::XSetRoot::new()?,
         })
     }
@@ -57,18 +51,26 @@ impl StatusBar {
 
     fn update_feature(&mut self, id: usize, settings: &settings::Settings) -> Result<()> {
         let feature = &mut self.features[id];
-        let rendered = feature.update()?.render(settings);
+        feature.update()?;
 
         if settings.general.debug {
-            println!("update {}: {}", feature.name(), &rendered);
+            println!(
+                "update {}: {}",
+                feature.name(),
+                feature.renderable().render()
+            );
         }
 
-        self.string_list[id] = rendered;
         Ok(())
     }
 
     pub(crate) fn render(&self, settings: &settings::Settings) -> Result<()> {
-        let status = self.string_list.join(&settings.general.separator);
+        let status = self
+            .features
+            .iter()
+            .map(|f| f.renderable().render())
+            .collect::<Vec<_>>()
+            .join(&settings.general.separator);
 
         self.xsetroot.render(status)
     }
