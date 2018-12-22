@@ -1,6 +1,6 @@
 use super::fmt_capacity;
 use super::fmt_time;
-use super::ConfigEntry;
+use super::NotifierConfig;
 use error::*;
 use std::time;
 use wrapper::libnotify;
@@ -9,11 +9,11 @@ use wrapper::libnotify;
 pub(super) struct BatteryNotifier {
     capacity: Option<u32>,
     libnotify: libnotify::LibNotify,
-    settings: ConfigEntry,
+    settings: NotifierConfig,
 }
 
 impl BatteryNotifier {
-    pub(super) fn new(settings: ConfigEntry) -> Result<Self> {
+    pub(super) fn new(settings: NotifierConfig) -> Result<Self> {
         Ok(Self {
             capacity: None,
             libnotify: libnotify::LibNotify::new()?,

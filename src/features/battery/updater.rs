@@ -3,24 +3,31 @@ use super::BatteryManager;
 use super::BatteryNotifier;
 use super::Data;
 use error::*;
-use feature::Updatable;
+use feature;
 use std::collections::HashMap;
 
 pub(super) struct Updater {
+    data: Data,
     manager: BatteryManager,
     notifier: BatteryNotifier,
 }
 
 impl Updater {
-    pub(super) fn new(manager: BatteryManager, notifier: BatteryNotifier) -> Self {
-        Self { manager, notifier }
+    pub(super) fn new(data: Data, manager: BatteryManager, notifier: BatteryNotifier) -> Self {
+        Self {
+            data,
+            manager,
+            notifier,
+        }
     }
 }
 
-impl Updatable for Updater {
-    type Data = Data;
+impl feature::Updatable for Updater {
+    fn renderable(&self) -> Box<&dyn feature::Renderable> {
+        Box::new(&self.data)
+    }
 
-    fn update(&mut self) -> Result<Self::Data> {
+    fn update(&mut self) -> Result<()> {
         self.manager.update_devices_list()?;
 
         let ac_online = self.manager.is_ac_online()?;
@@ -51,9 +58,8 @@ impl Updatable for Updater {
             }
         }
 
-        Ok(Data {
-            ac_online,
-            batteries,
-        })
+        self.data.update(ac_online, &batteries);
+
+        Ok(())
     }
 }

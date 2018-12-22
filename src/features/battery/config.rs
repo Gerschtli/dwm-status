@@ -5,17 +5,29 @@ use config::Value;
 use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
+pub(crate) struct NotifierConfig {
+    pub(super) enable_notifier: bool,
+    pub(super) notifier_critical: u32,
+    pub(super) notifier_levels: Vec<u32>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub(crate) struct RenderConfig {
+    pub(super) charging: String,
+    pub(super) discharging: String,
+    pub(super) icons: Vec<String>,
+    pub(super) no_battery: String,
+    pub(super) separator: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
-    pub(crate) charging: String,
     #[serde(skip)]
-    pub(crate) debug: bool,
-    pub(crate) discharging: String,
-    pub(crate) enable_notifier: bool,
-    pub(crate) icons: Vec<String>,
-    pub(crate) no_battery: String,
-    pub(crate) notifier_critical: u32,
-    pub(crate) notifier_levels: Vec<u32>,
-    pub(crate) separator: String,
+    pub(super) debug: bool,
+    #[serde(flatten)]
+    pub(super) notifier: NotifierConfig,
+    #[serde(flatten)]
+    pub(super) render: RenderConfig,
 }
 
 impl ConfigType for ConfigEntry {
