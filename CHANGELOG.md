@@ -11,12 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update for 1.31 rust and added more lints to improve code quality
 - Big refactoring to provide a better interface to plug in new features and to be able to encapsulate logic better.
 
-# fixed
+### Fixed
 - Always restarting notifier threads after an error occured. This fixes the bug, that the notifier thread of the `audio`
   feature dies after a hibernate or suspend.
 
 ## [1.4.1] - 2018-12-01
-# Fixed
+### Fixed
 - Update README according to last changes (icons for battery, `time.update_seconds`)
 - Update `PATH` for executable in `default.nix`
 
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Errors are only visible via stderr and no longer shown as notifications
 - Default value of `time.update_seconds` is automatically set through parsing the `format` string
 
-# Fixed
+### Fixed
 - Removed useless "notify thread killed" error message on `SIGTERM` when using audio feature
 
 ## [1.3.0] - 2018-11-24
