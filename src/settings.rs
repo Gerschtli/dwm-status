@@ -3,6 +3,14 @@ use config::ConfigError;
 use config::File;
 use config::Value;
 
+pub(crate) trait ConfigType {
+    fn set_default(_: &mut Config) -> Result<(), ConfigError>;
+
+    fn set_values(_: &mut Config) -> Result<(), ConfigError> {
+        Ok(())
+    }
+}
+
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct Audio {
     pub(crate) control: String,
