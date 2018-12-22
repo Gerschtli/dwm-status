@@ -5,14 +5,14 @@ use config::Value;
 use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
-pub(crate) struct NotifierConfig {
+pub(super) struct NotifierConfig {
     pub(super) enable_notifier: bool,
     pub(super) notifier_critical: u32,
     pub(super) notifier_levels: Vec<u32>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub(crate) struct RenderConfig {
+pub(super) struct RenderConfig {
     pub(super) charging: String,
     pub(super) discharging: String,
     pub(super) icons: Vec<String>,

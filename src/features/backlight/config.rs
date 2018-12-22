@@ -5,7 +5,7 @@ use config::Value;
 use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
-pub(crate) struct RenderConfig {
+pub(super) struct RenderConfig {
     pub(super) icons: Vec<String>,
     pub(super) template: String,
 }

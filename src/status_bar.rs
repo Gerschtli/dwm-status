@@ -4,20 +4,20 @@ use feature;
 use settings;
 use wrapper::xsetroot;
 
-pub(crate) struct StatusBar {
+pub(super) struct StatusBar {
     features: Vec<Box<dyn feature::Feature>>,
     xsetroot: xsetroot::XSetRoot,
 }
 
 impl StatusBar {
-    pub(crate) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
+    pub(super) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
         Ok(Self {
             features,
             xsetroot: xsetroot::XSetRoot::new()?,
         })
     }
 
-    pub(crate) fn update(
+    pub(super) fn update(
         &mut self,
         message: &communication::Message,
         settings: &settings::General,
@@ -49,7 +49,7 @@ impl StatusBar {
         Ok(())
     }
 
-    pub(crate) fn render(&self, settings: &settings::General) -> Result<()> {
+    pub(super) fn render(&self, settings: &settings::General) -> Result<()> {
         let status = self
             .features
             .iter()
