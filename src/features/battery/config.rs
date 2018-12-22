@@ -22,8 +22,6 @@ pub(crate) struct RenderConfig {
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
-    #[serde(skip)]
-    pub(super) debug: bool,
     #[serde(flatten)]
     pub(super) notifier: NotifierConfig,
     #[serde(flatten)]
@@ -45,13 +43,6 @@ impl ConfigType for ConfigEntry {
                 "separator"         => " · ",
             ),
         )?;
-        Ok(())
-    }
-
-    fn set_values(config: &mut Config) -> Result<(), ConfigError> {
-        // propagate debug value to battery module
-        let debug = config.get_bool("debug")?;
-        config.set(&format!("{}.debug", FEATURE_NAME), debug)?;
         Ok(())
     }
 }

@@ -10,16 +10,14 @@ use std::sync::mpsc;
 #[derive(Debug)]
 pub(super) struct BatteryManager {
     ac_name: String,
-    debug: bool,
     devices: HashMap<String, BatteryDevice>,
     rx_devices: mpsc::Receiver<DeviceMessage>,
 }
 
 impl BatteryManager {
-    pub(super) fn new(debug: bool, rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
+    pub(super) fn new(rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
         Ok(Self {
             ac_name: AcAdapter::get_current()?,
-            debug,
             devices: HashMap::new(),
             rx_devices,
         })
