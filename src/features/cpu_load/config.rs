@@ -6,8 +6,8 @@ use settings::ConfigType;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
-    pub(crate) template: String,
-    pub(crate) update_interval: u64,
+    pub(super) template: String,
+    pub(super) update_interval: u64,
 }
 
 impl ConfigType for ConfigEntry {

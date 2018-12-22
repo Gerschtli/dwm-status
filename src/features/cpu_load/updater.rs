@@ -1,17 +1,27 @@
 use super::Data;
 use super::FEATURE_NAME;
 use error::*;
-use feature::Updatable;
+use feature;
 use io;
 
 const PATH_LOADAVG: &str = "/proc/loadavg";
 
-pub(super) struct Updater;
+pub(super) struct Updater {
+    data: Data,
+}
 
-impl Updatable for Updater {
-    type Data = Data;
+impl Updater {
+    pub(super) fn new(data: Data) -> Self {
+        Self { data }
+    }
+}
 
-    fn update(&mut self) -> Result<Self::Data> {
+impl feature::Updatable for Updater {
+    fn renderable(&self) -> Box<&dyn feature::Renderable> {
+        Box::new(&self.data)
+    }
+
+    fn update(&mut self) -> Result<()> {
         let content = io::read_file(PATH_LOADAVG)
             .wrap_error(FEATURE_NAME, &format!("failed to read {}", PATH_LOADAVG))?;
 
@@ -21,7 +31,9 @@ impl Updatable for Updater {
         let five = convert_to_float(iterator.next())?;
         let fifteen = convert_to_float(iterator.next())?;
 
-        Ok(Data { one, five, fifteen })
+        self.data.update(one, five, fifteen);
+
+        Ok(())
     }
 }
 

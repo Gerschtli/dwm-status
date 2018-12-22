@@ -6,7 +6,6 @@ mod updater;
 use communication;
 use error::*;
 use feature;
-use settings;
 use std::sync::mpsc;
 
 pub(crate) use self::config::ConfigEntry;
@@ -19,11 +18,13 @@ pub(super) const FEATURE_NAME: &str = "cpu_load";
 pub(super) fn create(
     id: usize,
     tx: &mpsc::Sender<communication::Message>,
-    settings: &settings::Settings,
+    settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
+    let data = Data::new(settings.template.clone());
+
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
-        Notifier::new(id, tx.clone(), settings.cpu_load.update_interval),
-        Updater,
+        Notifier::new(id, tx.clone(), settings.update_interval),
+        Updater::new(data),
     )))
 }
