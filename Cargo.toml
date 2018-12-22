@@ -7,7 +7,6 @@ name = "dwm-status"
 readme = "README.md"
 repository = "https://github.com/Gerschtli/dwm-status"
 version = "1.4.1"
-
 [badges.travis-ci]
 branch = "master"
 repository = "Gerschtli/dwm-status"
@@ -18,8 +17,10 @@ config = "0.9.1"
 dbus = "0.6.3"
 inotify = "0.6.1"
 libnotify = "1.0.3"
+log = "0.4.6"
 serde = "1.0.80"
 serde_derive = "1.0.80"
+simplelog = "0.5.3"
 
 [dependencies.ctrlc]
 features = ["termination"]
