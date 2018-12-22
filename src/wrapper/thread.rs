@@ -2,7 +2,7 @@ use error::*;
 use std::thread;
 use std::time;
 
-pub(crate) trait Runnable {
+pub(crate) trait Runnable: Send + 'static {
     fn run(&self) -> Result<()>;
 }
 
@@ -13,7 +13,7 @@ pub(crate) struct Thread<R> {
 
 impl<R> Thread<R>
 where
-    R: Runnable + Send + 'static,
+    R: Runnable,
 {
     pub(crate) fn new(name: &'static str, runnable: R) -> Self {
         Self { name, runnable }

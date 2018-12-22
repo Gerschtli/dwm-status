@@ -22,7 +22,7 @@ pub(crate) trait Updatable {
 
 pub(crate) struct Composer<N, U>
 where
-    N: thread::Runnable + Send + 'static,
+    N: thread::Runnable,
     U: Updatable,
 {
     name: &'static str,
@@ -32,7 +32,7 @@ where
 
 impl<N, U> Composer<N, U>
 where
-    N: thread::Runnable + Send + 'static,
+    N: thread::Runnable,
     U: Updatable,
 {
     pub(crate) fn new(name: &'static str, notifier: N, updater: U) -> Self {
@@ -46,7 +46,7 @@ where
 
 impl<N, U> Feature for Composer<N, U>
 where
-    N: thread::Runnable + Send + 'static,
+    N: thread::Runnable,
     U: Updatable,
 {
     fn init_notifier(&mut self) -> Result<()> {
