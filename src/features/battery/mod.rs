@@ -41,8 +41,8 @@ pub(super) fn create(
     let (tx_devices, rx_devices) = mpsc::channel();
 
     let data = Data::new(settings.render.clone());
-    let manager = BatteryManager::new(rx_devices)?;
-    let notifier = BatteryNotifier::new(settings.notifier.clone())?;
+    let manager = BatteryManager::init(rx_devices)?;
+    let notifier = BatteryNotifier::init(settings.notifier.clone())?;
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,

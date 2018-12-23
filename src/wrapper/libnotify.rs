@@ -9,7 +9,7 @@ const ERROR_NAME: &str = "libnotify";
 pub(crate) struct LibNotify;
 
 impl LibNotify {
-    pub(crate) fn new() -> Result<Self> {
+    pub(crate) fn init() -> Result<Self> {
         libnotify::init("dwm-status").wrap_error(ERROR_NAME, "init failed")?;
 
         Ok(Self {})

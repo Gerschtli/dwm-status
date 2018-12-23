@@ -30,7 +30,7 @@ impl Message {
         Self { message }
     }
 
-    pub(crate) fn new_method_call(
+    pub(crate) fn init_method_call(
         bus: &'static str,
         path: &'_ str,
         interface: &'static str,

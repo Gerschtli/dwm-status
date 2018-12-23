@@ -10,10 +10,10 @@ pub(super) struct StatusBar {
 }
 
 impl StatusBar {
-    pub(super) fn new(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
+    pub(super) fn init(features: Vec<Box<dyn feature::Feature>>) -> Result<Self> {
         Ok(Self {
             features,
-            xsetroot: xsetroot::XSetRoot::new()?,
+            xsetroot: xsetroot::XSetRoot::init()?,
         })
     }
 

@@ -27,7 +27,7 @@ impl Notifier {
 
 impl thread::Runnable for Notifier {
     fn run(&self) -> Result<()> {
-        let mut inotify = inotify::Inotify::new()?;
+        let mut inotify = inotify::Inotify::init()?;
 
         inotify.add_watch(&self.brightness_file, inotify::WatchMask::MODIFY)?;
 

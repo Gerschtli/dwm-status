@@ -64,7 +64,7 @@ impl DbusWatcher {
     }
 
     fn get_current_devices(&self, connection: &dbus::Connection) -> Result<Vec<dbus::Path<'_>>> {
-        let message = dbus::Message::new_method_call(
+        let message = dbus::Message::init_method_call(
             INTERFACE_UPOWER,
             PATH_UPOWER,
             INTERFACE_UPOWER,
@@ -115,7 +115,7 @@ impl DbusWatcher {
 
 impl thread::Runnable for DbusWatcher {
     fn run(&self) -> Result<()> {
-        let connection = dbus::Connection::new()?;
+        let connection = dbus::Connection::init()?;
 
         connection.add_match(dbus::Match::new(INTERFACE_UPOWER, None, PATH_UPOWER))?;
 

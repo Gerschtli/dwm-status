@@ -12,7 +12,7 @@ pub(crate) struct XSetRoot {
 }
 
 impl XSetRoot {
-    pub(crate) fn new() -> Result<Self> {
+    pub(crate) fn init() -> Result<Self> {
         unsafe {
             let display = xlib::XOpenDisplay(ptr::null());
 

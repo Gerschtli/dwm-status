@@ -15,7 +15,7 @@ pub(crate) struct Connection {
 }
 
 impl Connection {
-    pub(crate) fn new() -> Result<Self> {
+    pub(crate) fn init() -> Result<Self> {
         let connection = dbus::Connection::get_private(dbus::BusType::System)
             .wrap_error(ERROR_NAME, "failed to connect to dbus")?;
 

@@ -21,7 +21,7 @@ struct Notifier {
 
 impl thread::Runnable for Notifier {
     fn run(&self) -> Result<()> {
-        let connection = dbus::Connection::new()?;
+        let connection = dbus::Connection::init()?;
 
         connection.add_match(dbus::Match::new(
             INTERFACE_LOGIN1,

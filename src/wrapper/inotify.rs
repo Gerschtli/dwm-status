@@ -10,7 +10,7 @@ pub(crate) struct Inotify {
 }
 
 impl Inotify {
-    pub(crate) fn new() -> Result<Self> {
+    pub(crate) fn init() -> Result<Self> {
         let inotify = inotify::Inotify::init().wrap_error(ERROR_NAME, "failed to start inotify")?;
 
         Ok(Self { inotify })

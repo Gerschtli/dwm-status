@@ -115,7 +115,7 @@ pub fn run() -> Result<()> {
     })
     .wrap_error("termination", "failed to set termination handler")?;
 
-    let mut status_bar = StatusBar::new(features)?;
+    let mut status_bar = StatusBar::init(features)?;
 
     for message in rx {
         match message {
