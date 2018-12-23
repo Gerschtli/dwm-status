@@ -9,7 +9,7 @@ const AC2: &str = "ACAD";
 pub(super) struct AcAdapter;
 
 impl AcAdapter {
-    pub(super) fn get_current() -> Result<String> {
+    pub(super) fn get_current() -> Result<&'static str> {
         let ac_name = if Self::ac_exists(AC1) {
             AC1
         } else if Self::ac_exists(AC2) {
@@ -24,7 +24,7 @@ impl AcAdapter {
             ));
         };
 
-        Ok(String::from(ac_name))
+        Ok(ac_name)
     }
 
     fn ac_exists(name: &str) -> bool {

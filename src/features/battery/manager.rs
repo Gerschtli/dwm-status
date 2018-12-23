@@ -8,7 +8,7 @@ use std::sync::mpsc;
 
 #[derive(Debug)]
 pub(super) struct BatteryManager {
-    ac_name: String,
+    ac_name: &'static str,
     devices: HashMap<String, BatteryDevice>,
     rx_devices: mpsc::Receiver<DeviceMessage>,
 }
@@ -27,7 +27,7 @@ impl BatteryManager {
     }
 
     pub(super) fn is_ac_online(&self) -> Result<bool> {
-        Ok(get_value(&self.ac_name, "online")? == 1)
+        Ok(get_value(self.ac_name, "online")? == 1)
     }
 
     pub(super) fn update_devices_list(&mut self) -> Result<()> {
