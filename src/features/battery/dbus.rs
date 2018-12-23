@@ -31,8 +31,8 @@ impl DbusWatcher {
         id: usize,
         tx: mpsc::Sender<communication::Message>,
         tx_devices: mpsc::Sender<DeviceMessage>,
-    ) -> Result<Self> {
-        Ok(Self { id, tx, tx_devices })
+    ) -> Self {
+        Self { id, tx, tx_devices }
     }
 
     fn add_device<'a>(

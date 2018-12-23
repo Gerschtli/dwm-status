@@ -46,7 +46,7 @@ pub(super) fn create(
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
-        DbusWatcher::new(id, tx.clone(), tx_devices)?,
+        DbusWatcher::new(id, tx.clone(), tx_devices),
         Updater::new(data, manager, notifier),
     )))
 }

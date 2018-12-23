@@ -35,7 +35,7 @@ impl BatteryManager {
             match message {
                 DeviceMessage::Added(name) => {
                     info!("Detected connected battery: adding {}", &name);
-                    let device = BatteryDevice::new(&name)?;
+                    let device = BatteryDevice::new(&name);
                     self.devices.insert(name, device);
                 },
                 DeviceMessage::Removed(name) => {
