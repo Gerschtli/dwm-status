@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.5.0] - 2018-12-23
 ### Changed
 - The super useless case of having one feature at least twice in the `order` list now throws an exception.. Why would
   anyone ever want to see one feature twice in their status bar?
@@ -150,7 +152,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Audio, backlight, battery and time features
   - Travis config with cargo fmt, build and test checks
 
-[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.4.1...HEAD
+[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.5.0...HEAD
+[1.5.0]: https://github.com/Gerschtli/dwm-status/compare/1.4.1...1.5.0
 [1.4.1]: https://github.com/Gerschtli/dwm-status/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/Gerschtli/dwm-status/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/Gerschtli/dwm-status/compare/1.2.0...1.3.0
