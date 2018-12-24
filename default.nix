@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "0yln64zjccvsp51cvb91zdlra9wra0jw75d7lh2ibr4y4vzmj5yp";
+  cargoSha256 = "1khknf1bjs80cc2n4jnpilf8cc15crykhhyvvff6q4ay40353gr6";
 
   postInstall = ''
     wrapProgram $out/bin/${name} --prefix "PATH" : "${binPath}"
