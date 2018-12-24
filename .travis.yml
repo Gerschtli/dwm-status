@@ -55,7 +55,3 @@ addons:
       - libgdk-pixbuf2.0-dev
       - libglib2.0-dev
       - libnotify-dev
-
-notifications:
-  email:
-    on_success: never
