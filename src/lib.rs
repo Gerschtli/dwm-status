@@ -60,6 +60,7 @@ use status_bar::StatusBar;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 use wrapper::channel;
+use wrapper::termination;
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
     if settings.general.order.is_empty() {
@@ -96,13 +97,12 @@ pub fn run(config_path: &str) -> Result<()> {
 
     sender.send(communication::Message::UpdateAll)?;
 
-    ctrlc::set_handler(move || {
+    termination::register_handler(move || {
         sender
             .send(communication::Message::Kill)
             .show_error()
-            .unwrap();
-    })
-    .wrap_error("termination", "failed to set termination handler")?;
+            .unwrap()
+    })?;
 
     let mut status_bar = StatusBar::init(features)?;
 
