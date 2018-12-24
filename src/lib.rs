@@ -30,15 +30,25 @@
     feature = "rust-1-31",
     allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)
 )]
+#![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts))]
+#![cfg_attr(
+    all(test, feature = "mocking"),
+    feature(custom_attribute, proc_macro_hygiene)
+)]
 
 extern crate chrono;
 extern crate config;
 extern crate ctrlc;
 extern crate dbus;
+#[cfg(test)]
+#[macro_use]
+extern crate hamcrest2;
 extern crate inotify;
 extern crate libnotify;
 #[macro_use]
 extern crate log;
+#[cfg(all(test, feature = "mocking"))]
+extern crate mocktopus;
 #[macro_use]
 extern crate serde_derive;
 extern crate x11;
