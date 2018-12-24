@@ -1,11 +1,9 @@
-#[allow(single_use_lifetimes)] // seems to be a bug in rustc
 pub(crate) struct Match<'a> {
     interface: &'static str,
     member: Option<&'static str>,
     path: &'a str,
 }
 
-#[allow(single_use_lifetimes)] // seems to be a bug in rustc
 impl<'a> Match<'a> {
     pub(crate) fn new<M: Into<Option<&'static str>>>(
         interface: &'static str,
