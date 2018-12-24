@@ -22,6 +22,7 @@ matrix:
       name: nix build on nixpkgs-unstable
       before_script:
         - nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+        - nix-channel --update
         - nix eval nixpkgs.rustc.version
       script:
         - nix build --verbose
@@ -29,6 +30,7 @@ matrix:
       name: nix build on nixos-18.09
       before_script:
         - nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+        - nix-channel --update
         - nix eval nixpkgs.rustc.version
       script:
         - nix build --verbose
