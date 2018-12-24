@@ -5,7 +5,6 @@ use error::*;
 use std::time;
 use wrapper::libnotify;
 
-#[derive(Debug)]
 pub(super) struct BatteryNotifier {
     capacity: Option<u32>,
     libnotify: libnotify::LibNotify,

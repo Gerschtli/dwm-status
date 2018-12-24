@@ -1,5 +1,4 @@
 #[allow(single_use_lifetimes)] // seems to be a bug in rustc
-#[derive(Debug)]
 pub(crate) struct Match<'a> {
     interface: &'static str,
     member: Option<&'static str>,

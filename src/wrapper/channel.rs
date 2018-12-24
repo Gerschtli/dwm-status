@@ -25,7 +25,7 @@ impl<M: Clone> Receiver<M> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub(crate) struct Sender<M> {
     sender: mpsc::Sender<M>,
 }

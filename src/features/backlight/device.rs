@@ -2,7 +2,6 @@ use super::FEATURE_NAME;
 use error::*;
 use wrapper::file;
 
-#[derive(Debug)]
 pub(super) struct BacklightDevice {
     max: u32,
     path: String,

@@ -10,7 +10,6 @@ const ENERGY_FULL: &str = "energy_full";
 const ENERGY_NOW: &str = "energy_now";
 const POWER_NOW: &str = "power_now";
 
-#[derive(Debug)]
 pub(super) struct BatteryDevice {
     name: String,
 }

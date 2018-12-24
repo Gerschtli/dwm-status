@@ -16,7 +16,6 @@ macro_rules! compare_property {
     };
 }
 
-#[derive(Debug)]
 pub(crate) struct Message {
     message: dbus::Message,
 }

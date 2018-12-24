@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::time;
 use utils::icon_by_percentage;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub(super) struct BatteryInfo {
     pub(super) capacity: u32,
     pub(super) estimation: Option<time::Duration>,

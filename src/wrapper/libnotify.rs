@@ -5,7 +5,6 @@ pub(crate) use libnotify::Urgency;
 
 const ERROR_NAME: &str = "libnotify";
 
-#[derive(Debug)]
 pub(crate) struct LibNotify;
 
 impl LibNotify {

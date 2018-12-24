@@ -2,7 +2,6 @@ use super::RenderConfig;
 use feature;
 use utils::icon_by_percentage;
 
-#[derive(Debug)]
 pub(super) struct Data {
     cache: String,
     config: RenderConfig,

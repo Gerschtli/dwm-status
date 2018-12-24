@@ -21,7 +21,6 @@ pub(super) enum DeviceMessage {
     Removed(String),
 }
 
-#[derive(Debug)]
 pub(super) struct DbusWatcher {
     id: usize,
     sender: channel::Sender<communication::Message>,
