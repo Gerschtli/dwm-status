@@ -58,20 +58,8 @@ mod wrapper;
 use error::*;
 use status_bar::StatusBar;
 use std::collections::HashSet;
-use std::env;
 use std::iter::FromIterator;
 use wrapper::channel;
-
-fn get_settings() -> Result<settings::Settings> {
-    let mut args = env::args();
-
-    let path = args.nth(1).wrap_error(
-        "usage",
-        "first parameter needs to be the path to config file",
-    )?;
-
-    settings::Settings::new(&path).wrap_error("settings", "creation of settings object failed")
-}
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
     if settings.general.order.is_empty() {
@@ -89,8 +77,10 @@ fn validate_settings(settings: &settings::Settings) -> Result<()> {
     Ok(())
 }
 
-pub fn run() -> Result<()> {
-    let settings = get_settings()?;
+pub fn run(config_path: &str) -> Result<()> {
+    let settings = settings::Settings::new(config_path)
+        .wrap_error("settings", "creation of settings object failed")?;
+
     validate_settings(&settings)?;
 
     let (sender, receiver) = channel::create();
