@@ -13,6 +13,7 @@ repository = "Gerschtli/dwm-status"
 
 [dependencies]
 chrono = "0.4.6"
+clap = "2.32.0"
 config = "0.9.1"
 dbus = "0.6.3"
 inotify = "0.6.1"
