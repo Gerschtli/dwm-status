@@ -1,18 +1,17 @@
-use super::FEATURE_NAME;
 use communication;
 use error::*;
-use std::sync::mpsc;
+use wrapper::channel;
 use wrapper::process;
 use wrapper::thread;
 
 pub(super) struct Notifier {
     id: usize,
-    tx: mpsc::Sender<communication::Message>,
+    sender: channel::Sender<communication::Message>,
 }
 
 impl Notifier {
-    pub(super) fn new(id: usize, tx: mpsc::Sender<communication::Message>) -> Self {
-        Self { id, tx }
+    pub(super) fn new(id: usize, sender: channel::Sender<communication::Message>) -> Self {
+        Self { id, sender }
     }
 }
 
@@ -21,7 +20,7 @@ impl thread::Runnable for Notifier {
         let command = process::Command::new("stdbuf", &["-oL", "alsactl", "monitor"]);
 
         command.listen_stdout(
-            || communication::send_message(FEATURE_NAME, self.id, &self.tx),
+            || communication::send_message(self.id, &self.sender),
             thread::sleep_prevent_spam,
         )?;
 

@@ -1,5 +1,5 @@
 use error::*;
-use std::sync::mpsc;
+use wrapper::channel;
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) enum Message {
@@ -8,8 +8,8 @@ pub(crate) enum Message {
     UpdateAll,
 }
 
-pub(crate) fn send_message(feature: &str, id: usize, tx: &mpsc::Sender<Message>) -> Result<()> {
+pub(crate) fn send_message(id: usize, sender: &channel::Sender<Message>) -> Result<()> {
     let message = Message::FeatureUpdate(id);
 
-    tx.send(message).wrap_error(feature, "notify thread killed")
+    sender.send(message)
 }

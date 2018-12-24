@@ -2,7 +2,7 @@ use super::FEATURE_NAME;
 use communication;
 use error::*;
 use std::collections::HashSet;
-use std::sync::mpsc;
+use wrapper::channel;
 use wrapper::dbus;
 use wrapper::thread;
 
@@ -15,24 +15,30 @@ const PATH_BATTERY_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices/batte
 const PATH_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices";
 const PATH_UPOWER: &str = "/org/freedesktop/UPower";
 
+#[derive(Clone, Debug)]
 pub(super) enum DeviceMessage {
     Added(String),
     Removed(String),
 }
 
+#[derive(Debug)]
 pub(super) struct DbusWatcher {
     id: usize,
-    tx: mpsc::Sender<communication::Message>,
-    tx_devices: mpsc::Sender<DeviceMessage>,
+    sender: channel::Sender<communication::Message>,
+    sender_devices: channel::Sender<DeviceMessage>,
 }
 
 impl DbusWatcher {
     pub(super) fn new(
         id: usize,
-        tx: mpsc::Sender<communication::Message>,
-        tx_devices: mpsc::Sender<DeviceMessage>,
+        sender: channel::Sender<communication::Message>,
+        sender_devices: channel::Sender<DeviceMessage>,
     ) -> Self {
-        Self { id, tx, tx_devices }
+        Self {
+            id,
+            sender,
+            sender_devices,
+        }
     }
 
     fn add_device<'a>(
@@ -54,9 +60,8 @@ impl DbusWatcher {
             path,
         ))?;
 
-        self.tx_devices
-            .send(DeviceMessage::Added(String::from(name)))
-            .wrap_error(FEATURE_NAME, "failed to send device added message")?;
+        self.sender_devices
+            .send(DeviceMessage::Added(String::from(name)))?;
 
         devices.insert(path.clone());
 
@@ -103,9 +108,8 @@ impl DbusWatcher {
             path,
         ))?;
 
-        self.tx_devices
-            .send(DeviceMessage::Removed(String::from(name)))
-            .wrap_error(FEATURE_NAME, "failed to send device removed message")?;
+        self.sender_devices
+            .send(DeviceMessage::Removed(String::from(name)))?;
 
         devices.remove(path);
 
@@ -129,7 +133,7 @@ impl thread::Runnable for DbusWatcher {
         // dbus method call with a 2 seconds timeout. While waiting it's possible that
         // the initial `update` has already been triggered, so the status bar would show
         // the "no battery" information.
-        communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
+        communication::send_message(self.id, &self.sender)?;
 
         connection.listen_for_signals(|signal| {
             if signal.is_interface(INTERFACE_UPOWER)? {
@@ -141,12 +145,12 @@ impl thread::Runnable for DbusWatcher {
                     self.remove_device(&connection, &mut devices, &path)?;
                 }
 
-                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
+                communication::send_message(self.id, &self.sender)?;
             } else if signal.is_member(MEMBER_PROPERTIES_CHANGED)? {
                 // wait for /sys/class/power_supply files updates
                 thread::sleep_secs(2);
 
-                communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
+                communication::send_message(self.id, &self.sender)?;
             }
 
             Ok(())

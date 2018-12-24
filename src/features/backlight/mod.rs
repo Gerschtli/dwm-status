@@ -7,7 +7,7 @@ mod updater;
 use communication;
 use error::*;
 use feature;
-use std::sync::mpsc;
+use wrapper::channel;
 
 pub(crate) use self::config::ConfigEntry;
 pub(self) use self::config::RenderConfig;
@@ -20,7 +20,7 @@ pub(super) const FEATURE_NAME: &str = "backlight";
 
 pub(super) fn create(
     id: usize,
-    tx: &mpsc::Sender<communication::Message>,
+    sender: &channel::Sender<communication::Message>,
     settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
     let data = Data::new(settings.render.clone());
@@ -28,7 +28,7 @@ pub(super) fn create(
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
-        Notifier::new(id, tx.clone(), device.brightness_file()),
+        Notifier::new(id, sender.clone(), device.brightness_file()),
         Updater::new(data, device),
     )))
 }

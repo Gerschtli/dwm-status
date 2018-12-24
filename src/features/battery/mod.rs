@@ -11,7 +11,7 @@ mod util;
 use communication;
 use error::*;
 use feature;
-use std::sync::mpsc;
+use wrapper::channel;
 
 pub(self) use self::ac_adapter::AcAdapter;
 pub(crate) use self::config::ConfigEntry;
@@ -35,18 +35,18 @@ pub(self) const POWER_SUPPLY_PATH: &str = "/sys/class/power_supply";
 
 pub(super) fn create(
     id: usize,
-    tx: &mpsc::Sender<communication::Message>,
+    sender: &channel::Sender<communication::Message>,
     settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
-    let (tx_devices, rx_devices) = mpsc::channel();
+    let (sender_devices, receiver_devices) = channel::create();
 
     let data = Data::new(settings.render.clone());
-    let manager = BatteryManager::init(rx_devices)?;
+    let manager = BatteryManager::init(receiver_devices)?;
     let notifier = BatteryNotifier::init(settings.notifier.clone())?;
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
-        DbusWatcher::new(id, tx.clone(), tx_devices),
+        DbusWatcher::new(id, sender.clone(), sender_devices),
         Updater::new(data, manager, notifier),
     )))
 }

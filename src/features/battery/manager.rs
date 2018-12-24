@@ -4,21 +4,20 @@ use super::BatteryDevice;
 use super::DeviceMessage;
 use error::*;
 use std::collections::HashMap;
-use std::sync::mpsc;
+use wrapper::channel;
 
-#[derive(Debug)]
 pub(super) struct BatteryManager {
     ac_name: &'static str,
     devices: HashMap<String, BatteryDevice>,
-    rx_devices: mpsc::Receiver<DeviceMessage>,
+    receiver_devices: channel::Receiver<DeviceMessage>,
 }
 
 impl BatteryManager {
-    pub(super) fn init(rx_devices: mpsc::Receiver<DeviceMessage>) -> Result<Self> {
+    pub(super) fn init(receiver_devices: channel::Receiver<DeviceMessage>) -> Result<Self> {
         Ok(Self {
             ac_name: AcAdapter::get_current()?,
             devices: HashMap::new(),
-            rx_devices,
+            receiver_devices,
         })
     }
 
@@ -31,7 +30,7 @@ impl BatteryManager {
     }
 
     pub(super) fn update_devices_list(&mut self) -> Result<()> {
-        while let Ok(message) = self.rx_devices.try_recv() {
+        while let Ok(message) = self.receiver_devices.read() {
             match message {
                 DeviceMessage::Added(name) => {
                     info!("Detected connected battery: adding {}", &name);

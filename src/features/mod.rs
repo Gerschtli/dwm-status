@@ -8,13 +8,13 @@ use communication;
 use error::*;
 use feature;
 use settings;
-use std::sync::mpsc;
+use wrapper::channel;
 
 macro_rules! features {
-    ( $id:expr, $name:expr, $tx:expr, $settings:expr; $( $mod:ident, )* ) => {
+    ( $id:expr, $name:expr, $sender:expr, $settings:expr; $( $mod:ident, )* ) => {
         match &$name.to_lowercase()[..] {
             $(
-                $mod::FEATURE_NAME => $mod::create($id, $tx, &$settings.$mod),
+                $mod::FEATURE_NAME => $mod::create($id, $sender, &$settings.$mod),
             )*
             _ => Err(Error::new_custom(
                 "create feature",
@@ -27,10 +27,10 @@ macro_rules! features {
 pub(super) fn create_feature(
     id: usize,
     name: &str,
-    tx: &mpsc::Sender<communication::Message>,
+    sender: &channel::Sender<communication::Message>,
     settings: &settings::Settings,
 ) -> Result<Box<dyn feature::Feature>> {
-    features!(id, name, tx, settings;
+    features!(id, name, sender, settings;
         audio,
         backlight,
         battery,

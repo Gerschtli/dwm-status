@@ -60,7 +60,7 @@ use status_bar::StatusBar;
 use std::collections::HashSet;
 use std::env;
 use std::iter::FromIterator;
-use std::sync::mpsc;
+use wrapper::channel;
 
 fn get_settings() -> Result<settings::Settings> {
     let mut args = env::args();
@@ -93,23 +93,22 @@ pub fn run() -> Result<()> {
     let settings = get_settings()?;
     validate_settings(&settings)?;
 
-    let (tx, rx) = mpsc::channel();
+    let (sender, receiver) = channel::create();
     let mut features = Vec::new();
 
     for (index, feature_name) in settings.general.order.iter().enumerate() {
-        let mut feature = features::create_feature(index, feature_name, &tx, &settings)?;
+        let mut feature = features::create_feature(index, feature_name, &sender, &settings)?;
         feature.init_notifier()?;
         features.push(feature);
     }
 
-    resume::init_resume_notifier(&tx)?;
+    resume::init_resume_notifier(&sender)?;
 
-    tx.send(communication::Message::UpdateAll)
-        .wrap_error("init", "initial update message failed")?;
+    sender.send(communication::Message::UpdateAll)?;
 
     ctrlc::set_handler(move || {
-        tx.send(communication::Message::Kill)
-            .wrap_error("termination", "notify thread killed")
+        sender
+            .send(communication::Message::Kill)
             .show_error()
             .unwrap();
     })
@@ -117,7 +116,7 @@ pub fn run() -> Result<()> {
 
     let mut status_bar = StatusBar::init(features)?;
 
-    for message in rx {
+    while let Ok(message) = receiver.read_blocking() {
         match message {
             communication::Message::Kill => break,
             _ => status_bar.update(&message, &settings.general)?,

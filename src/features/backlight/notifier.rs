@@ -1,25 +1,24 @@
-use super::FEATURE_NAME;
 use communication;
 use error::*;
-use std::sync::mpsc;
+use wrapper::channel;
 use wrapper::inotify;
 use wrapper::thread;
 
 pub(super) struct Notifier {
     id: usize,
-    tx: mpsc::Sender<communication::Message>,
+    sender: channel::Sender<communication::Message>,
     brightness_file: String,
 }
 
 impl Notifier {
     pub(super) fn new(
         id: usize,
-        tx: mpsc::Sender<communication::Message>,
+        sender: channel::Sender<communication::Message>,
         brightness_file: String,
     ) -> Self {
         Self {
             id,
-            tx,
+            sender,
             brightness_file,
         }
     }
@@ -32,7 +31,7 @@ impl thread::Runnable for Notifier {
         inotify.add_watch(&self.brightness_file, inotify::WatchMask::MODIFY)?;
 
         inotify.listen_for_any_events(|| {
-            communication::send_message(FEATURE_NAME, self.id, &self.tx)?;
+            communication::send_message(self.id, &self.sender)?;
 
             thread::sleep_prevent_spam();
 

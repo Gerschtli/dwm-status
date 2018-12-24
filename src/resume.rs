@@ -1,6 +1,6 @@
 use communication;
 use error::*;
-use std::sync::mpsc;
+use wrapper::channel;
 use wrapper::dbus;
 use wrapper::thread;
 
@@ -9,14 +9,16 @@ const INTERFACE_LOGIN1: &str = "org.freedesktop.login1.Manager";
 const MEMBER_PREPARE_FOR_SLEEP: &str = "PrepareForSleep";
 const PATH_LOGIN1: &str = "/org/freedesktop/login1";
 
-pub(super) fn init_resume_notifier(tx: &mpsc::Sender<communication::Message>) -> Result<()> {
-    let notifier = Notifier { tx: tx.clone() };
+pub(super) fn init_resume_notifier(sender: &channel::Sender<communication::Message>) -> Result<()> {
+    let notifier = Notifier {
+        sender: sender.clone(),
+    };
 
     thread::Thread::new(ERROR_NAME, notifier).run()
 }
 
 struct Notifier {
-    tx: mpsc::Sender<communication::Message>,
+    sender: channel::Sender<communication::Message>,
 }
 
 impl thread::Runnable for Notifier {
@@ -32,9 +34,7 @@ impl thread::Runnable for Notifier {
         connection.listen_for_signals(|signal| {
             // return value is true if going to sleep, false if waking up
             if signal.is_interface(INTERFACE_LOGIN1)? && !signal.return_value::<bool>()? {
-                self.tx
-                    .send(communication::Message::UpdateAll)
-                    .wrap_error(ERROR_NAME, "send update failed")?
+                self.sender.send(communication::Message::UpdateAll)?
             }
 
             Ok(())
