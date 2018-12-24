@@ -1,3 +1,4 @@
+pub(crate) mod channel;
 pub(crate) mod dbus;
 pub(crate) mod file;
 pub(crate) mod inotify;
