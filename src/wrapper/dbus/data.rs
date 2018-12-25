@@ -36,7 +36,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_match() {
+    fn match_build() {
         assert_eq!(
             Match {
                 interface: "org.freedesktop.DBus.Properties",
@@ -50,7 +50,7 @@ mod tests {
     }
 
     #[test]
-    fn test_match_without_member() {
+    fn match_build_without_member() {
         assert_eq!(
             Match {
                 interface: "org.freedesktop.UPower",
