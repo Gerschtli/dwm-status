@@ -1,5 +1,6 @@
 pub(crate) mod channel;
 pub(crate) mod config;
+pub(crate) mod date_time;
 pub(crate) mod dbus;
 pub(crate) mod file;
 pub(crate) mod inotify;
