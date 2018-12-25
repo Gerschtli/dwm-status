@@ -1,8 +1,8 @@
 use super::FEATURE_NAME;
-use config::Config;
-use config::ConfigError;
-use config::Value;
+use error::*;
 use settings::ConfigType;
+use wrapper::config;
+use wrapper::config::Value;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(super) struct RenderConfig {
@@ -19,7 +19,7 @@ pub(crate) struct ConfigEntry {
 }
 
 impl ConfigType for ConfigEntry {
-    fn set_default(config: &mut Config) -> Result<(), ConfigError> {
+    fn set_default(config: &mut config::Config) -> Result<()> {
         config.set_default(
             FEATURE_NAME,
             map!(
@@ -28,8 +28,6 @@ impl ConfigType for ConfigEntry {
                 "mute"     => "MUTE",
                 "template" => "S {VOL}%",
             ),
-        )?;
-
-        Ok(())
+        )
     }
 }

@@ -49,6 +49,7 @@ extern crate libnotify;
 extern crate log;
 #[cfg(all(test, feature = "mocking"))]
 extern crate mocktopus;
+extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate x11;
