@@ -1,16 +1,15 @@
-use config::Config;
-use config::ConfigError;
-use config::File;
+use error::*;
 use features::audio;
 use features::backlight;
 use features::battery;
 use features::cpu_load;
 use features::time;
+use wrapper::config;
 
 pub(crate) trait ConfigType {
-    fn set_default(_: &mut Config) -> Result<(), ConfigError>;
+    fn set_default(_: &mut config::Config) -> Result<()>;
 
-    fn set_values(_: &mut Config) -> Result<(), ConfigError> {
+    fn set_values(_: &mut config::Config) -> Result<()> {
         Ok(())
     }
 }
@@ -23,17 +22,16 @@ pub(crate) struct General {
 }
 
 impl ConfigType for General {
-    fn set_default(config: &mut Config) -> Result<(), ConfigError> {
-        config
-            .set_default("debug", None::<bool>)?
-            .set_default("order", Vec::<String>::new())?
-            .set_default("separator", " / ")?;
+    fn set_default(config: &mut config::Config) -> Result<()> {
+        config.set_default("debug", None::<bool>)?;
+        config.set_default("order", Vec::<String>::new())?;
+        config.set_default("separator", " / ")?;
 
         Ok(())
     }
 
-    fn set_values(config: &mut Config) -> Result<(), ConfigError> {
-        let debug: Option<bool> = config.get("debug")?;
+    fn set_values(config: &mut config::Config) -> Result<()> {
+        let debug: Option<bool> = config.get_option("debug")?;
 
         if debug.is_some() {
             warn!(
@@ -58,15 +56,15 @@ macro_rules! settings {
         }
 
         impl Settings {
-            pub(crate) fn new(config_path: &str) -> Result<Self, ConfigError> {
-                let mut config = Config::new();
+            pub(crate) fn new(config_path: &str) -> Result<Self> {
+                let mut config = config::Config::new();
 
                 General::set_default(&mut config)?;
                 $(
                     $mod::ConfigEntry::set_default(&mut config)?;
                 )*
 
-                config.merge(File::with_name(config_path))?;
+                config.set_path(config_path)?;
 
                 General::set_values(&mut config)?;
                 $(
