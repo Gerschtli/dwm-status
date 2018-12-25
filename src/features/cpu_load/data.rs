@@ -1,4 +1,4 @@
-use feature;
+use feature::Renderable;
 
 #[derive(Debug)]
 pub(super) struct Data {
@@ -23,8 +23,39 @@ impl Data {
     }
 }
 
-impl feature::Renderable for Data {
+impl Renderable for Data {
     fn render(&self) -> &str {
         &self.cache
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use hamcrest2::prelude::*;
+
+    #[test]
+    fn render_with_default() {
+        let object = Data::new(String::from("{CL1} {CL5} {CL15}"));
+
+        assert_that!(object.render(), is(equal_to("")));
+    }
+
+    #[test]
+    fn render_with_update() {
+        let mut object = Data::new(String::from("{CL1} {CL5} {CL15}"));
+
+        object.update(20.1234, 0.005, 5.3);
+
+        assert_that!(object.render(), is(equal_to("20.12 0.00 5.30")));
+    }
+
+    #[test]
+    fn render_with_update_and_missing_placeholder() {
+        let mut object = Data::new(String::from("{CL1} - {CL15}"));
+
+        object.update(20.1234, 0.005, 5.3);
+
+        assert_that!(object.render(), is(equal_to("20.12 - 5.30")));
     }
 }
