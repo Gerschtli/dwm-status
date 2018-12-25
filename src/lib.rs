@@ -39,6 +39,7 @@ extern crate inotify;
 extern crate libnotify;
 #[macro_use]
 extern crate log;
+extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate x11;
