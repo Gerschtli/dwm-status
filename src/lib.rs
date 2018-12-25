@@ -90,8 +90,7 @@ fn validate_settings(settings: &settings::Settings) -> Result<()> {
 }
 
 pub fn run(config_path: &str) -> Result<()> {
-    let settings = settings::Settings::new(config_path)
-        .wrap_error("settings", "creation of settings object failed")?;
+    let settings = settings::Settings::init(config_path)?;
 
     validate_settings(&settings)?;
 

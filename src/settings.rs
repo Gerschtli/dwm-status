@@ -56,7 +56,7 @@ macro_rules! settings {
         }
 
         impl Settings {
-            pub(crate) fn new(config_path: &str) -> Result<Self> {
+            pub(crate) fn init(config_path: &str) -> Result<Self> {
                 let mut config = config::Config::new();
 
                 General::set_default(&mut config)?;
