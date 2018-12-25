@@ -15,5 +15,5 @@ stdenv.mkDerivation {
     xorg.libX11
   ];
 
-  RUST_BACKTRACE = 1;
+  # RUST_BACKTRACE = 1;
 }
