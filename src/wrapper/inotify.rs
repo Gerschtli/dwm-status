@@ -38,28 +38,3 @@ impl Inotify {
         }
     }
 }
-
-// {
-//     let mut notify =
-//         inotify::Inotify::init().wrap_error(ERROR_NAME, "failed to start inotify")?;
-//     notify
-//         .add_watch(&self.brightness_file, inotify::WatchMask::MODIFY)
-//         .wrap_error(ERROR_NAME, "failed to watch brightness file")?;
-//
-//     let mut buffer = [0; 1024];
-//     loop {
-//         let events = notify
-//             .read_events_blocking(&mut buffer)
-//             .wrap_error(ERROR_NAME, "error while reading inotify events")?;
-//
-//         for event in events {
-//             println!("{:?}", event);
-//         }
-//
-//         if events.any(|event| event.mask.contains(inotify::EventMask::MODIFY)) {
-//             communication::send_message(ERROR_NAME, self.id, &self.tx)?;
-//         }
-//
-//         thread::sleep_prevent_spam();
-//     }
-// }
