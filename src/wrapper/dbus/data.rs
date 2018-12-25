@@ -38,11 +38,11 @@ mod tests {
     #[test]
     fn match_build() {
         assert_eq!(
-            Match {
-                interface: "org.freedesktop.DBus.Properties",
-                member: Some("DeviceAdded"),
-                path: "/org/freedesktop/UPower",
-            }
+            Match::new(
+                "org.freedesktop.DBus.Properties",
+                "DeviceAdded",
+                "/org/freedesktop/UPower",
+            )
             .build(),
             "type='signal',path='/org/freedesktop/UPower',interface='org.freedesktop.DBus.\
              Properties',member='DeviceAdded'"
@@ -52,11 +52,11 @@ mod tests {
     #[test]
     fn match_build_without_member() {
         assert_eq!(
-            Match {
-                interface: "org.freedesktop.UPower",
-                member: None,
-                path: "/org/freedesktop/UPower/devices/battery_BAT0",
-            }
+            Match::new(
+                "org.freedesktop.UPower",
+                None,
+                "/org/freedesktop/UPower/devices/battery_BAT0",
+            )
             .build(),
             "type='signal',path='/org/freedesktop/UPower/devices/battery_BAT0',interface='org.\
              freedesktop.UPower'"
