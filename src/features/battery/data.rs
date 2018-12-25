@@ -1,7 +1,7 @@
 use super::fmt_capacity;
 use super::fmt_time;
 use super::RenderConfig;
-use feature;
+use feature::Renderable;
 use std::collections::HashMap;
 use std::time;
 use utils::icon_by_percentage;
@@ -70,8 +70,124 @@ impl Data {
     }
 }
 
-impl feature::Renderable for Data {
+impl Renderable for Data {
     fn render(&self) -> &str {
         &self.cache
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use hamcrest2::prelude::*;
+    #[cfg(feature = "mocking")]
+    use mocktopus::mocking::*;
+
+    #[test]
+    fn render_with_default() {
+        let object = build_object();
+
+        assert_that!(object.render(), is(equal_to("")));
+    }
+
+    #[test]
+    fn render_when_no_battery() {
+        let mut object = build_object();
+
+        object.update(true, &HashMap::new());
+
+        assert_that!(object.render(), is(equal_to("no_battery")));
+    }
+
+    #[cfg(feature = "mocking")]
+    #[test]
+    fn render_with_one_battery_and_charging() {
+        let mut counter = 0;
+        icon_by_percentage.mock_safe(move |icons, value| {
+            counter += 1;
+            assert_that!(icons, contains(vec![String::from("icons")]).exactly());
+
+            match counter {
+                1 => {
+                    assert_that!(value, is(equal_to(40)));
+                    MockResult::Return(None)
+                },
+                _ => panic!("icon_by_percentage called to often: {}", value),
+            }
+        });
+
+        let mut batteries = HashMap::new();
+        batteries.insert(
+            String::from("BAT0"),
+            BatteryInfo {
+                capacity: 40,
+                estimation: None,
+            },
+        );
+
+        let mut object = build_object();
+
+        object.update(true, &batteries);
+
+        assert_that!(object.render(), is(equal_to("charging 40%")));
+    }
+
+    #[cfg(feature = "mocking")]
+    #[test]
+    fn render_with_multiple_batteries_and_discharging() {
+        let mut counter = 0;
+        icon_by_percentage.mock_safe(move |icons, value| {
+            counter += 1;
+            assert_that!(icons, contains(vec![String::from("icons")]).exactly());
+
+            match counter {
+                1 => {
+                    assert_that!(value, is(equal_to(40)));
+                    MockResult::Return(Some("ico40"))
+                },
+                2 => {
+                    assert_that!(value, is(equal_to(70)));
+                    MockResult::Return(Some("ico70"))
+                },
+                _ => panic!("icon_by_percentage called to often: {}", value),
+            }
+        });
+
+        let mut batteries = HashMap::new();
+        batteries.insert(
+            String::from("BAT1"),
+            BatteryInfo {
+                capacity: 70,
+                estimation: Some(time::Duration::from_secs((2 * 60 + 7) * 60)),
+            },
+        );
+        batteries.insert(
+            String::from("BAT0"),
+            BatteryInfo {
+                capacity: 40,
+                estimation: Some(time::Duration::from_secs(30 * 60)),
+            },
+        );
+
+        let mut object = build_object();
+
+        object.update(false, &batteries);
+
+        assert_that!(
+            object.render(),
+            is(equal_to(
+                "discharging ico40 40% (00:30) # ico70 70% (02:07)"
+            ))
+        );
+    }
+
+    fn build_object() -> Data {
+        Data::new(RenderConfig {
+            charging: String::from("charging"),
+            discharging: String::from("discharging"),
+            icons: vec![String::from("icons")],
+            no_battery: String::from("no_battery"),
+            separator: String::from(" # "),
+        })
     }
 }
