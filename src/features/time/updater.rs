@@ -1,7 +1,7 @@
 use super::Data;
-use chrono;
 use error::*;
 use feature;
+use wrapper::date_time;
 
 pub(super) struct Updater {
     data: Data,
@@ -19,7 +19,7 @@ impl feature::Updatable for Updater {
     }
 
     fn update(&mut self) -> Result<()> {
-        self.data.update(chrono::Local::now());
+        self.data.update(date_time::DateTime::now());
 
         Ok(())
     }

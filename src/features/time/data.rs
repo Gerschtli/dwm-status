@@ -1,5 +1,5 @@
-use chrono;
 use feature;
+use wrapper::date_time;
 
 #[derive(Debug)]
 pub(super) struct Data {
@@ -15,8 +15,8 @@ impl Data {
         }
     }
 
-    pub(super) fn update(&mut self, datetime: chrono::DateTime<chrono::Local>) {
-        self.cache = format!("{}", datetime.format(&self.format));
+    pub(super) fn update(&mut self, date_time: date_time::DateTime) {
+        self.cache = date_time.format(&self.format);
     }
 }
 
