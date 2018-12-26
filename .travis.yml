@@ -14,7 +14,7 @@ matrix:
       before_cache:
         - RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --force
       after_success:
-        - cargo tarpaulin --out Xml
+        - RUST_BACKTRACE=full cargo tarpaulin --out Xml
         - bash <(curl -s https://codecov.io/bash)
     - rust: beta
       env: FEATURES=rust-1-31
