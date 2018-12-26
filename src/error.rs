@@ -1,9 +1,9 @@
 use std::fmt;
-use std::result::Result as StdResult;
 
+pub(crate) use std::result::Result as StdResult;
 pub(crate) type Result<T> = StdResult<T, Error>;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Error {
     name: String,
     description: String,
@@ -22,6 +22,16 @@ impl Error {
             description: description.into(),
             cause: Some(format!("{:?}", cause)),
         }
+    }
+
+    #[cfg(test)]
+    pub(crate) fn new_test<N, D, E>(name: N, description: D, cause: E) -> Self
+    where
+        N: Into<String>,
+        D: Into<String>,
+        E: fmt::Debug,
+    {
+        Self::new(name, description, cause)
     }
 
     pub(crate) fn new_custom<N, D>(name: N, description: D) -> Self
