@@ -12,7 +12,7 @@ matrix:
         - rustup component add clippy-preview || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
         - rustup component add rustfmt-preview || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt-nightly
       before_cache:
-        - RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+        - RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --force
       after_success:
         - cargo tarpaulin --out Xml
         - bash <(curl -s https://codecov.io/bash)
