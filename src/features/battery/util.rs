@@ -40,7 +40,6 @@ mod tests {
     use hamcrest2::prelude::*;
     #[cfg(feature = "mocking")]
     use mocktopus::mocking::*;
-    #[cfg(feature = "mocking")]
     use std::io;
 
     #[test]
