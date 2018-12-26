@@ -112,7 +112,7 @@ mod tests {
                     assert_that!(value, is(equal_to(40)));
                     MockResult::Return(None)
                 },
-                _ => panic!("icon_by_percentage called to often: {}", value),
+                _ => panic!("icon_by_percentage called to often: {} times", counter),
             }
         });
 
@@ -149,7 +149,7 @@ mod tests {
                     assert_that!(value, is(equal_to(70)));
                     MockResult::Return(Some("ico70"))
                 },
-                _ => panic!("icon_by_percentage called to often: {}", value),
+                _ => panic!("icon_by_percentage called to often: {} times", counter),
             }
         });
 
