@@ -99,3 +99,147 @@ impl<T> ResultExt<T> for Result<T> {
         self.map_err(|error| error.show_error())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use hamcrest2::prelude::*;
+    use wrapper::log::Level;
+    use wrapper::log::LoggerContext;
+
+    #[derive(Debug)]
+    struct ExampleError;
+
+    mod error {
+        use super::*;
+
+        #[test]
+        fn new() {
+            let logger_context = LoggerContext::new();
+
+            let error = Error::new("name", "description", ExampleError);
+
+            error.show_error();
+
+            logger_context.assert_entry(Level::Error, "Error in name: description (ExampleError)");
+        }
+
+        #[test]
+        fn new_test() {
+            let logger_context = LoggerContext::new();
+
+            let error = Error::new_test("name", "description", ExampleError);
+
+            error.show_error();
+
+            logger_context.assert_entry(Level::Error, "Error in name: description (ExampleError)");
+        }
+
+        #[test]
+        fn new_custom() {
+            let logger_context = LoggerContext::new();
+
+            let error = Error::new_custom("name", "description");
+
+            error.show_error();
+
+            logger_context.assert_entry(Level::Error, "Error in name: description");
+        }
+    }
+
+    mod wrap_error_ext {
+        use super::*;
+
+        mod result {
+            use super::*;
+
+            #[test]
+            fn when_ok() {
+                let result: StdResult<u32, ExampleError> = Ok(42);
+
+                assert_that!(
+                    result.wrap_error("name", "description"),
+                    is(equal_to(Ok(42)))
+                );
+            }
+
+            #[test]
+            fn when_err() {
+                let result: StdResult<u32, ExampleError> = Err(ExampleError);
+
+                assert_that!(
+                    result.wrap_error("name", "description"),
+                    is(equal_to(Err(Error::new(
+                        "name",
+                        "description",
+                        ExampleError
+                    ))))
+                );
+            }
+
+            #[test]
+            fn when_custom_error() {
+                let result: StdResult<u32, Error> = Err(Error::new_custom("inner", "inner desc"));
+
+                assert_that!(
+                    result.wrap_error("name", "description"),
+                    is(equal_to(Err(Error::new(
+                        "name",
+                        "description",
+                        Error::new_custom("inner", "inner desc")
+                    ))))
+                );
+            }
+        }
+
+        mod option {
+            use super::*;
+
+            #[test]
+            fn when_some() {
+                let option = Some(42);
+
+                assert_that!(
+                    option.wrap_error("name", "description"),
+                    is(equal_to(Ok(42)))
+                );
+            }
+
+            #[test]
+            fn when_err() {
+                let option: Option<u32> = None;
+
+                assert_that!(
+                    option.wrap_error("name", "description"),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+            }
+        }
+    }
+
+    mod result_ext {
+        use super::*;
+
+        #[test]
+        fn show_error_when_ok() {
+            let logger_context = LoggerContext::new();
+
+            let result: Result<u32> = Ok(42);
+
+            assert_that!(result.show_error(), is(equal_to(Ok(42))));
+
+            logger_context.assert_no_entries();
+        }
+
+        #[test]
+        fn show_error_when_err() {
+            let logger_context = LoggerContext::new();
+
+            let result: Result<u32> = Err(Error::new_custom("name", "description"));
+
+            assert_that!(result.show_error(), is(equal_to(Err(()))));
+
+            logger_context.assert_entry(Level::Error, "Error in name: description");
+        }
+    }
+}
