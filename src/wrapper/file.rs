@@ -18,6 +18,7 @@ where
     Ok(s)
 }
 
+#[cfg_attr(all(test, feature = "mocking"), ::mocktopus::macros::mockable)]
 pub(crate) fn parse_file_content<P, T>(path: P) -> io::Result<T>
 where
     P: AsRef<path::Path>,
