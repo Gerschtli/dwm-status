@@ -45,3 +45,39 @@ impl ConfigType for ConfigEntry {
         )
     }
 }
+
+#[cfg(test)]
+#[cfg(feature = "mocking")]
+mod tests {
+    use super::*;
+    use std::collections::HashMap;
+    use test_utils::config::test_set_default_err;
+    use test_utils::config::test_set_default_ok;
+
+    #[test]
+    fn config_type_set_default_when_ok() {
+        test_set_default_ok::<ConfigEntry>("battery", default_map);
+    }
+
+    #[test]
+    fn config_type_set_default_when_err() {
+        test_set_default_err::<ConfigEntry>("battery", default_map);
+    }
+
+    fn default_map() -> HashMap<String, Value> {
+        let mut map = HashMap::new();
+        map.insert(String::from("charging"), "▲".into());
+        map.insert(String::from("discharging"), "▼".into());
+        map.insert(String::from("enable_notifier"), true.into());
+        map.insert(String::from("icons"), Vec::<String>::new().into());
+        map.insert(String::from("no_battery"), "NO BATT".into());
+        map.insert(String::from("notifier_critical"), 10.into());
+        map.insert(
+            String::from("notifier_levels"),
+            vec![2, 5, 10, 15, 20].into(),
+        );
+        map.insert(String::from("separator"), " · ".into());
+
+        map
+    }
+}
