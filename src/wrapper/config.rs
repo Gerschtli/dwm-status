@@ -18,6 +18,17 @@ impl Config {
         }
     }
 
+    pub(crate) fn set<T>(&mut self, key: &str, value: T) -> Result<()>
+    where
+        T: Into<Value>,
+    {
+        self.config
+            .set(key, value)
+            .wrap_error(ERROR_NAME, "set value failed")?;
+
+        Ok(())
+    }
+
     pub(crate) fn set_default<T>(&mut self, key: &str, value: T) -> Result<()>
     where
         T: Into<Value>,
