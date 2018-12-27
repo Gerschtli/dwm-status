@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Completely new network feature
+- Added a bunch of unit tests to ensure code quality, it's the first step but a long way to go for a reasonable code
+  coverage..
 
 ### Changed
 - Improved command line interface, providing `--help` and `--version` options through `clap` crate
