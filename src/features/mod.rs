@@ -2,6 +2,7 @@ pub(super) mod audio;
 pub(super) mod backlight;
 pub(super) mod battery;
 pub(super) mod cpu_load;
+pub(super) mod network;
 pub(super) mod time;
 
 use communication;
