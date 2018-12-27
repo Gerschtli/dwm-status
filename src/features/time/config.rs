@@ -37,3 +37,141 @@ impl ConfigType for ConfigEntry {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[cfg(feature = "mocking")]
+mod tests {
+    use super::*;
+    use hamcrest2::prelude::*;
+    use mocktopus::mocking::*;
+    use std::collections::HashMap;
+    use test_utils::config::test_set_default_err;
+    use test_utils::config::test_set_default_ok;
+
+    mod config_type_set_default {
+        use super::*;
+
+        #[test]
+        fn when_ok() {
+            test_set_default_ok::<ConfigEntry>("time", default_map);
+        }
+
+        #[test]
+        fn when_err() {
+            test_set_default_err::<ConfigEntry>("time", default_map);
+        }
+
+        fn default_map() -> HashMap<String, Value> {
+            let mut map = HashMap::new();
+            map.insert(String::from("format"), "%Y-%m-%d %H:%M".into());
+            map.insert(String::from("update_seconds"), false.into());
+
+            map
+        }
+    }
+
+    mod config_type_set_values {
+        use super::*;
+
+        mod when_all_ok {
+            use super::*;
+
+            #[test]
+            fn and_matching_placeholder_lower_f() {
+                test_builder("%f", true);
+            }
+
+            #[test]
+            fn and_matching_placeholder_lower_r() {
+                test_builder("%r", true);
+            }
+
+            #[test]
+            fn and_matching_placeholder_upper_s() {
+                test_builder("%S", true);
+            }
+
+            #[test]
+            fn and_matching_placeholder_lower_s() {
+                test_builder("%s", true);
+            }
+
+            #[test]
+            fn and_matching_placeholder_upper_t() {
+                test_builder("%T", true);
+            }
+
+            #[test]
+            fn and_not_matching_escaped_percent() {
+                test_builder("%%s %%f", false);
+            }
+
+            #[test]
+            fn and_not_matching_any_wrong_placeholder() {
+                test_builder("%Y-%m-%d %H:%M", false);
+            }
+
+            #[allow(unsafe_code)]
+            fn test_builder(format: &'static str, is_match: bool) {
+                config::Config::get_str.mock_safe(move |_, key| {
+                    assert_that!(key, is(equal_to("time.format")));
+                    MockResult::Return(Ok(String::from(format)))
+                });
+
+                let mut counter = 0;
+                unsafe {
+                    config::Config::set_default.mock_raw(|_, key, value: bool| {
+                        counter += 1;
+                        assert_that!(key, is(equal_to("time.update_seconds")));
+                        assert_that!(value, is(equal_to(true)));
+                        MockResult::Return(Ok(()))
+                    });
+                }
+
+                let mut config = config::Config::new();
+
+                assert_that!(ConfigEntry::set_values(&mut config), is(equal_to(Ok(()))));
+                assert_that!(counter, is(equal_to(if is_match { 1 } else { 0 })));
+            }
+        }
+
+        mod when_err {
+            use super::*;
+
+            #[test]
+            fn in_get_str() {
+                config::Config::get_str.mock_safe(|_, key| {
+                    assert_that!(key, is(equal_to("time.format")));
+                    MockResult::Return(Err(Error::new_custom("name", "description")))
+                });
+
+                let mut config = config::Config::new();
+
+                assert_that!(
+                    ConfigEntry::set_values(&mut config),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+            }
+
+            #[test]
+            fn in_set_default() {
+                config::Config::get_str.mock_safe(|_, key| {
+                    assert_that!(key, is(equal_to("time.format")));
+                    MockResult::Return(Ok(String::from("%s")))
+                });
+                config::Config::set_default.mock_safe(|_, key, value: bool| {
+                    assert_that!(key, is(equal_to("time.update_seconds")));
+                    assert_that!(value, is(equal_to(true)));
+                    MockResult::Return(Err(Error::new_custom("name", "description")))
+                });
+
+                let mut config = config::Config::new();
+
+                assert_that!(
+                    ConfigEntry::set_values(&mut config),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+            }
+        }
+    }
+}
