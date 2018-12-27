@@ -128,8 +128,21 @@ Shows CPU load taken from `/proc/loadavg` in configured format and refreshes eve
 
 | name              | default                | description                 |
 | ----------------- | ---------------------- | --------------------------- |
-| `template`        | `"{CL1} {CL5} {CL15}"` | Text representation. (`{CLx}` gets replaced with the load<br/>of last `x` minutes for `x` in `{1, 5, 15}`) |
+| `template`        | `"{CL1} {CL5} {CL15}"` | Text representation. (`{CLx}` gets replaced with the load of last `x` minutes for `x` in `{1, 5, 15}`) |
 | `update_interval` | `20`                   | Update interval in seconds. |
+
+### Feature: Network
+
+**Note:** The commands `ip`, `dig` and `iwgetid` need to be in `PATH`.
+
+Shows connected ESSID, public IPv4 and IPv6 address. Updates get triggered by listening on `ip monitor address link`.
+
+#### Configuration options
+
+| name       | default                       | description                     |
+| ---------- | ----------------------------- | ------------------------------- |
+| `no_value` | `"NA"`                        | Value for not defined elements. |
+| `template` | `"{IPv4} · {IPv6} · {ESSID}"` | Text representation. Placeholders surrounded by curly braces are `{IPv4}`, `{IPv6}` and `{ESSID}`. |
 
 ### Feature: Time
 
