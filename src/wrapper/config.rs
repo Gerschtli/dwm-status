@@ -10,6 +10,7 @@ pub(crate) struct Config {
     config: config::Config,
 }
 
+#[cfg_attr(all(test, feature = "mocking"), ::mocktopus::macros::mockable)]
 impl Config {
     pub(crate) fn new() -> Self {
         Self {
