@@ -33,6 +33,10 @@
     template: "{CL1} {CL5} {CL15}"
     update_interval: 20
   }
+  network: {
+    no_value: NA
+    template: "{IPv4} · {IPv6} · {ESSID}"
+  }
   time: {
     format: %Y-%m-%d %H:%M
     update_seconds: false
