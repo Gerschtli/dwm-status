@@ -31,7 +31,7 @@ impl ConfigType for General {
     }
 
     fn set_values(config: &mut config::Config) -> Result<()> {
-        let debug: Option<bool> = config.get_option("debug")?;
+        let debug = config.get_bool_option("debug")?;
 
         if debug.is_some() {
             warn!(

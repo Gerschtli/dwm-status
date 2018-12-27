@@ -37,10 +37,10 @@ impl Config {
         Ok(())
     }
 
-    pub(crate) fn get_option<'de, T: Deserialize<'de>>(&self, key: &'de str) -> Result<Option<T>> {
+    pub(crate) fn get_bool_option(&self, key: &str) -> Result<Option<bool>> {
         self.config
             .get(key)
-            .wrap_error(ERROR_NAME, "read optional field failed")
+            .wrap_error(ERROR_NAME, "read optional boolean field failed")
     }
 
     pub(crate) fn get_str(&self, key: &str) -> Result<String> {
