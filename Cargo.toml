@@ -19,8 +19,8 @@ dbus = "0.6.3"
 inotify = "0.6.1"
 libnotify = "1.0.3"
 log = "0.4.6"
-serde = "1.0.80"
-serde_derive = "1.0.80"
+serde = "1.0.82"
+serde_derive = "1.0.82"
 simplelog = "0.5.3"
 
 [dependencies.ctrlc]
