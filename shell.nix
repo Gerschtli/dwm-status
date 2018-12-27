@@ -7,11 +7,14 @@ stdenv.mkDerivation {
     cargo-edit
     cargo-release
     dbus
+    dnsutils
     gdk_pixbuf
+    iproute
     libnotify
     pkgconfig
     rustracer
     rustup
+    wirelesstools
     xorg.libX11
   ];
 

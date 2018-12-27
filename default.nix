@@ -2,7 +2,11 @@ with import <nixpkgs> { };
 
 let
   binPath = stdenv.lib.makeBinPath [
-    alsaUtils bash coreutils
+    alsaUtils     # audio:   alsactl, amixer
+    coreutils     # audio:   stdbuf
+    dnsutils      # network: dig
+    iproute       # network: ip
+    wirelesstools # network: iwgetid
   ];
 in
 
