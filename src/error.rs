@@ -3,7 +3,8 @@ use std::fmt;
 pub(crate) use std::result::Result as StdResult;
 pub(crate) type Result<T> = StdResult<T, Error>;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
+#[cfg_attr(test, derive(Clone, PartialEq))]
 pub struct Error {
     name: String,
     description: String,
