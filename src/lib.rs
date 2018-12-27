@@ -63,6 +63,8 @@ mod features;
 mod resume;
 mod settings;
 mod status_bar;
+#[cfg(test)]
+mod test_utils;
 mod utils;
 mod wrapper;
 

@@ -104,8 +104,8 @@ impl<T> ResultExt<T> for Result<T> {
 mod tests {
     use super::*;
     use hamcrest2::prelude::*;
-    use wrapper::log::Level;
-    use wrapper::log::LoggerContext;
+    use test_utils::log::Level;
+    use test_utils::log::LoggerContext;
 
     #[derive(Debug)]
     struct ExampleError;
