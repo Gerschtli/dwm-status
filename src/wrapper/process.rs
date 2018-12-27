@@ -1,6 +1,7 @@
 use error::*;
 use std::io::Read;
 use std::process;
+use wrapper::thread;
 
 const ERROR_NAME: &str = "process";
 
@@ -25,14 +26,9 @@ impl Command {
             .wrap_error(ERROR_NAME, "reading process output failed")
     }
 
-    pub(crate) fn listen_stdout<D, S>(
-        mut self,
-        success_handler: S,
-        default_handler: D,
-    ) -> Result<()>
+    pub(crate) fn listen_stdout<S>(mut self, success_handler: S) -> Result<()>
     where
         S: Fn() -> Result<()>,
-        D: Fn(),
     {
         let mut monitor = self
             .command
@@ -53,7 +49,7 @@ impl Command {
                 success_handler()?;
             }
 
-            default_handler();
+            thread::sleep_prevent_spam();
         }
     }
 }

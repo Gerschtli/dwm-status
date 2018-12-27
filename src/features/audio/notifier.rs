@@ -19,11 +19,6 @@ impl thread::Runnable for Notifier {
     fn run(&self) -> Result<()> {
         let command = process::Command::new("stdbuf", &["-oL", "alsactl", "monitor"]);
 
-        command.listen_stdout(
-            || communication::send_message(self.id, &self.sender),
-            thread::sleep_prevent_spam,
-        )?;
-
-        Ok(())
+        command.listen_stdout(|| communication::send_message(self.id, &self.sender))
     }
 }
