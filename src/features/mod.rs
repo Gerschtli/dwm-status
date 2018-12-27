@@ -36,6 +36,7 @@ pub(super) fn create_feature(
         backlight,
         battery,
         cpu_load,
+        network,
         time,
     )
 }
