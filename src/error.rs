@@ -223,13 +223,11 @@ mod tests {
 
         #[test]
         fn show_error_when_ok() {
-            let logger_context = LoggerContext::new();
+            let _ = LoggerContext::new();
 
             let result: Result<u32> = Ok(42);
 
             assert_that!(result.show_error(), is(equal_to(Ok(42))));
-
-            logger_context.assert_no_entries();
         }
 
         #[test]

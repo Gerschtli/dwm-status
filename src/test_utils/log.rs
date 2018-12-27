@@ -65,26 +65,16 @@ impl LoggerContext {
             assert_that!(entry, is(equal_to(expected)));
         });
     }
-
-    pub(crate) fn assert_no_entries(&self) {
-        self.assert_no_entries_clean(false);
-    }
-
-    fn assert_no_entries_clean(&self, truncate: bool) {
-        QUEUE.with(|q| {
-            let queue = &mut *q.borrow_mut();
-            let clone = queue.clone();
-            if truncate {
-                queue.truncate(0);
-            }
-
-            assert_that!(clone, is(equal_to(VecDeque::new())));
-        });
-    }
 }
 
 impl Drop for LoggerContext {
     fn drop(&mut self) {
-        self.assert_no_entries_clean(true);
+        QUEUE.with(|q| {
+            let queue = &mut *q.borrow_mut();
+            let clone = queue.clone();
+            queue.truncate(0);
+
+            assert_that!(clone, is(equal_to(VecDeque::new())));
+        });
     }
 }
