@@ -93,7 +93,6 @@ mod tests {
             use super::*;
 
             #[test]
-            #[allow(unsafe_code)]
             fn when_first_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
@@ -117,7 +116,6 @@ mod tests {
             }
 
             #[test]
-            #[allow(unsafe_code)]
             fn when_second_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
@@ -154,7 +152,6 @@ mod tests {
             }
 
             #[test]
-            #[allow(unsafe_code)]
             fn when_third_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
@@ -204,7 +201,6 @@ mod tests {
             }
 
             #[test]
-            #[allow(unsafe_code)]
             fn when_all_calls_succeed() {
                 let mut counter_first = 0;
                 unsafe {

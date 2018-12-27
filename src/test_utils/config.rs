@@ -24,7 +24,6 @@ pub(crate) fn test_set_default_err<T: settings::ConfigType>(
     );
 }
 
-#[allow(unsafe_code)]
 fn test_set_default<T: settings::ConfigType>(
     name: &'static str,
     default_map_builder: fn() -> HashMap<String, Value>,

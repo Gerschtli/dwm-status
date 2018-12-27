@@ -30,7 +30,7 @@
     feature = "rust-1-31",
     allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)
 )]
-#![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts))]
+#![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]
 #![cfg_attr(
     all(test, feature = "mocking"),
     feature(custom_attribute, proc_macro_hygiene)

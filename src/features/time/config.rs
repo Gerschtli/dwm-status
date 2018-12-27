@@ -111,7 +111,6 @@ mod tests {
                 test_builder("%Y-%m-%d %H:%M", false);
             }
 
-            #[allow(unsafe_code)]
             fn test_builder(format: &'static str, is_match: bool) {
                 config::Config::get_str.mock_safe(move |_, key| {
                     assert_that!(key, is(equal_to("time.format")));
