@@ -3,6 +3,7 @@ use features::audio;
 use features::backlight;
 use features::battery;
 use features::cpu_load;
+use features::network;
 use features::time;
 use wrapper::config;
 
@@ -77,7 +78,7 @@ macro_rules! settings {
     }
 }
 
-settings!(audio, backlight, battery, cpu_load, time);
+settings!(audio, backlight, battery, cpu_load, network, time);
 
 #[cfg(test)]
 #[cfg(feature = "mocking")]
