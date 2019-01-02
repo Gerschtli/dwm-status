@@ -15,10 +15,8 @@ pub(super) struct BatteryDevice {
 }
 
 impl BatteryDevice {
-    pub(super) fn new(name: &str) -> Self {
-        Self {
-            name: String::from(name),
-        }
+    pub(super) fn new<I: Into<String>>(name: I) -> Self {
+        Self { name: name.into() }
     }
 
     pub(super) fn capacity(&self) -> Result<u32> {

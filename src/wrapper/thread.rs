@@ -21,7 +21,7 @@ where
 
     pub(crate) fn run(self) -> Result<()> {
         thread::Builder::new()
-            .name(String::from(self.name))
+            .name(self.name.to_owned())
             .spawn(move || loop {
                 let _ = self.runnable.run().show_error();
                 sleep_secs(2);

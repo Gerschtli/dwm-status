@@ -87,11 +87,8 @@ mod tests {
 
         fn default_map() -> HashMap<String, Value> {
             let mut map = HashMap::new();
-            map.insert(String::from("no_value"), "NA".into());
-            map.insert(
-                String::from("template"),
-                "{IPv4} · {IPv6} · {ESSID}".into(),
-            );
+            map.insert("no_value".to_owned(), "NA".into());
+            map.insert("template".to_owned(), "{IPv4} · {IPv6} · {ESSID}".into());
 
             map
         }
@@ -136,7 +133,7 @@ mod tests {
             ) {
                 config::Config::get_str.mock_safe(move |_, key| {
                     assert_that!(key, is(equal_to("network.template")));
-                    MockResult::Return(Ok(String::from(template)))
+                    MockResult::Return(Ok(template.to_owned()))
                 });
 
                 let mut counter = 0;
@@ -191,7 +188,7 @@ mod tests {
             fn in_first_set() {
                 config::Config::get_str.mock_safe(|_, key| {
                     assert_that!(key, is(equal_to("network.template")));
-                    MockResult::Return(Ok(String::from("template")))
+                    MockResult::Return(Ok("template".to_owned()))
                 });
 
                 let mut counter = 0;
@@ -220,7 +217,7 @@ mod tests {
             fn in_second_set() {
                 config::Config::get_str.mock_safe(|_, key| {
                     assert_that!(key, is(equal_to("network.template")));
-                    MockResult::Return(Ok(String::from("template")))
+                    MockResult::Return(Ok("template".to_owned()))
                 });
 
                 let mut counter = 0;
@@ -254,7 +251,7 @@ mod tests {
             fn in_third_set() {
                 config::Config::get_str.mock_safe(|_, key| {
                     assert_that!(key, is(equal_to("network.template")));
-                    MockResult::Return(Ok(String::from("template")))
+                    MockResult::Return(Ok("template".to_owned()))
                 });
 
                 let mut counter = 0;

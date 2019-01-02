@@ -52,10 +52,10 @@ mod tests {
 
     fn default_map() -> HashMap<String, Value> {
         let mut map = HashMap::new();
-        map.insert(String::from("control"), "Master".into());
-        map.insert(String::from("icons"), Vec::<String>::new().into());
-        map.insert(String::from("mute"), "MUTE".into());
-        map.insert(String::from("template"), "S {VOL}%".into());
+        map.insert("control".to_owned(), "Master".into());
+        map.insert("icons".to_owned(), Vec::<String>::new().into());
+        map.insert("mute".to_owned(), "MUTE".into());
+        map.insert("template".to_owned(), "S {VOL}%".into());
 
         map
     }

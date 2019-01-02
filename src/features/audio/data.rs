@@ -50,8 +50,8 @@ mod tests {
     fn render_with_default() {
         let config = RenderConfig {
             icons: vec![],
-            mute: String::from("MUTE"),
-            template: String::from("TEMPLATE"),
+            mute: "MUTE".to_owned(),
+            template: "TEMPLATE".to_owned(),
         };
 
         let object = Data::new(config);
@@ -63,8 +63,8 @@ mod tests {
     fn render_with_mute() {
         let config = RenderConfig {
             icons: vec![],
-            mute: String::from("MUTE"),
-            template: String::from("TEMPLATE"),
+            mute: "MUTE".to_owned(),
+            template: "TEMPLATE".to_owned(),
         };
 
         let mut object = Data::new(config);
@@ -79,8 +79,8 @@ mod tests {
     fn render_with_volume() {
         let config = RenderConfig {
             icons: vec![],
-            mute: String::from("MUTE"),
-            template: String::from("TEMPLATE {VOL} {ICO}"),
+            mute: "MUTE".to_owned(),
+            template: "TEMPLATE {VOL} {ICO}".to_owned(),
         };
 
         icon_by_percentage.mock_safe(|icons, value| {
@@ -101,13 +101,13 @@ mod tests {
     #[test]
     fn render_with_volume_and_icon() {
         let config = RenderConfig {
-            icons: vec![String::from("ico1"), String::from("ico2")],
-            mute: String::from("MUTE"),
-            template: String::from("TEMPLATE {VOL} {ICO}"),
+            icons: vec!["ico1".to_owned(), "ico2".to_owned()],
+            mute: "MUTE".to_owned(),
+            template: "TEMPLATE {VOL} {ICO}".to_owned(),
         };
 
         icon_by_percentage.mock_safe(|icons, value| {
-            let expected_icons = vec![String::from("ico1"), String::from("ico2")];
+            let expected_icons = vec!["ico1".to_owned(), "ico2".to_owned()];
             assert_that!(icons, contains(expected_icons).exactly());
             assert_that!(value, is(equal_to(10)));
 

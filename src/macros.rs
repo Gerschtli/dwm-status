@@ -3,7 +3,7 @@ macro_rules! map {
         use std::collections::HashMap;
 
         let mut map: HashMap<String, Value> = HashMap::new();
-        $( map.insert(String::from($k), $v.into()); )*
+        $( map.insert($k.into(), $v.into()); )*
         map
     }}
 }

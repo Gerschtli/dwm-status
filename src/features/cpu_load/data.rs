@@ -36,14 +36,14 @@ mod tests {
 
     #[test]
     fn render_with_default() {
-        let object = Data::new(String::from("{CL1} {CL5} {CL15}"));
+        let object = Data::new("{CL1} {CL5} {CL15}".to_owned());
 
         assert_that!(object.render(), is(equal_to("")));
     }
 
     #[test]
     fn render_with_update() {
-        let mut object = Data::new(String::from("{CL1} {CL5} {CL15}"));
+        let mut object = Data::new("{CL1} {CL5} {CL15}".to_owned());
 
         object.update(20.1234, 0.005, 5.3);
 
@@ -52,7 +52,7 @@ mod tests {
 
     #[test]
     fn render_with_update_and_missing_placeholder() {
-        let mut object = Data::new(String::from("{CL1} - {CL15}"));
+        let mut object = Data::new("{CL1} - {CL15}".to_owned());
 
         object.update(20.1234, 0.005, 5.3);
 

@@ -105,7 +105,7 @@ mod tests {
         let mut counter = 0;
         icon_by_percentage.mock_safe(move |icons, value| {
             counter += 1;
-            assert_that!(icons, contains(vec![String::from("icons")]).exactly());
+            assert_that!(icons, contains(vec!["icons".to_owned()]).exactly());
 
             match counter {
                 1 => {
@@ -118,7 +118,7 @@ mod tests {
 
         let mut batteries = HashMap::new();
         batteries.insert(
-            String::from("BAT0"),
+            "BAT0".to_owned(),
             BatteryInfo {
                 capacity: 40,
                 estimation: None,
@@ -138,7 +138,7 @@ mod tests {
         let mut counter = 0;
         icon_by_percentage.mock_safe(move |icons, value| {
             counter += 1;
-            assert_that!(icons, contains(vec![String::from("icons")]).exactly());
+            assert_that!(icons, contains(vec!["icons".to_owned()]).exactly());
 
             match counter {
                 1 => {
@@ -155,14 +155,14 @@ mod tests {
 
         let mut batteries = HashMap::new();
         batteries.insert(
-            String::from("BAT1"),
+            "BAT1".to_owned(),
             BatteryInfo {
                 capacity: 70,
                 estimation: Some(time::Duration::from_secs((2 * 60 + 7) * 60)),
             },
         );
         batteries.insert(
-            String::from("BAT0"),
+            "BAT0".to_owned(),
             BatteryInfo {
                 capacity: 40,
                 estimation: Some(time::Duration::from_secs(30 * 60)),
@@ -183,11 +183,11 @@ mod tests {
 
     fn build_object() -> Data {
         Data::new(RenderConfig {
-            charging: String::from("charging"),
-            discharging: String::from("discharging"),
-            icons: vec![String::from("icons")],
-            no_battery: String::from("no_battery"),
-            separator: String::from(" # "),
+            charging: "charging".to_owned(),
+            discharging: "discharging".to_owned(),
+            icons: vec!["icons".to_owned()],
+            no_battery: "no_battery".to_owned(),
+            separator: " # ".to_owned(),
         })
     }
 }

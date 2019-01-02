@@ -35,7 +35,7 @@ mod tests {
 
     #[test]
     fn render_with_default() {
-        let object = Data::new(String::from("format"));
+        let object = Data::new("format".to_owned());
 
         assert_that!(object.render(), is(equal_to("")));
     }
@@ -43,12 +43,12 @@ mod tests {
     #[cfg(feature = "mocking")]
     #[test]
     fn render_with_update() {
-        let mut object = Data::new(String::from("format"));
+        let mut object = Data::new("format".to_owned());
 
         date_time::DateTime::format.mock_safe(|_, format| {
             assert_that!(format, is(equal_to("format")));
 
-            MockResult::Return(String::from("formatted date time"))
+            MockResult::Return("formatted date time".to_owned())
         });
 
         object.update(date_time::DateTime::now());

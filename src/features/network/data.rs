@@ -51,8 +51,8 @@ mod tests {
     #[test]
     fn render_with_default() {
         let object = Data::new(RenderConfig {
-            no_value: String::from("--"),
-            template: String::from("{IPv4} {IPv6} {ESSID}"),
+            no_value: "--".to_owned(),
+            template: "{IPv4} {IPv6} {ESSID}".to_owned(),
         });
 
         assert_that!(object.render(), is(equal_to("")));
@@ -61,14 +61,14 @@ mod tests {
     #[test]
     fn render_with_update() {
         let mut object = Data::new(RenderConfig {
-            no_value: String::from("--"),
-            template: String::from("{IPv4} {IPv6} {ESSID}"),
+            no_value: "--".to_owned(),
+            template: "{IPv4} {IPv6} {ESSID}".to_owned(),
         });
 
         object.update(
-            String::from("127.0.0.1"),
-            String::from("fe::1"),
-            String::from("WLAN"),
+            "127.0.0.1".to_owned(),
+            "fe::1".to_owned(),
+            "WLAN".to_owned(),
         );
 
         assert_that!(object.render(), is(equal_to("127.0.0.1 fe::1 WLAN")));
@@ -77,11 +77,11 @@ mod tests {
     #[test]
     fn render_with_update_and_missing_placeholder() {
         let mut object = Data::new(RenderConfig {
-            no_value: String::from("#"),
-            template: String::from("{IPv4} // {ESSID}"),
+            no_value: "#".to_owned(),
+            template: "{IPv4} // {ESSID}".to_owned(),
         });
 
-        object.update(String::from("127.0.0.1"), String::from("fe::1"), None);
+        object.update("127.0.0.1".to_owned(), "fe::1".to_owned(), None);
 
         assert_that!(object.render(), is(equal_to("127.0.0.1 // #")));
     }
@@ -89,8 +89,8 @@ mod tests {
     #[test]
     fn render_with_update_and_none_values() {
         let mut object = Data::new(RenderConfig {
-            no_value: String::from("--"),
-            template: String::from("{IPv4} {IPv6} {ESSID}"),
+            no_value: "--".to_owned(),
+            template: "{IPv4} {IPv6} {ESSID}".to_owned(),
         });
 
         object.update(None, None, None);

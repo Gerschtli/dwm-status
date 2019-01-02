@@ -63,8 +63,8 @@ mod tests {
 
         fn default_map() -> HashMap<String, Value> {
             let mut map = HashMap::new();
-            map.insert(String::from("format"), "%Y-%m-%d %H:%M".into());
-            map.insert(String::from("update_seconds"), false.into());
+            map.insert("format".to_owned(), "%Y-%m-%d %H:%M".into());
+            map.insert("update_seconds".to_owned(), false.into());
 
             map
         }
@@ -114,7 +114,7 @@ mod tests {
             fn test_builder(format: &'static str, is_match: bool) {
                 config::Config::get_str.mock_safe(move |_, key| {
                     assert_that!(key, is(equal_to("time.format")));
-                    MockResult::Return(Ok(String::from(format)))
+                    MockResult::Return(Ok(format.to_owned()))
                 });
 
                 let mut counter = 0;
@@ -156,7 +156,7 @@ mod tests {
             fn in_set_default() {
                 config::Config::get_str.mock_safe(|_, key| {
                     assert_that!(key, is(equal_to("time.format")));
-                    MockResult::Return(Ok(String::from("%s")))
+                    MockResult::Return(Ok("%s".to_owned()))
                 });
                 config::Config::set_default.mock_safe(|_, key, value: bool| {
                     assert_that!(key, is(equal_to("time.update_seconds")));

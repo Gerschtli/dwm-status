@@ -28,7 +28,7 @@ impl log::Log for TestLogger {
         QUEUE.with(|q| {
             let queue = &mut *q.borrow_mut();
             queue.push_back(LogEntry {
-                message: String::from(record.args().to_string()),
+                message: record.args().to_string(),
                 level: record.level(),
             });
         });

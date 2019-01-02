@@ -22,7 +22,7 @@ impl Command {
     pub(crate) fn output(mut self) -> Result<String> {
         self.command
             .output()
-            .map(|o| String::from(String::from_utf8_lossy(&o.stdout).trim()))
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
             .wrap_error(ERROR_NAME, "reading process output failed")
     }
 

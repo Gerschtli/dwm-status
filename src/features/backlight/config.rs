@@ -50,9 +50,9 @@ mod tests {
 
     fn default_map() -> HashMap<String, Value> {
         let mut map = HashMap::new();
-        map.insert(String::from("device"), "intel_backlight".into());
-        map.insert(String::from("icons"), Vec::<String>::new().into());
-        map.insert(String::from("template"), "L {BL}%".into());
+        map.insert("device".to_owned(), "intel_backlight".into());
+        map.insert("icons".to_owned(), Vec::<String>::new().into());
+        map.insert("template".to_owned(), "L {BL}%".into());
 
         map
     }

@@ -26,7 +26,7 @@ mod tests {
 
     #[test]
     fn icon_by_percentage_with_one_element() {
-        let icons = vec![String::from("ICON")];
+        let icons = vec!["ICON".to_owned()];
         assert_eq!(icon_by_percentage(&icons, 0), Some("ICON"));
         assert_eq!(icon_by_percentage(&icons, 50), Some("ICON"));
         assert_eq!(icon_by_percentage(&icons, 100), Some("ICON"));
@@ -35,7 +35,7 @@ mod tests {
 
     #[test]
     fn icon_by_percentage_with_two_elements() {
-        let icons = vec![String::from("LOW"), String::from("HIGH")];
+        let icons = vec!["LOW".to_owned(), "HIGH".to_owned()];
         assert_eq!(icon_by_percentage(&icons, 0), Some("LOW"));
         assert_eq!(icon_by_percentage(&icons, 49), Some("LOW"));
         assert_eq!(icon_by_percentage(&icons, 50), Some("HIGH"));
@@ -45,11 +45,7 @@ mod tests {
 
     #[test]
     fn icon_by_percentage_with_three_elements() {
-        let icons = vec![
-            String::from("LOW"),
-            String::from("MIDDLE"),
-            String::from("HIGH"),
-        ];
+        let icons = vec!["LOW".to_owned(), "MIDDLE".to_owned(), "HIGH".to_owned()];
         assert_eq!(icon_by_percentage(&icons, 0), Some("LOW"));
         assert_eq!(icon_by_percentage(&icons, 32), Some("LOW"));
         assert_eq!(icon_by_percentage(&icons, 33), Some("MIDDLE"));

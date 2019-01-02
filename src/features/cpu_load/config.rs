@@ -42,8 +42,8 @@ mod tests {
 
     fn default_map() -> HashMap<String, Value> {
         let mut map = HashMap::new();
-        map.insert(String::from("template"), "{CL1} {CL5} {CL15}".into());
-        map.insert(String::from("update_interval"), 20.into());
+        map.insert("template".to_owned(), "{CL1} {CL5} {CL15}".into());
+        map.insert("update_interval".to_owned(), 20.into());
 
         map
     }

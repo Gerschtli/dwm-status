@@ -60,7 +60,7 @@ impl DbusWatcher {
         ))?;
 
         self.sender_devices
-            .send(DeviceMessage::Added(String::from(name)))?;
+            .send(DeviceMessage::Added(name.to_owned()))?;
 
         devices.insert(path.clone());
 
@@ -108,7 +108,7 @@ impl DbusWatcher {
         ))?;
 
         self.sender_devices
-            .send(DeviceMessage::Removed(String::from(name)))?;
+            .send(DeviceMessage::Removed(name.to_owned()))?;
 
         devices.remove(path);
 

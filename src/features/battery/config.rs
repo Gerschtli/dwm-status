@@ -66,17 +66,14 @@ mod tests {
 
     fn default_map() -> HashMap<String, Value> {
         let mut map = HashMap::new();
-        map.insert(String::from("charging"), "▲".into());
-        map.insert(String::from("discharging"), "▼".into());
-        map.insert(String::from("enable_notifier"), true.into());
-        map.insert(String::from("icons"), Vec::<String>::new().into());
-        map.insert(String::from("no_battery"), "NO BATT".into());
-        map.insert(String::from("notifier_critical"), 10.into());
-        map.insert(
-            String::from("notifier_levels"),
-            vec![2, 5, 10, 15, 20].into(),
-        );
-        map.insert(String::from("separator"), " · ".into());
+        map.insert("charging".to_owned(), "▲".into());
+        map.insert("discharging".to_owned(), "▼".into());
+        map.insert("enable_notifier".to_owned(), true.into());
+        map.insert("icons".to_owned(), Vec::<String>::new().into());
+        map.insert("no_battery".to_owned(), "NO BATT".into());
+        map.insert("notifier_critical".to_owned(), 10.into());
+        map.insert("notifier_levels".to_owned(), vec![2, 5, 10, 15, 20].into());
+        map.insert("separator".to_owned(), " · ".into());
 
         map
     }
