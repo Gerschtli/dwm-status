@@ -38,8 +38,8 @@ impl feature::Updatable for Updater {
     }
 
     fn update(&mut self) -> Result<()> {
-        let ipv4 = self.get_if_enabled(self.config.show_ipv4, || ip_address(IpAddress::V4))?;
-        let ipv6 = self.get_if_enabled(self.config.show_ipv6, || ip_address(IpAddress::V6))?;
+        let ipv4 = self.get_if_enabled(self.config.show_ipv4, || ip_address(&IpAddress::V4))?;
+        let ipv6 = self.get_if_enabled(self.config.show_ipv6, || ip_address(&IpAddress::V6))?;
         let essid = self.get_if_enabled(self.config.show_essid, essid)?;
 
         self.data.update(ipv4, ipv6, essid);
@@ -55,7 +55,7 @@ fn essid() -> Result<Option<String>> {
     Ok(normalize_output(output))
 }
 
-fn ip_address(address_type: IpAddress) -> Result<Option<String>> {
+fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
     let command = process::Command::new(
         "dig",
         &[

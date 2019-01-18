@@ -19,7 +19,7 @@ impl feature::Updatable for Updater {
     }
 
     fn update(&mut self) -> Result<()> {
-        self.data.update(date_time::DateTime::now());
+        self.data.update(&date_time::DateTime::now());
 
         Ok(())
     }

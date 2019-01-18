@@ -15,7 +15,7 @@ impl Data {
         }
     }
 
-    pub(super) fn update(&mut self, date_time: date_time::DateTime) {
+    pub(super) fn update(&mut self, date_time: &date_time::DateTime) {
         self.cache = date_time.format(&self.format);
     }
 }
@@ -51,7 +51,7 @@ mod tests {
             MockResult::Return("formatted date time".to_owned())
         });
 
-        object.update(date_time::DateTime::now());
+        object.update(&date_time::DateTime::now());
 
         assert_that!(object.render(), is(equal_to("formatted date time")));
     }

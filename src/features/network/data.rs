@@ -33,7 +33,7 @@ impl Data {
     }
 
     fn get_value<T: Into<Option<String>>>(&self, value: T) -> String {
-        value.into().unwrap_or(self.config.no_value.clone())
+        value.into().unwrap_or_else(|| self.config.no_value.clone())
     }
 }
 
