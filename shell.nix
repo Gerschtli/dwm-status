@@ -4,18 +4,24 @@ stdenv.mkDerivation {
   name = "dwm-status";
 
   buildInputs = [
-    cargo-edit
-    cargo-release
+    # build dependencies
     dbus
-    dnsutils
     gdk_pixbuf
-    iproute
     libnotify
     pkgconfig
-    rustracer
-    rustup
-    wirelesstools
     xorg.libX11
+
+    # run-time dependencies
+    alsaUtils
+    coreutils
+    dnsutils
+    iproute
+    wirelesstools
+
+    # dev tools
+    cargo-edit
+    cargo-release
+    rustup
   ];
 
   # RUST_BACKTRACE = 1;
