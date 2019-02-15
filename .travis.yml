@@ -7,9 +7,7 @@ cache: cargo
 matrix:
   include:
     - rust: nightly
-      # FIXME: enable after mocktopus update
-      # env: FEATURES="rust-1-31 mocking"
-      env: FEATURES=rust-1-31
+      env: FEATURES="rust-1-31 mocking"
       before_script:
         - rustup component add clippy-preview || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
         - rustup component add rustfmt-preview || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt-nightly
