@@ -9,8 +9,8 @@ matrix:
     - rust: nightly
       env: FEATURES="rust-1-31 mocking"
       before_script:
-        - rustup component add clippy-preview || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
-        - rustup component add rustfmt-preview || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt-nightly
+        - rustup component add clippy-preview || return 0
+        - rustup component add rustfmt-preview || return 0
       before_cache:
         - cargo install cargo-update || echo "cargo-update already installed"
         - RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin || echo "cargo-tarpaulin already installed"
@@ -45,13 +45,13 @@ matrix:
 
 script:
   - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && hash cargo-fmt 2> /dev/null; then
       cargo fmt -- --verbose --check
     fi
   - cargo check --verbose --features "$FEATURES"
   - cargo build --verbose --features "$FEATURES"
   - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]]; then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && hash cargo-clippy 2> /dev/null; then
       cargo clippy --verbose --features "$FEATURES"
     fi
   - cargo test --verbose --features "$FEATURES"
