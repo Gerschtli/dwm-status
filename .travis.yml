@@ -48,13 +48,13 @@ matrix:
 
 script:
   - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && hash cargo-fmt 2> /dev/null; then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && $(rustup component list | grep installed | grep rustfmt-preview > /dev/null); then
       cargo fmt -- --verbose --check
     fi
   - cargo check --verbose --features "$FEATURES"
   - cargo build --verbose --features "$FEATURES"
   - |
-    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && hash cargo-clippy 2> /dev/null; then
+    if [[ "${TRAVIS_RUST_VERSION}" == "nightly" ]] && $(rustup component list | grep installed | grep clippy-preview > /dev/null); then
       cargo clippy --verbose --features "$FEATURES"
     fi
   - cargo test --verbose --features "$FEATURES"
