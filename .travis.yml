@@ -23,8 +23,8 @@ matrix:
       env: FEATURES=rust-1-31
     - rust: stable
       env: FEATURES=rust-1-31
-    - rust: 1.27.0 # current stable version in nixpkgs
-      env: FEATURES=
+    - rust: 1.32.0
+      env: FEATURES=rust-1-31
 
     - language: nix
       name: nix build on nixpkgs-unstable
@@ -36,15 +36,14 @@ matrix:
         # use nix-build because travis bulid get killed after 10 minutes without output
         # - nix build --verbose
         - nix-build
-    # disabled because of missing edition feature required by Mocktopus
-    # - language: nix
-    #   name: nix build on nixos-18.09
-    #   before_script:
-    #     - nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
-    #     - nix-channel --update
-    #     - nix eval nixpkgs.rustc.version
-    #   script:
-    #     - nix build --verbose
+    - language: nix
+      name: nix build on nixos-19.03
+      before_script:
+        - nix-channel --add https://nixos.org/channels/nixos-19.03 nixpkgs
+        - nix-channel --update
+        - nix eval nixpkgs.rustc.version
+      script:
+        - nix build --verbose
 
 script:
   - |
