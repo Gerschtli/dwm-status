@@ -19,7 +19,7 @@
     unused_extern_crates,
     unused_import_braces,
     unused_qualifications,
-    variant_size_differences,
+    variant_size_differences
 )]
 #![allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)]
 #![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]

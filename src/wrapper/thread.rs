@@ -22,9 +22,11 @@ where
     pub(crate) fn run(self) -> Result<()> {
         thread::Builder::new()
             .name(self.name.to_owned())
-            .spawn(move || loop {
-                let _ = self.runnable.run().show_error();
-                sleep_secs(2);
+            .spawn(move || {
+                loop {
+                    let _ = self.runnable.run().show_error();
+                    sleep_secs(2);
+                }
             })
             .wrap_error("thread start", "failed to create thread")?;
 

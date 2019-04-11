@@ -24,11 +24,7 @@ impl Updater {
         enabled: bool,
         builder: F,
     ) -> Result<Option<String>> {
-        if enabled {
-            builder()
-        } else {
-            Ok(None)
-        }
+        if enabled { builder() } else { Ok(None) }
     }
 }
 
