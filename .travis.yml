@@ -2,12 +2,11 @@ sudo: required
 language: rust
 cache: cargo
 
-# feature rust-1-31 is only used to enable more lints checked by rustc and clippy
 # feature mocking is needed to execute tests with mocking
 matrix:
   include:
     - rust: nightly
-      env: FEATURES="rust-1-31 mocking"
+      env: FEATURES=mocking
       before_script:
         - rustup component add clippy-preview || return 0
         - rustup component add rustfmt-preview || return 0
@@ -20,11 +19,8 @@ matrix:
         - RUST_BACKTRACE=full cargo tarpaulin --out Xml
         - bash <(curl -s https://codecov.io/bash)
     - rust: beta
-      env: FEATURES=rust-1-31
     - rust: stable
-      env: FEATURES=rust-1-31
     - rust: 1.32.0
-      env: FEATURES=rust-1-31
 
     - language: nix
       name: nix build on nixpkgs-unstable
@@ -43,7 +39,9 @@ matrix:
         - nix-channel --update
         - nix eval nixpkgs.rustc.version
       script:
-        - nix build --verbose
+        # use nix-build because travis bulid get killed after 10 minutes without output
+        # - nix build --verbose
+        - nix-build
 
 script:
   - |

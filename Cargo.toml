@@ -40,4 +40,3 @@ hamcrest2 = "0.2.3"
 
 [features]
 mocking = ["mocktopus"]
-rust-1-31 = []
