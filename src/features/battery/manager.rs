@@ -4,6 +4,7 @@ use super::BatteryDevice;
 use super::DeviceMessage;
 use crate::error::*;
 use crate::wrapper::channel;
+use log::info;
 use std::collections::HashMap;
 
 pub(super) struct BatteryManager {

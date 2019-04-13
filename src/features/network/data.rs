@@ -46,6 +46,7 @@ impl Renderable for Data {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
 
     #[test]

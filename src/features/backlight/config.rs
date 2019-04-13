@@ -3,6 +3,7 @@ use crate::error::*;
 use crate::settings::ConfigType;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
+use serde_derive::*;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(super) struct RenderConfig {

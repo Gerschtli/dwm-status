@@ -16,19 +16,15 @@
     trivial_numeric_casts,
     unreachable_pub,
     unsafe_code,
-    unused_extern_crates,
     unused_import_braces,
     unused_qualifications,
     variant_size_differences
 )]
 #![allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)]
 
-#[macro_use]
-extern crate clap;
-extern crate dwm_status;
-extern crate simplelog;
 
 use clap::Arg;
+use clap::*;
 use simplelog::Config;
 use simplelog::LevelFilter;
 use simplelog::SimpleLogger;

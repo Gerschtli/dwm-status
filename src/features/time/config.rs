@@ -3,6 +3,7 @@ use crate::error::*;
 use crate::settings::ConfigType;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
+use serde_derive::*;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
@@ -44,6 +45,7 @@ mod tests {
     use super::*;
     use crate::test_utils::config::test_set_default_err;
     use crate::test_utils::config::test_set_default_ok;
+    use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
     use mocktopus::mocking::*;
     use std::collections::HashMap;

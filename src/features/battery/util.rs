@@ -37,6 +37,7 @@ pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u32> 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
     #[cfg(feature = "mocking")]
     use mocktopus::mocking::*;

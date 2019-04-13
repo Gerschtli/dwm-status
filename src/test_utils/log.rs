@@ -1,3 +1,4 @@
+use hamcrest2::assert_that;
 use hamcrest2::prelude::*;
 use log;
 use std::cell::RefCell;

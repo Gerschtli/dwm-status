@@ -16,7 +16,6 @@
     trivial_numeric_casts,
     unreachable_pub,
     unsafe_code,
-    unused_extern_crates,
     unused_import_braces,
     unused_qualifications,
     variant_size_differences
@@ -28,23 +27,6 @@
     feature(custom_attribute, proc_macro_hygiene)
 )]
 
-extern crate chrono;
-extern crate config;
-extern crate ctrlc;
-extern crate dbus;
-#[cfg(test)]
-#[macro_use]
-extern crate hamcrest2;
-extern crate inotify;
-extern crate libnotify;
-#[macro_use]
-extern crate log;
-#[cfg(all(test, feature = "mocking"))]
-extern crate mocktopus;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate x11;
 
 #[macro_use]
 mod macros;

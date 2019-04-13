@@ -6,6 +6,8 @@ use crate::features::cpu_load;
 use crate::features::network;
 use crate::features::time;
 use crate::wrapper::config;
+use log::warn;
+use serde_derive::*;
 
 pub(crate) trait ConfigType {
     fn set_default(_: &mut config::Config) -> Result<()>;
@@ -84,6 +86,7 @@ settings!(audio, backlight, battery, cpu_load, network, time);
 #[cfg(feature = "mocking")]
 mod tests {
     use super::*;
+    use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
     use mocktopus::mocking::*;
 
