@@ -1,7 +1,7 @@
-use communication;
-use error::*;
-use wrapper::channel;
-use wrapper::thread;
+use crate::communication;
+use crate::error::*;
+use crate::wrapper::channel;
+use crate::wrapper::thread;
 
 pub(super) struct Notifier {
     id: usize,

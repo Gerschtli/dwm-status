@@ -1,8 +1,8 @@
 use super::FEATURE_NAME;
-use error::*;
-use settings::ConfigType;
-use wrapper::config;
-use wrapper::config::Value;
+use crate::error::*;
+use crate::settings::ConfigType;
+use crate::wrapper::config;
+use crate::wrapper::config::Value;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(super) struct RenderConfig {
@@ -34,9 +34,9 @@ impl ConfigType for ConfigEntry {
 #[cfg(feature = "mocking")]
 mod tests {
     use super::*;
+    use crate::test_utils::config::test_set_default_err;
+    use crate::test_utils::config::test_set_default_ok;
     use std::collections::HashMap;
-    use test_utils::config::test_set_default_err;
-    use test_utils::config::test_set_default_ok;
 
     #[test]
     fn config_type_set_default_when_ok() {

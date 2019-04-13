@@ -8,10 +8,10 @@ mod notifier;
 mod updater;
 mod util;
 
-use communication;
-use error::*;
-use feature;
-use wrapper::channel;
+use crate::communication;
+use crate::error::*;
+use crate::feature;
+use crate::wrapper::channel;
 
 pub(self) use self::ac_adapter::AcAdapter;
 pub(crate) use self::config::ConfigEntry;

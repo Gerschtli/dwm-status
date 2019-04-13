@@ -1,9 +1,9 @@
 use super::fmt_capacity;
 use super::fmt_time;
 use super::NotifierConfig;
-use error::*;
+use crate::error::*;
+use crate::wrapper::libnotify;
 use std::time;
-use wrapper::libnotify;
 
 pub(super) struct BatteryNotifier {
     capacity: Option<u32>,

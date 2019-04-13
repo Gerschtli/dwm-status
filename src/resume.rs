@@ -1,8 +1,8 @@
-use communication;
-use error::*;
-use wrapper::channel;
-use wrapper::dbus;
-use wrapper::thread;
+use crate::communication;
+use crate::error::*;
+use crate::wrapper::channel;
+use crate::wrapper::dbus;
+use crate::wrapper::thread;
 
 const ERROR_NAME: &str = "resume watcher";
 const INTERFACE_LOGIN1: &str = "org.freedesktop.login1.Manager";

@@ -4,10 +4,10 @@ mod device;
 mod notifier;
 mod updater;
 
-use communication;
-use error::*;
-use feature;
-use wrapper::channel;
+use crate::communication;
+use crate::error::*;
+use crate::feature;
+use crate::wrapper::channel;
 
 pub(crate) use self::config::ConfigEntry;
 pub(self) use self::config::RenderConfig;

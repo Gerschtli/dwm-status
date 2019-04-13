@@ -1,5 +1,5 @@
-use error::*;
-use wrapper::thread;
+use crate::error::*;
+use crate::wrapper::thread;
 
 pub(crate) trait Renderable {
     fn render(&self) -> &str;

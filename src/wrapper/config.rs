@@ -1,5 +1,5 @@
+use crate::error::*;
 use config;
-use error::*;
 use serde::Deserialize;
 
 pub(crate) use config::Value;

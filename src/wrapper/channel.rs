@@ -1,4 +1,4 @@
-use error::*;
+use crate::error::*;
 use std::sync::mpsc;
 
 pub(crate) fn create<M: Clone>() -> (Sender<M>, Receiver<M>) {

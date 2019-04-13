@@ -1,6 +1,6 @@
 #![allow(unsafe_code)]
 
-use error::*;
+use crate::error::*;
 use std::ffi::CString;
 use std::os::raw::c_char;
 use std::ptr;

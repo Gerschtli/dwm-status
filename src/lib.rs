@@ -60,12 +60,12 @@ mod test_utils;
 mod utils;
 mod wrapper;
 
-use error::*;
-use status_bar::StatusBar;
+use crate::error::*;
+use crate::status_bar::StatusBar;
+use crate::wrapper::channel;
+use crate::wrapper::termination;
 use std::collections::HashSet;
 use std::iter::FromIterator;
-use wrapper::channel;
-use wrapper::termination;
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
     if settings.general.order.is_empty() {

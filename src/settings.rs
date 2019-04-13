@@ -1,11 +1,11 @@
-use error::*;
-use features::audio;
-use features::backlight;
-use features::battery;
-use features::cpu_load;
-use features::network;
-use features::time;
-use wrapper::config;
+use crate::error::*;
+use crate::features::audio;
+use crate::features::backlight;
+use crate::features::battery;
+use crate::features::cpu_load;
+use crate::features::network;
+use crate::features::time;
+use crate::wrapper::config;
 
 pub(crate) trait ConfigType {
     fn set_default(_: &mut config::Config) -> Result<()>;
@@ -250,8 +250,8 @@ mod tests {
 
         mod set_values {
             use super::*;
-            use test_utils::log::Level;
-            use test_utils::log::LoggerContext;
+            use crate::test_utils::log::Level;
+            use crate::test_utils::log::LoggerContext;
 
             #[test]
             fn when_get_option_failed() {

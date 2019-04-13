@@ -2,7 +2,7 @@ use super::RenderConfig;
 use super::PLACEHOLDER_ESSID;
 use super::PLACEHOLDER_IPV4;
 use super::PLACEHOLDER_IPV6;
-use feature::Renderable;
+use crate::feature::Renderable;
 
 #[derive(Debug)]
 pub(super) struct Data {

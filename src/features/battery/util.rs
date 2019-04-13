@@ -1,8 +1,8 @@
 use super::FEATURE_NAME;
 use super::POWER_SUPPLY_PATH;
-use error::*;
+use crate::error::*;
+use crate::wrapper::file;
 use std::time;
-use wrapper::file;
 
 pub(super) fn fmt_capacity(capacity: u32) -> String {
     format!("{}%", capacity)

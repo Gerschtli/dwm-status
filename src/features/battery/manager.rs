@@ -2,9 +2,9 @@ use super::get_value;
 use super::AcAdapter;
 use super::BatteryDevice;
 use super::DeviceMessage;
-use error::*;
+use crate::error::*;
+use crate::wrapper::channel;
 use std::collections::HashMap;
-use wrapper::channel;
 
 pub(super) struct BatteryManager {
     ac_name: &'static str,

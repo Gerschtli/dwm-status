@@ -5,11 +5,11 @@ pub(super) mod cpu_load;
 pub(super) mod network;
 pub(super) mod time;
 
-use communication;
-use error::*;
-use feature;
-use settings;
-use wrapper::channel;
+use crate::communication;
+use crate::error::*;
+use crate::feature;
+use crate::settings;
+use crate::wrapper::channel;
 
 macro_rules! features {
     ( $id:expr, $name:expr, $sender:expr, $settings:expr; $( $mod:ident, )* ) => {

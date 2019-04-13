@@ -1,5 +1,5 @@
 use super::get_value2;
-use error::*;
+use crate::error::*;
 use std::cmp;
 use std::time;
 

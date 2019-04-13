@@ -1,4 +1,4 @@
-use error::*;
+use crate::error::*;
 use libnotify;
 
 pub(crate) use libnotify::Urgency;

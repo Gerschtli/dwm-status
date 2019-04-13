@@ -2,10 +2,10 @@ use super::FEATURE_NAME;
 use super::PLACEHOLDER_ESSID;
 use super::PLACEHOLDER_IPV4;
 use super::PLACEHOLDER_IPV6;
-use error::*;
-use settings::ConfigType;
-use wrapper::config;
-use wrapper::config::Value;
+use crate::error::*;
+use crate::settings::ConfigType;
+use crate::wrapper::config;
+use crate::wrapper::config::Value;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(super) struct RenderConfig {
@@ -66,11 +66,11 @@ fn set_update_config(
 #[cfg(feature = "mocking")]
 mod tests {
     use super::*;
+    use crate::test_utils::config::test_set_default_err;
+    use crate::test_utils::config::test_set_default_ok;
     use hamcrest2::prelude::*;
     use mocktopus::mocking::*;
     use std::collections::HashMap;
-    use test_utils::config::test_set_default_err;
-    use test_utils::config::test_set_default_ok;
 
     mod config_type_set_default {
         use super::*;

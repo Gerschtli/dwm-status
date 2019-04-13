@@ -1,5 +1,5 @@
-use error::*;
-use wrapper::channel;
+use crate::error::*;
+use crate::wrapper::channel;
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) enum Message {

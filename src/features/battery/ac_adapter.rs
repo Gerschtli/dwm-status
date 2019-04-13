@@ -1,7 +1,7 @@
 use super::FEATURE_NAME;
 use super::POWER_SUPPLY_PATH;
-use error::*;
-use wrapper::file;
+use crate::error::*;
+use crate::wrapper::file;
 
 const AC1: &str = "AC";
 const AC2: &str = "ACAD";

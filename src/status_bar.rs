@@ -1,8 +1,8 @@
-use communication;
-use error::*;
-use feature;
-use settings;
-use wrapper::xsetroot;
+use crate::communication;
+use crate::error::*;
+use crate::feature;
+use crate::settings;
+use crate::wrapper::xsetroot;
 
 pub(super) struct StatusBar {
     features: Vec<Box<dyn feature::Feature>>,

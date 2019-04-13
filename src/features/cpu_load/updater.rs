@@ -1,8 +1,8 @@
 use super::Data;
 use super::FEATURE_NAME;
-use error::*;
-use feature;
-use wrapper::file;
+use crate::error::*;
+use crate::feature;
+use crate::wrapper::file;
 
 const PATH_LOADAVG: &str = "/proc/loadavg";
 

@@ -1,9 +1,9 @@
 use super::ConfigEntry;
 use super::Data;
 use super::FEATURE_NAME;
-use error::*;
-use feature;
-use wrapper::process;
+use crate::error::*;
+use crate::feature;
+use crate::wrapper::process;
 
 const FILTER: &[char] = &['[', ']', '%'];
 

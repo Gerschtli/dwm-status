@@ -1,10 +1,10 @@
 use super::fmt_capacity;
 use super::fmt_time;
 use super::RenderConfig;
-use feature::Renderable;
+use crate::feature::Renderable;
+use crate::utils::icon_by_percentage;
 use std::collections::HashMap;
 use std::time;
-use utils::icon_by_percentage;
 
 #[derive(Debug)]
 pub(super) struct BatteryInfo {

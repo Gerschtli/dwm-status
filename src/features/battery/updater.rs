@@ -2,8 +2,8 @@ use super::BatteryInfo;
 use super::BatteryManager;
 use super::BatteryNotifier;
 use super::Data;
-use error::*;
-use feature;
+use crate::error::*;
+use crate::feature;
 use std::collections::HashMap;
 
 pub(super) struct Updater {

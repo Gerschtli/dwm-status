@@ -1,7 +1,7 @@
-use error::*;
+use crate::error::*;
+use crate::wrapper::thread;
 use std::io::Read;
 use std::process;
-use wrapper::thread;
 
 const ERROR_NAME: &str = "process";
 

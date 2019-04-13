@@ -1,6 +1,6 @@
 use super::RenderConfig;
-use feature::Renderable;
-use utils::icon_by_percentage;
+use crate::feature::Renderable;
+use crate::utils::icon_by_percentage;
 
 pub(super) struct Data {
     cache: String,

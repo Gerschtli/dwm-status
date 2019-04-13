@@ -1,4 +1,4 @@
-use feature::Renderable;
+use crate::feature::Renderable;
 
 #[derive(Debug)]
 pub(super) struct Data {

@@ -1,8 +1,8 @@
 use super::Data;
 use super::UpdateConfig;
-use error::*;
-use feature;
-use wrapper::process;
+use crate::error::*;
+use crate::feature;
+use crate::wrapper::process;
 
 enum IpAddress {
     V4,
