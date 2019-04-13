@@ -13,7 +13,11 @@ pub(super) struct Updater {
 }
 
 impl Updater {
-    pub(super) fn new(data: Data, manager: BatteryManager, notifier: BatteryNotifier) -> Self {
+    pub(super) const fn new(
+        data: Data,
+        manager: BatteryManager,
+        notifier: BatteryNotifier,
+    ) -> Self {
         Self {
             data,
             manager,

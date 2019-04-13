@@ -10,7 +10,7 @@ pub(super) struct Notifier {
 }
 
 impl Notifier {
-    pub(super) fn new(id: usize, sender: channel::Sender<communication::Message>) -> Self {
+    pub(super) const fn new(id: usize, sender: channel::Sender<communication::Message>) -> Self {
         Self { id, sender }
     }
 }

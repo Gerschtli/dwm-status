@@ -25,7 +25,7 @@ impl Message {
 
     compare_property!(is_member, member);
 
-    pub(crate) fn new(message: dbus::Message) -> Self {
+    pub(crate) const fn new(message: dbus::Message) -> Self {
         Self { message }
     }
 
@@ -41,6 +41,7 @@ impl Message {
         })
     }
 
+    #[allow(clippy::missing_const_for_fn)]
     pub(super) fn raw(self) -> dbus::Message {
         self.message
     }

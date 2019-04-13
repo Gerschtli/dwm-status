@@ -7,6 +7,7 @@ pub(super) struct Data {
 }
 
 impl Data {
+    #[allow(clippy::missing_const_for_fn)]
     pub(super) fn new(template: String) -> Self {
         Self {
             cache: String::new(),

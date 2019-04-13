@@ -15,7 +15,7 @@ pub(super) struct Updater {
 }
 
 impl Updater {
-    pub(super) fn new(data: Data, config: UpdateConfig) -> Self {
+    pub(super) const fn new(data: Data, config: UpdateConfig) -> Self {
         Self { data, config }
     }
 

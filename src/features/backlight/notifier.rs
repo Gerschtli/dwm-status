@@ -11,7 +11,7 @@ pub(super) struct Notifier {
 }
 
 impl Notifier {
-    pub(super) fn new(
+    pub(super) const fn new(
         id: usize,
         sender: channel::Sender<communication::Message>,
         brightness_file: String,
