@@ -13,7 +13,7 @@ pub(super) fn fmt_time(duration: &time::Duration) -> String {
     format!("{:02}:{:02}", minutes / 60, minutes % 60)
 }
 
-#[cfg_attr(all(test, feature = "mocking"), ::mocktopus::macros::mockable)]
+#[cfg_attr(all(test, feature = "mocking"), mocktopus::macros::mockable)]
 pub(super) fn get_value(device: &str, name: &str) -> Result<u32> {
     file::parse_file_content(format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
         .wrap_error(FEATURE_NAME, format!("error reading {}/{}", device, name))

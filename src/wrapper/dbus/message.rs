@@ -6,8 +6,8 @@ macro_rules! compare_property {
     ( $method:ident, $property:ident ) => {
         pub(crate) fn $method(&self, compare: &'static str) -> Result<bool> {
             Ok(if let Some(interface) = self.message.$property() {
-                interface.as_cstr() == ::std::ffi::CString::new(compare)
-                    .wrap_error(crate::wrapper::dbus::ERROR_NAME, "failed to create CString")?
+                interface.as_cstr() == std::ffi::CString::new(compare)
+                    .wrap_error(ERROR_NAME, "failed to create CString")?
                     .as_c_str()
             } else {
                 false

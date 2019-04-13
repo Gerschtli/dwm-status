@@ -4,7 +4,7 @@ pub(crate) struct DateTime {
     date_time: chrono::DateTime<chrono::Local>,
 }
 
-#[cfg_attr(all(test, feature = "mocking"), ::mocktopus::macros::mockable)]
+#[cfg_attr(all(test, feature = "mocking"), mocktopus::macros::mockable)]
 impl DateTime {
     pub(crate) fn now() -> Self {
         Self {

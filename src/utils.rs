@@ -1,6 +1,6 @@
 use std::cmp;
 
-#[cfg_attr(all(test, feature = "mocking"), ::mocktopus::macros::mockable)]
+#[cfg_attr(all(test, feature = "mocking"), mocktopus::macros::mockable)]
 pub(crate) fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
     if icons.is_empty() {
         return None;
