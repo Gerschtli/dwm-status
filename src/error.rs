@@ -98,7 +98,7 @@ pub(crate) trait ResultExt<T> {
 
 impl<T> ResultExt<T> for Result<T> {
     fn show_error(self) -> StdResult<T, ()> {
-        self.map_err(|error| error.show_error())
+        self.map_err(Error::show_error)
     }
 }
 

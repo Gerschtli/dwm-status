@@ -27,7 +27,6 @@
     feature(custom_attribute, proc_macro_hygiene)
 )]
 
-
 #[macro_use]
 mod macros;
 mod communication;

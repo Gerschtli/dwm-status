@@ -124,7 +124,9 @@ impl thread::Runnable for DbusWatcher {
 
         let mut devices = HashSet::new();
 
-        for device in self.get_current_devices(&connection)? {
+        let current_devices = self.get_current_devices(&connection)?;
+
+        for device in current_devices {
             self.add_device(&connection, &mut devices, &device)?;
         }
 
