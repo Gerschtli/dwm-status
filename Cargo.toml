@@ -14,19 +14,19 @@ repository = "Gerschtli/dwm-status"
 
 [dependencies]
 chrono = "0.4.6"
-clap = "2.32.0"
+clap = "2.33.0"
 config = "0.9.2"
 dbus = "0.6.4"
 inotify = "0.7.0"
 libnotify = "1.0.3"
 log = "0.4.6"
-serde = "1.0.87"
-serde_derive = "1.0.87"
+serde = "1.0.90"
+serde_derive = "1.0.90"
 simplelog = "0.5.3"
 
 [dependencies.ctrlc]
 features = ["termination"]
-version = "3.1.1"
+version = "3.1.2"
 
 [dependencies.mocktopus]
 optional = true
@@ -37,7 +37,7 @@ features = ["xlib"]
 version = "2.18.1"
 
 [dev-dependencies]
-hamcrest2 = "0.2.3"
+hamcrest2 = "0.2.6"
 
 [features]
 mocking = ["mocktopus"]
