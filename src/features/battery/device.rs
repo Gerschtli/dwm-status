@@ -23,9 +23,9 @@ impl BatteryDevice {
         let charge_now = get_value2(&self.name, CHARGE_NOW, ENERGY_NOW)?;
         let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
 
-        let capacity = charge_now * 100 / charge_full;
+        let capacity = charge_now as u64 * 100 / charge_full as u64;
 
-        Ok(cmp::min(capacity, 100))
+        Ok(cmp::min(capacity as u32, 100))
     }
 
     pub(super) fn estimation(&self, is_ac_online: bool) -> Result<Option<time::Duration>> {
