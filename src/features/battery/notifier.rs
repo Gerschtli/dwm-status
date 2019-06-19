@@ -6,7 +6,7 @@ use crate::wrapper::libnotify;
 use std::time;
 
 pub(super) struct BatteryNotifier {
-    capacity: Option<u32>,
+    capacity: Option<u64>,
     libnotify: libnotify::LibNotify,
     settings: NotifierConfig,
 }
@@ -24,7 +24,7 @@ impl BatteryNotifier {
         self.capacity = None;
     }
 
-    pub(super) fn update(&mut self, capacity: u32, estimation: &time::Duration) -> Result<()> {
+    pub(super) fn update(&mut self, capacity: u64, estimation: &time::Duration) -> Result<()> {
         if !self.settings.enable_notifier {
             return Ok(());
         }

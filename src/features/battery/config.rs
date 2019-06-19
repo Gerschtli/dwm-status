@@ -8,8 +8,8 @@ use serde_derive::*;
 #[derive(Clone, Debug, Deserialize)]
 pub(super) struct NotifierConfig {
     pub(super) enable_notifier: bool,
-    pub(super) notifier_critical: u32,
-    pub(super) notifier_levels: Vec<u32>,
+    pub(super) notifier_critical: u64,
+    pub(super) notifier_levels: Vec<u64>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
