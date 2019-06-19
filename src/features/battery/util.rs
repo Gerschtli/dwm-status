@@ -4,7 +4,7 @@ use crate::error::*;
 use crate::wrapper::file;
 use std::time;
 
-pub(super) fn fmt_capacity(capacity: u32) -> String {
+pub(super) fn fmt_capacity(capacity: u64) -> String {
     format!("{}%", capacity)
 }
 
@@ -14,12 +14,12 @@ pub(super) fn fmt_time(duration: &time::Duration) -> String {
 }
 
 #[cfg_attr(all(test, feature = "mocking"), mocktopus::macros::mockable)]
-pub(super) fn get_value(device: &str, name: &str) -> Result<u32> {
+pub(super) fn get_value(device: &str, name: &str) -> Result<u64> {
     file::parse_file_content(format!("{}/{}/{}", POWER_SUPPLY_PATH, device, name))
         .wrap_error(FEATURE_NAME, format!("error reading {}/{}", device, name))
 }
 
-pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u32> {
+pub(super) fn get_value2(device: &str, name1: &str, name2: &str) -> Result<u64> {
     if let Ok(result) = get_value(device, name1) {
         return Ok(result);
     }

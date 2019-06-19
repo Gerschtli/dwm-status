@@ -8,7 +8,7 @@ use std::time;
 
 #[derive(Debug)]
 pub(super) struct BatteryInfo {
-    pub(super) capacity: u32,
+    pub(super) capacity: u64,
     pub(super) estimation: Option<time::Duration>,
 }
 
@@ -16,7 +16,7 @@ impl BatteryInfo {
     fn render(&self, settings: &RenderConfig) -> String {
         let mut rendered = String::with_capacity(16);
 
-        if let Some(icon) = icon_by_percentage(&settings.icons, self.capacity) {
+        if let Some(icon) = icon_by_percentage(&settings.icons, self.capacity as u32) {
             rendered.push_str(&format!("{} ", icon));
         }
 
