@@ -71,7 +71,7 @@ mod tests {
     #[test]
     fn get_value_when_ok() {
         file::parse_file_content.mock_safe(
-            |path: String| -> MockResult<_, StdResult<u32, io::Error>> {
+            |path: String| -> MockResult<_, StdResult<u64, io::Error>> {
                 assert_that!(path, is(equal_to("/sys/class/power_supply/device/name")));
 
                 MockResult::Return(Ok(1337))
@@ -85,7 +85,7 @@ mod tests {
     #[test]
     fn get_value_when_err() {
         file::parse_file_content.mock_safe(
-            |path: String| -> MockResult<_, StdResult<u32, io::Error>> {
+            |path: String| -> MockResult<_, StdResult<u64, io::Error>> {
                 assert_that!(path, is(equal_to("/sys/class/power_supply/device/name")));
 
                 MockResult::Return(Err(io::Error::new(io::ErrorKind::Other, "io error")))
