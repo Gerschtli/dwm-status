@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Internals: Use new rust edition 2018
 
+### Fixed
+- Fixes reported [issue](https://github.com/Gerschtli/dwm-status/issues/3) describing rounding errors in battery
+  capacity
+
 ## [1.6.0] - 2018-12-27
 ### Added
 - Completely new network feature
