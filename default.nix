@@ -1,4 +1,4 @@
-{ cargoSha256 ? "0bfcjjlvw6pd0h4vkc6j7n0y299l529ix6k0x929zkca5rpfnjnd" }:
+{ cargoSha256 ? "102vr7xprz1sfsmd725kbykm4lk8p2lx1mv8kvs84n7clx0xcg2g" }:
 
 with import <nixpkgs> { };
 
