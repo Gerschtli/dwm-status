@@ -75,13 +75,12 @@ fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
         "dig",
         &[
             "@resolver1.opendns.com",
-            "A",
+            match address_type {
+                IpAddress::V4 => "A",
+                IpAddress::V6 => "AAAA",
+            },
             "myip.opendns.com",
             "+short",
-            match address_type {
-                IpAddress::V4 => "-4",
-                IpAddress::V6 => "-6",
-            },
         ],
     );
 
