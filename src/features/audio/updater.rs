@@ -25,7 +25,15 @@ impl feature::Updatable for Updater {
 
     fn update(&mut self) -> Result<()> {
         // originally taken from https://github.com/greshake/i3status-rust/blob/master/src/blocks/sound.rs
-        let output = process::Command::new("amixer", &["get", &self.settings.control]).output()?;
+        let output = process::Command::new("amixer", &["get", &self.settings.control])
+            .output()
+            .wrap_error(
+                FEATURE_NAME,
+                format!(
+                    "amixer info for control '{}' could not be fetched",
+                    &self.settings.control,
+                ),
+            )?;
 
         let last_line = &output
             .lines()

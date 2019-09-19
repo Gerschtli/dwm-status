@@ -1,12 +1,29 @@
+#![allow(clippy::use_self)] // is experimental in stable rust
+
 use super::Data;
 use super::UpdateConfig;
+use super::FEATURE_NAME;
 use crate::error::*;
 use crate::feature;
 use crate::wrapper::process;
+use std::fmt;
 
 enum IpAddress {
     V4,
     V6,
+}
+
+impl fmt::Display for IpAddress {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "IPv{}",
+            match self {
+                IpAddress::V4 => 4,
+                IpAddress::V6 => 6,
+            }
+        )
+    }
 }
 
 pub(super) struct Updater {
@@ -46,7 +63,9 @@ impl feature::Updatable for Updater {
 
 fn essid() -> Result<Option<String>> {
     let command = process::Command::new("iwgetid", &["-r"]);
-    let output = command.output()?;
+    let output = command
+        .output()
+        .wrap_error(FEATURE_NAME, "essid {} could not be fetched")?;
 
     Ok(normalize_output(output))
 }
@@ -66,7 +85,10 @@ fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
         ],
     );
 
-    let output = command.output()?;
+    let output = command.output().wrap_error(
+        FEATURE_NAME,
+        format!("ip address {} could not be fetched", address_type),
+    )?;
 
     Ok(normalize_output(output))
 }
