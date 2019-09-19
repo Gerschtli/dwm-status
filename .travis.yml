@@ -31,7 +31,7 @@ matrix:
       script:
         # use nix-build because travis bulid get killed after 10 minutes without output
         # - nix build --verbose
-        - nix-build --argstr cargoSha256 0pprf8509d321azg2l51lpxylgpk7290y38z9p5hxgkcwhrhrcss
+        - nix-build --argstr cargoSha256 0l6x59bzzilc78gsi5rlgq9zjvp8qjphfsds776ljzmkbdq8q4iz
     - language: nix
       name: nix build on nixos-19.03
       before_script:
