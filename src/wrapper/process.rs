@@ -22,6 +22,17 @@ impl Command {
     pub(crate) fn output(mut self) -> Result<String> {
         self.command
             .output()
+            .wrap_error(ERROR_NAME, "executing process failed")
+            .and_then(|o| {
+                if o.status.success() {
+                    Ok(o)
+                } else {
+                    Err(Error::new_custom(
+                        ERROR_NAME,
+                        format!("process exit code is {}", o.status.code().unwrap()),
+                    ))
+                }
+            })
             .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
             .wrap_error(ERROR_NAME, "reading process output failed")
     }
