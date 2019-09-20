@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Improved error messages in case of failed command executions
 
+## Fixed
+- Fixes reported [issues](https://github.com/Gerschtli/dwm-status/issues/5) in network feature:
+  - Fixes incorrect command line arguments of `dig` call for IPv6 address
+  - Log warn message instead of exiting dwm-status on command execution failure
+  - Interpret exit codes not equal to 0 as error and print `no_value` option in status bar
+  - Decrease timeout and tries options of `dig` commands because they are currently synchronous and with default values
+    each of these calls have a total maximum running time of 15 seconds
+
 ## [1.6.2] - 2019-07-23
 ### Changed
 - Updated external dependencies
