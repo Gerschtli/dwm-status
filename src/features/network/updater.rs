@@ -6,6 +6,7 @@ use super::FEATURE_NAME;
 use crate::error::*;
 use crate::feature;
 use crate::wrapper::process;
+use log::info;
 use std::fmt;
 
 enum IpAddress {
@@ -65,7 +66,7 @@ fn essid() -> Result<Option<String>> {
     let command = process::Command::new("iwgetid", &["-r"]);
     let output = command
         .output()
-        .wrap_error(FEATURE_NAME, "essid {} could not be fetched")?;
+        .wrap_error(FEATURE_NAME, "essid {} could not be fetched");
 
     Ok(normalize_output(output))
 }
@@ -87,15 +88,23 @@ fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
     let output = command.output().wrap_error(
         FEATURE_NAME,
         format!("ip address {} could not be fetched", address_type),
-    )?;
+    );
 
     Ok(normalize_output(output))
 }
 
-fn normalize_output(output: String) -> Option<String> {
-    if output.is_empty() {
-        None
-    } else {
-        Some(output)
+fn normalize_output(output: Result<String>) -> Option<String> {
+    match output {
+        Ok(string) => {
+            if string.is_empty() {
+                None
+            } else {
+                Some(string)
+            }
+        },
+        Err(error) => {
+            info!("{}", error);
+            None
+        },
     }
 }
