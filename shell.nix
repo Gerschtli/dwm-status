@@ -22,6 +22,11 @@ stdenv.mkDerivation {
     cargo-edit
     cargo-release
     rustup
+
+    # tarpaulin
+    # run RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
+    openssl
+    zlib
   ];
 
   # RUST_BACKTRACE = 1;
