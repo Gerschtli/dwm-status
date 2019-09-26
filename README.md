@@ -160,13 +160,8 @@ Shows time in configured format and refreshes every second or minute.
 You need `rustup` with nightly toolchain, rustfmt, clippy and `lib{dbus,gdk-pixbuf,notify,x11}-dev`. I recommend the
 installation of racer.
 
-If your are using [nix](https://nixos.org/nix) you can use `shell.nix` for all dependencies except the `rustup`
-toolchain and components:
+If your are using [nix](https://nixos.org/nix) you can use `shell.nix` for all dependencies, including the nightly rust compiler:
 
 ```sh
 $ nix-shell
-[nix-shell]$ rustup install nightly
-[nix-shell]$ rustup default nightly
-[nix-shell]$ rustup component add clippy-preview
-[nix-shell]$ rustup component add rustfmt-preview
 ```
