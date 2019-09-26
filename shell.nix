@@ -30,4 +30,11 @@ stdenv.mkDerivation {
   ];
 
   # RUST_BACKTRACE = 1;
+
+  shellHook = ''
+    rustup install nightly
+    rustup default nightly
+    rustup component add clippy-preview
+    rustup component add rustfmt-preview
+  '';
 }
