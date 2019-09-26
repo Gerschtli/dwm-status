@@ -33,6 +33,11 @@ stdenv.mkDerivation {
 
   shellHook = ''
     rustup install nightly
+    # store old default toolchain
+    defaulttoolchain=$(rustup toolchain list | awk '$2 == "(default)" { print $1; }')
+    if [ $defaulttoolchain ]; then # if $defaulttoolchain contains anything
+      trap "rustup default $defaulttoolchain" EXIT # restore the old toolchain
+    fi
     rustup default nightly
     rustup component add clippy-preview
     rustup component add rustfmt-preview
