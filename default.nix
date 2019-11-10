@@ -1,5 +1,3 @@
-{ cargoSha256 ? "102vr7xprz1sfsmd725kbykm4lk8p2lx1mv8kvs84n7clx0xcg2g" }:
-
 with import <nixpkgs> { };
 
 let
@@ -20,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   src = builtins.filterSource
     (path: type: type != "directory" || baseNameOf path != "target")
     ./.;
+
+  cargoSha256 = "0l6x59bzzilc78gsi5rlgq9zjvp8qjphfsds776ljzmkbdq8q4iz";
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
