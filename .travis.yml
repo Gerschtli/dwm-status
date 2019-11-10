@@ -20,7 +20,7 @@ matrix:
         - bash <(curl -s https://codecov.io/bash)
     - rust: beta
     - rust: stable
-    - rust: 1.32.0
+    - rust: 1.37.0
 
     - language: nix
       name: nix build on nixpkgs-unstable
@@ -33,9 +33,9 @@ matrix:
         # - nix build --verbose
         - nix-build --argstr cargoSha256 0l6x59bzzilc78gsi5rlgq9zjvp8qjphfsds776ljzmkbdq8q4iz
     - language: nix
-      name: nix build on nixos-19.03
+      name: nix build on nixos-19.09
       before_script:
-        - nix-channel --add https://nixos.org/channels/nixos-19.03 nixpkgs
+        - nix-channel --add https://nixos.org/channels/nixos-19.09 nixpkgs
         - nix-channel --update
         - nix eval nixpkgs.rustc.version
       script:
