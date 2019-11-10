@@ -13,6 +13,8 @@ pub(super) struct BatteryInfo {
 }
 
 impl BatteryInfo {
+    // TODO: fix clippy warning
+    #[allow(clippy::cast_possible_truncation)]
     fn render(&self, settings: &RenderConfig) -> String {
         let mut rendered = String::with_capacity(16);
 

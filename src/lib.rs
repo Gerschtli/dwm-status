@@ -20,7 +20,7 @@
     unused_qualifications,
     variant_size_differences
 )]
-#![allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)]
+#![allow(clippy::filter_map, clippy::non_ascii_literal, clippy::unused_self)]
 #![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]
 #![cfg_attr(
     all(test, feature = "mocking"),

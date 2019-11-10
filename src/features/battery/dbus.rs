@@ -86,7 +86,7 @@ impl DbusWatcher {
             "failed to create utf8 string of dbus object path",
         )?;
 
-        Ok(string.trim_left_matches(PATH_BATTERY_DEVICES_PREFIX))
+        Ok(string.trim_start_matches(PATH_BATTERY_DEVICES_PREFIX))
     }
 
     fn remove_device<'a>(
