@@ -22,10 +22,7 @@
 )]
 #![allow(clippy::filter_map, clippy::non_ascii_literal, clippy::unused_self)]
 #![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]
-#![cfg_attr(
-    all(test, feature = "mocking"),
-    feature(custom_attribute, proc_macro_hygiene)
-)]
+#![cfg_attr(all(test, feature = "mocking"), feature(proc_macro_hygiene))]
 
 #[macro_use]
 mod macros;
