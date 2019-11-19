@@ -6,14 +6,14 @@ use crate::wrapper::config::Value;
 use serde_derive::*;
 
 #[derive(Clone, Debug, Deserialize)]
-pub(super) struct NotifierConfig {
+pub(crate) struct NotifierConfig {
     pub(super) enable_notifier: bool,
     pub(super) notifier_critical: u64,
     pub(super) notifier_levels: Vec<u64>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub(super) struct RenderConfig {
+pub(crate) struct RenderConfig {
     pub(super) charging: String,
     pub(super) discharging: String,
     pub(super) icons: Vec<String>,

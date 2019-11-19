@@ -9,7 +9,7 @@ use crate::wrapper::config::Value;
 use serde_derive::*;
 
 #[derive(Clone, Debug, Deserialize)]
-pub(super) struct RenderConfig {
+pub(crate) struct RenderConfig {
     pub(super) no_value: String,
     pub(super) template: String,
 }
