@@ -39,7 +39,7 @@ impl BatteryDevice {
 
         let seconds = if is_ac_online {
             let charge_full = get_value2(&self.name, CHARGE_FULL, ENERGY_FULL)?;
-            charge_full - charge_now * 3600 / current_now
+            (charge_full - charge_now) * 3600 / current_now
         } else {
             charge_now * 3600 / current_now
         };
