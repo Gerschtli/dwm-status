@@ -1,15 +1,17 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, useGlobalAlsaUtils ? false }:
 
 with pkgs;
 
 let
-  binPath = stdenv.lib.makeBinPath [
-    alsaUtils     # audio:   alsactl, amixer
-    coreutils     # audio:   stdbuf
-    dnsutils      # network: dig
-    iproute       # network: ip
-    wirelesstools # network: iwgetid
-  ];
+  binPath = stdenv.lib.makeBinPath (
+    [
+      coreutils     # audio:   stdbuf
+      dnsutils      # network: dig
+      iproute       # network: ip
+      wirelesstools # network: iwgetid
+    ]
+    ++ pkgs.lib.optional (!useGlobalAlsaUtils) alsaUtils # audio: alsactl, amixer
+  );
 in
 
 rustPlatform.buildRustPackage rec {
