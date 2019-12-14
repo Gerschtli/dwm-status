@@ -87,3 +87,31 @@ jobs:
         run: |
           RUST_BACKTRACE=full cargo tarpaulin --out Xml
           bash <(curl -s https://codecov.io/bash)
+
+
+  nix:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        nix-channel:
+          - nixpkgs-unstable
+          - nixos-19.09
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v6
+
+      - name: Set nix-channel
+        run: |
+          nix-channel --add https://nixos.org/channels/${{ matrix.nix-channel }} nixpkgs
+          nix-channel --update
+
+      - name: Show current rust version
+        run: nix eval nixpkgs.rustc.version
+
+      - name: Build package
+        run: nix-build
