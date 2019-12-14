@@ -29,6 +29,18 @@ jobs:
           rust-version: ${{ matrix.rust }}
           components: ${{ matrix.components }}
 
+      - name: Cache ~/.cargo
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo
+          key: ${{ matrix.rust }}-cargo
+
+      - name: Cache ./target
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ matrix.rust }}-target
+
       - name: Install build dependencies
         run: sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev
 
