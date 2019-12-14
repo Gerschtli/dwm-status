@@ -1,0 +1,65 @@
+name: Build and test
+on:
+  pull_request:
+  push:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust:
+          - stable
+          - beta
+          - nightly
+          - 1.37.0
+        include:
+          - rust: nightly
+            components: clippy, rustfmt
+            cargo-flags: --features mocking
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Install rust
+        uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: ${{ matrix.rust }}
+          components: ${{ matrix.components }}
+
+      - name: Install build dependencies
+        run: sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev
+
+      - name: Install tarpaulin
+        if: matrix.rust == 'nightly'
+        run: |
+          cargo install cargo-update || echo "cargo-update already installed"
+          RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin || echo "cargo-tarpaulin already installed"
+          cargo install-update cargo-update
+          RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install-update cargo-tarpaulin
+          sudo apt-get install libssl-dev
+
+      - name: Check coding style
+        if: matrix.rust == 'nightly'
+        run: cargo fmt -- --verbose --check
+
+      - name: Build package
+        run: |
+          cargo check --verbose ${{ matrix.cargo-flags }}
+          cargo build --verbose ${{ matrix.cargo-flags }}
+
+      - name: Check clippy errors
+        if: matrix.rust == 'nightly'
+        run: cargo clippy --verbose ${{ matrix.cargo-flags }}
+
+      - name: Run cargo tests
+        if: matrix.rust == 'nightly'
+        run: cargo test --verbose ${{ matrix.cargo-flags }}
+
+      - name: Generate and push code coverage data
+        if: matrix.rust == 'nightly'
+        run: |
+          RUST_BACKTRACE=full cargo tarpaulin --out Xml
+          bash <(curl -s https://codecov.io/bash)
