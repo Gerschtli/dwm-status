@@ -59,11 +59,8 @@ jobs:
       - name: Install tarpaulin
         if: matrix.rust == 'nightly'
         run: |
-          cargo install cargo-update || echo "cargo-update already installed"
-          RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin || echo "cargo-tarpaulin already installed"
-          cargo install-update cargo-update
-          RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install-update cargo-tarpaulin
           sudo apt-get install libssl-dev
+          RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
 
       - name: Check coding style
         if: matrix.rust == 'nightly'
