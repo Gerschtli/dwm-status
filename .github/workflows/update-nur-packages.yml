@@ -1,0 +1,18 @@
+name: Update nur-packages
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sendDispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository Dispatch to nur-packages
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: Gerschtli/nur-packages
+          event-type: update-dwm-status
+          client-payload: '{"commit_id": "${{ github.sha }}"}'
