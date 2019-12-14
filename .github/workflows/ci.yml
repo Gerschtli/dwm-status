@@ -29,17 +29,29 @@ jobs:
           rust-version: ${{ matrix.rust }}
           components: ${{ matrix.components }}
 
-      - name: Cache ~/.cargo
+      - name: Cache cargo registry
         uses: actions/cache@v1
         with:
-          path: ~/.cargo
-          key: ${{ matrix.rust }}-cargo
+          path: ~/.cargo/registry
+          key: ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ matrix.rust }}-cargo-registry-
 
-      - name: Cache ./target
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ matrix.rust }}-cargo-index-
+
+      - name: Cache cargo build
         uses: actions/cache@v1
         with:
           path: target
-          key: ${{ matrix.rust }}-target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ matrix.rust }}-cargo-build-target-
 
       - name: Install build dependencies
         run: sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev
