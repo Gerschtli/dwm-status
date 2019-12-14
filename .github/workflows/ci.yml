@@ -35,16 +35,18 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.cargo/registry
-          key: ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}-{{ github.sha }}
           restore-keys: |
+            ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}-
             ${{ matrix.rust }}-cargo-registry-
 
       - name: Cache cargo index
         uses: actions/cache@v1
         with:
           path: ~/.cargo/git
-          key: ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-{{ github.sha }}
           restore-keys: |
+            ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-
             ${{ matrix.rust }}-cargo-index-
 
       - name: Cache cargo build
