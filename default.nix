@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     (path: type: type != "directory" || baseNameOf path != "target")
     ./.;
 
-  cargoSha256 = "1wsybk5ny0krq8jkk4bp6ff0d31102ff1bv33pdipf32lj0axns6";
+  cargoSha256 = "1i3zqz7yqbps684rsz422akbvhrbw6qhrmfarkm4zpi557gx400b";
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
