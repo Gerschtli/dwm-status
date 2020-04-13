@@ -1,9 +1,23 @@
-with import <nixpkgs> { };
+let
+  sources = import ./nix/sources.nix;
+  nixpkgs-mozilla = import sources.nixpkgs-mozilla;
+  niv = import sources.niv;
+  pkgs = import sources.nixpkgs {
+    overlays =
+      [
+        nixpkgs-mozilla
+        (self: super:
+          {
+            rustc = self.latest.rustChannels.nightly.rust;
+            cargo = self.latest.rustChannels.nightly.rust;
+          }
+        )
+      ];
+  };
+in
 
-stdenv.mkDerivation {
-  name = "dwm-status";
-
-  buildInputs = [
+pkgs.mkShell {
+  buildInputs = with pkgs; [
     # build dependencies
     dbus
     gdk_pixbuf
@@ -19,9 +33,11 @@ stdenv.mkDerivation {
     wirelesstools
 
     # dev tools
+    cargo
     cargo-edit
     cargo-release
-    rustup
+    niv
+    rustc
 
     # tarpaulin
     # run RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
