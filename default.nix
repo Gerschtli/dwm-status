@@ -1,8 +1,13 @@
-{ pkgs ? import <nixpkgs> { }, useGlobalAlsaUtils ? false }:
+{ sources ? import ./nix/sources.nix
+, pkgs ? import sources.nixpkgs { overlays = []; }
+, useGlobalAlsaUtils ? false
+}:
 
 with pkgs;
 
 let
+  naersk = callPackage sources.naersk { };
+
   binPath = stdenv.lib.makeBinPath (
     [
       coreutils     # audio:   stdbuf
@@ -10,23 +15,29 @@ let
       iproute       # network: ip
       wirelesstools # network: iwgetid
     ]
-    ++ pkgs.lib.optional (!useGlobalAlsaUtils) alsaUtils # audio: alsactl, amixer
+    ++ lib.optional (!useGlobalAlsaUtils) alsaUtils # audio: alsactl, amixer
   );
 in
 
-rustPlatform.buildRustPackage rec {
-  name = "dwm-status";
-
+naersk.buildPackage {
   src = builtins.filterSource
     (path: type: type != "directory" || baseNameOf path != "target")
     ./.;
 
-  cargoSha256 = "1i3zqz7yqbps684rsz422akbvhrbw6qhrmfarkm4zpi557gx400b";
+  nativeBuildInputs = [
+    makeWrapper pkgconfig
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+    # default values of naersk
+    # see https://github.com/nmattia/naersk/issues/50#issuecomment-612951680
+    cargo jq rsync
+  ];
+
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
   postInstall = ''
-    wrapProgram $out/bin/${name} --prefix "PATH" : "${binPath}"
+    # run only when building the final package
+    if [[ -x $out/bin/dwm-status ]]; then
+      wrapProgram $out/bin/dwm-status --prefix "PATH" : "${binPath}"
+    fi
   '';
 }
