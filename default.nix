@@ -24,14 +24,7 @@ naersk.buildPackage {
     (path: type: type != "directory" || baseNameOf path != "target")
     ./.;
 
-  nativeBuildInputs = [
-    makeWrapper pkgconfig
-
-    # default values of naersk
-    # see https://github.com/nmattia/naersk/issues/50#issuecomment-612951680
-    cargo jq rsync
-  ];
-
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
   postInstall = ''
