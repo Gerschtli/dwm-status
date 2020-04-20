@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.6.4] - 2020-04-20
 ### Changed
 - Updated external dependencies
 
@@ -187,7 +189,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Audio, backlight, battery and time features
   - Travis config with cargo fmt, build and test checks
 
-[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.6.3...HEAD
+[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.6.4...HEAD
+[1.6.4]: https://github.com/Gerschtli/dwm-status/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/Gerschtli/dwm-status/compare/1.6.2...1.6.3
 [1.6.2]: https://github.com/Gerschtli/dwm-status/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/Gerschtli/dwm-status/compare/1.6.0...1.6.1
