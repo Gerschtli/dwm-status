@@ -1,7 +1,7 @@
 let
   sources = import ./nix/sources.nix;
   nixpkgs-mozilla = import sources.nixpkgs-mozilla;
-  niv = import sources.niv;
+  niv = (import sources.niv { }).niv;
   pkgs = import sources.nixpkgs {
     overlays =
       [
