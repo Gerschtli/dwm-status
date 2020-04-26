@@ -16,7 +16,7 @@ jobs:
           - stable
           - beta
           - nightly
-          - 1.37.0
+          - 1.41.0
         include:
           - rust: nightly
             components: clippy, rustfmt
@@ -99,7 +99,7 @@ jobs:
       matrix:
         nix-channel:
           - nixpkgs-unstable
-          - nixos-19.09
+          - nixos-20.03
 
     steps:
       - name: Checkout repository
