@@ -6,7 +6,7 @@ pub(crate) trait Renderable {
 }
 
 pub(crate) trait Updatable {
-    fn renderable(&self) -> Box<&dyn Renderable>;
+    fn renderable(&self) -> &dyn Renderable;
 
     fn update(&mut self) -> Result<()>;
 }
@@ -65,7 +65,7 @@ where
     N: thread::Runnable,
     U: Updatable,
 {
-    fn renderable(&self) -> Box<&dyn Renderable> {
+    fn renderable(&self) -> &dyn Renderable {
         self.updater.renderable()
     }
 

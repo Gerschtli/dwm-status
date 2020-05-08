@@ -27,8 +27,8 @@ impl Updater {
 }
 
 impl feature::Updatable for Updater {
-    fn renderable(&self) -> Box<&dyn feature::Renderable> {
-        Box::new(&self.data)
+    fn renderable(&self) -> &dyn feature::Renderable {
+        &self.data
     }
 
     fn update(&mut self) -> Result<()> {
