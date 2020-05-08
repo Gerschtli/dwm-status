@@ -1,19 +1,7 @@
 let
   sources = import ./nix/sources.nix;
-  nixpkgs-mozilla = import sources.nixpkgs-mozilla;
   niv = (import sources.niv { }).niv;
-  pkgs = import sources.nixpkgs {
-    overlays =
-      [
-        nixpkgs-mozilla
-        (self: super:
-          {
-            rustc = self.latest.rustChannels.nightly.rust;
-            cargo = self.latest.rustChannels.nightly.rust;
-          }
-        )
-      ];
-  };
+  pkgs = import sources.nixpkgs { overlays = [ ]; };
 in
 
 pkgs.mkShell {
@@ -33,11 +21,10 @@ pkgs.mkShell {
     wirelesstools
 
     # dev tools
-    cargo
     cargo-edit
     cargo-release
     niv
-    rustc
+    rustup
 
     # tarpaulin
     # run RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f

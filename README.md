@@ -170,6 +170,4 @@ toolchain and components:
 $ nix-shell
 [nix-shell]$ rustup install nightly
 [nix-shell]$ rustup default nightly
-[nix-shell]$ rustup component add clippy-preview
-[nix-shell]$ rustup component add rustfmt-preview
 ```
