@@ -1,5 +1,4 @@
 use crate::error::*;
-use ctrlc;
 
 pub(crate) fn register_handler<T>(handler: T) -> Result<()>
 where

@@ -24,7 +24,6 @@
 
 use clap::Arg;
 use clap::*;
-use dwm_status;
 use simplelog::Config;
 use simplelog::LevelFilter;
 use simplelog::SimpleLogger;

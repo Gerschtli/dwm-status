@@ -1,6 +1,5 @@
 use super::ERROR_NAME;
 use crate::error::*;
-use dbus;
 
 macro_rules! compare_property {
     ( $method:ident, $property:ident ) => {

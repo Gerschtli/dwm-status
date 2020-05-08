@@ -1,5 +1,3 @@
-use chrono;
-
 pub(crate) struct DateTime {
     date_time: chrono::DateTime<chrono::Local>,
 }

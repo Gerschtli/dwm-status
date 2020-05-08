@@ -2,7 +2,6 @@ pub(crate) mod data;
 pub(crate) mod message;
 
 use crate::error::*;
-use dbus;
 
 pub(crate) use self::data::Match;
 pub(crate) use self::message::Message;

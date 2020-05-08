@@ -1,5 +1,4 @@
 use crate::error::*;
-use inotify;
 
 pub(crate) use inotify::WatchMask;
 
