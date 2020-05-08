@@ -20,7 +20,14 @@
     unused_qualifications,
     variant_size_differences
 )]
-#![allow(clippy::filter_map, clippy::non_ascii_literal, deprecated)]
+#![allow(
+    clippy::filter_map,
+    clippy::missing_errors_doc,
+    clippy::non_ascii_literal,
+    clippy::redundant_pub_crate,
+    clippy::unused_self,
+    clippy::wildcard_imports
+)]
 
 use clap::Arg;
 use clap::*;
