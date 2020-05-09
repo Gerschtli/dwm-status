@@ -94,7 +94,7 @@ impl<T> WrapErrorExt<T> for Option<T> {
 
 pub(crate) trait ResultExt<T> {
     fn show_error(self) -> StdResult<T, ()>;
-    fn show_error_and_ignore(self) ;
+    fn show_error_and_ignore(self);
 }
 
 impl<T> ResultExt<T> for Result<T> {
