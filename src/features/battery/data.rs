@@ -72,7 +72,7 @@ impl Data {
             },
             Battery::Full => {
                 let mut list = vec![];
-                self.push_capacity(&mut list, 1.);
+                self.push_capacity(&mut list, 100.);
                 list
             },
         }
