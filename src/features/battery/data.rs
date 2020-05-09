@@ -1,36 +1,11 @@
-use super::fmt_capacity;
-use super::fmt_time;
 use super::RenderConfig;
 use crate::feature::Renderable;
 use crate::utils::icon_by_percentage;
-use std::collections::HashMap;
-use std::time;
-
-#[derive(Debug)]
-pub(super) struct BatteryInfo {
-    pub(super) capacity: u64,
-    pub(super) estimation: Option<time::Duration>,
-}
-
-impl BatteryInfo {
-    // TODO: fix clippy warning
-    #[allow(clippy::cast_possible_truncation)]
-    fn render(&self, settings: &RenderConfig) -> String {
-        let mut rendered = String::with_capacity(16);
-
-        if let Some(icon) = icon_by_percentage(&settings.icons, self.capacity as u32) {
-            rendered.push_str(&format!("{} ", icon));
-        }
-
-        rendered.push_str(&fmt_capacity(self.capacity));
-
-        if let Some(ref estimation) = self.estimation {
-            rendered.push_str(&format!(" ({})", fmt_time(estimation)));
-        }
-
-        rendered
-    }
-}
+use crate::wrapper::battery::Battery;
+use crate::wrapper::uom::get_raw_hours;
+use crate::wrapper::uom::get_raw_minutes;
+use crate::wrapper::uom::get_raw_percent;
+use uom::si::f32::Time;
 
 #[derive(Debug)]
 pub(super) struct Data {
@@ -47,151 +22,85 @@ impl Data {
         }
     }
 
-    pub(super) fn update(&mut self, ac_online: bool, batteries: &HashMap<String, BatteryInfo>) {
-        if batteries.is_empty() {
-            self.cache = self.config.no_battery.clone();
-            return;
+    pub(super) fn update(&mut self, batteries: &[Battery]) {
+        self.cache = if batteries.is_empty() {
+            self.config.no_battery.clone()
+        } else {
+            batteries
+                .iter()
+                .map(|battery| {
+                    self.render_battery(battery)
+                        .into_iter()
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                })
+                .collect::<Vec<_>>()
+                .join(&self.config.separator)
+        }
+    }
+
+    fn render_battery(&self, battery: &Battery) -> Vec<String> {
+        match *battery {
+            Battery::Charging {
+                percentage,
+                time_to_full,
+            } => {
+                let capacity = get_raw_percent(percentage);
+
+                let mut list = vec![];
+                list.push(self.config.charging.to_owned());
+                self.push_capacity(&mut list, capacity);
+                self.push_time(&mut list, time_to_full);
+                list
+            },
+            Battery::Discharging {
+                percentage,
+                time_to_empty,
+            } => {
+                let capacity = get_raw_percent(percentage);
+
+                let mut list = vec![];
+                list.push(self.config.discharging.to_owned());
+                self.push_capacity(&mut list, capacity);
+                self.push_time(&mut list, time_to_empty);
+                list
+            },
+            Battery::Empty => {
+                let mut list = vec![];
+                self.push_capacity(&mut list, 0.);
+                list
+            },
+            Battery::Full => {
+                let mut list = vec![];
+                self.push_capacity(&mut list, 1.);
+                list
+            },
+        }
+    }
+
+    // FIXME: allow truncation
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    fn push_capacity(&self, list: &mut Vec<String>, capacity: f32) {
+        let icon = icon_by_percentage(&self.config.icons, (capacity * 100.) as u32);
+
+        if let Some(icon_str) = icon {
+            list.push(icon_str.to_owned());
         }
 
-        let mut keys = batteries.keys().collect::<Vec<_>>();
-        keys.sort();
-        let rendered = keys
-            .into_iter()
-            .map(|key| batteries[key].render(&self.config))
-            .collect::<Vec<_>>()
-            .join(&self.config.separator);
+        list.push(format!("{}%", capacity));
+    }
 
-        self.cache = format!(
-            "{} {}",
-            if ac_online {
-                &self.config.charging
-            } else {
-                &self.config.discharging
-            },
-            rendered
-        );
+    fn push_time(&self, list: &mut Vec<String>, time: Time) {
+        list.push(format!(
+            "({:02}:{:02})",
+            get_raw_hours(time),
+            get_raw_minutes(time)
+        ));
     }
 }
 
 impl Renderable for Data {
     fn render(&self) -> &str {
         &self.cache
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use hamcrest2::assert_that;
-    use hamcrest2::prelude::*;
-    #[cfg(feature = "mocking")]
-    use mocktopus::mocking::*;
-
-    #[test]
-    fn render_with_default() {
-        let object = build_object();
-
-        assert_that!(object.render(), is(equal_to("")));
-    }
-
-    #[test]
-    fn render_when_no_battery() {
-        let mut object = build_object();
-
-        object.update(true, &HashMap::new());
-
-        assert_that!(object.render(), is(equal_to("no_battery")));
-    }
-
-    #[cfg(feature = "mocking")]
-    #[test]
-    fn render_with_one_battery_and_charging() {
-        let mut counter = 0;
-        icon_by_percentage.mock_safe(move |icons, value| {
-            counter += 1;
-            assert_that!(icons, contains(vec!["icons".to_owned()]).exactly());
-
-            match counter {
-                1 => {
-                    assert_that!(value, is(equal_to(40)));
-                    MockResult::Return(None)
-                },
-                _ => panic!("icon_by_percentage called to often: {} times", counter),
-            }
-        });
-
-        let mut batteries = HashMap::new();
-        batteries.insert(
-            "BAT0".to_owned(),
-            BatteryInfo {
-                capacity: 40,
-                estimation: None,
-            },
-        );
-
-        let mut object = build_object();
-
-        object.update(true, &batteries);
-
-        assert_that!(object.render(), is(equal_to("charging 40%")));
-    }
-
-    #[cfg(feature = "mocking")]
-    #[test]
-    fn render_with_multiple_batteries_and_discharging() {
-        let mut counter = 0;
-        icon_by_percentage.mock_safe(move |icons, value| {
-            counter += 1;
-            assert_that!(icons, contains(vec!["icons".to_owned()]).exactly());
-
-            match counter {
-                1 => {
-                    assert_that!(value, is(equal_to(40)));
-                    MockResult::Return(Some("ico40"))
-                },
-                2 => {
-                    assert_that!(value, is(equal_to(70)));
-                    MockResult::Return(Some("ico70"))
-                },
-                _ => panic!("icon_by_percentage called to often: {} times", counter),
-            }
-        });
-
-        let mut batteries = HashMap::new();
-        batteries.insert(
-            "BAT1".to_owned(),
-            BatteryInfo {
-                capacity: 70,
-                estimation: Some(time::Duration::from_secs((2 * 60 + 7) * 60)),
-            },
-        );
-        batteries.insert(
-            "BAT0".to_owned(),
-            BatteryInfo {
-                capacity: 40,
-                estimation: Some(time::Duration::from_secs(30 * 60)),
-            },
-        );
-
-        let mut object = build_object();
-
-        object.update(false, &batteries);
-
-        assert_that!(
-            object.render(),
-            is(equal_to(
-                "discharging ico40 40% (00:30) # ico70 70% (02:07)"
-            ))
-        );
-    }
-
-    fn build_object() -> Data {
-        Data::new(RenderConfig {
-            charging: "charging".to_owned(),
-            discharging: "discharging".to_owned(),
-            icons: vec!["icons".to_owned()],
-            no_battery: "no_battery".to_owned(),
-            separator: " # ".to_owned(),
-        })
     }
 }

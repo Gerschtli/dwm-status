@@ -15,29 +15,14 @@ const PATH_BATTERY_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices/batte
 const PATH_DEVICES_PREFIX: &str = "/org/freedesktop/UPower/devices";
 const PATH_UPOWER: &str = "/org/freedesktop/UPower";
 
-#[derive(Clone, Debug)]
-pub(super) enum DeviceMessage {
-    Added(String),
-    Removed(String),
-}
-
 pub(super) struct DbusWatcher {
     id: usize,
     sender: channel::Sender<communication::Message>,
-    sender_devices: channel::Sender<DeviceMessage>,
 }
 
 impl DbusWatcher {
-    pub(super) const fn new(
-        id: usize,
-        sender: channel::Sender<communication::Message>,
-        sender_devices: channel::Sender<DeviceMessage>,
-    ) -> Self {
-        Self {
-            id,
-            sender,
-            sender_devices,
-        }
+    pub(super) const fn new(id: usize, sender: channel::Sender<communication::Message>) -> Self {
+        Self { id, sender }
     }
 
     fn add_device<'a>(
@@ -58,9 +43,6 @@ impl DbusWatcher {
             MEMBER_PROPERTIES_CHANGED,
             path,
         ))?;
-
-        self.sender_devices
-            .send(DeviceMessage::Added(name.to_owned()))?;
 
         devices.insert(path.clone());
 
@@ -99,16 +81,11 @@ impl DbusWatcher {
             return Ok(());
         }
 
-        let name = self.get_device_name(path)?;
-
         connection.remove_match(dbus::Match::new(
             INTERFACE_DBUS_PROPERTIES,
             MEMBER_PROPERTIES_CHANGED,
             path,
         ))?;
-
-        self.sender_devices
-            .send(DeviceMessage::Removed(name.to_owned()))?;
 
         devices.remove(path);
 
