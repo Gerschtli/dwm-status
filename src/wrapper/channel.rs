@@ -17,12 +17,6 @@ impl<M: Clone> Receiver<M> {
             .recv()
             .wrap_error("channel receiver", "read blocking failed")
     }
-
-    pub(crate) fn read(&self) -> Result<M> {
-        self.receiver
-            .try_recv()
-            .wrap_error("channel receiver", "read failed")
-    }
 }
 
 #[derive(Clone)]

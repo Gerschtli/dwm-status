@@ -4,10 +4,6 @@ use std::io::Read;
 use std::path;
 use std::str;
 
-pub(crate) fn exists(path: &str) -> bool {
-    path::Path::new(path).exists()
-}
-
 pub(crate) fn read<P>(path: P) -> io::Result<String>
 where
     P: AsRef<path::Path>,
