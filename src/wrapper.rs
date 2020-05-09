@@ -1,3 +1,4 @@
+pub(crate) mod battery;
 pub(crate) mod channel;
 pub(crate) mod config;
 pub(crate) mod date_time;
