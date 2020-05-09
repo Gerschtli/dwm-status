@@ -8,4 +8,5 @@ pub(crate) mod libnotify;
 pub(crate) mod process;
 pub(crate) mod termination;
 pub(crate) mod thread;
+pub(crate) mod uom;
 pub(crate) mod xsetroot;
