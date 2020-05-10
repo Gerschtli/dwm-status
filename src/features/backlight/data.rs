@@ -17,8 +17,11 @@ impl Data {
         }
     }
 
-    pub(super) fn update(&mut self, value: u32) {
-        let mut rendered = self.config.template.replace("{BL}", &format!("{}", value));
+    pub(super) fn update(&mut self, value: f32) {
+        let mut rendered = self
+            .config
+            .template
+            .replace("{BL}", &format!("{:.0}", value));
 
         if let Some(icon) = icon_by_percentage(&self.config.icons, value) {
             rendered = rendered.replace("{ICO}", icon);
