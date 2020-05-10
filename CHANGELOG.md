@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Replaced logic for gathering battery status information by external crate [battery](https://crates.io/crates/battery)
+  to handle more devices and edge cases
 
 ## [1.6.4] - 2020-04-20
 ### Changed
@@ -14,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Improved error messages in case of failed command executions
 
-## Fixed
+### Fixed
 - Fixes reported [issues](https://github.com/Gerschtli/dwm-status/issues/5) in network feature:
   - Fixes incorrect command line arguments of `dig` call for IPv6 address
   - Log warn message instead of exiting dwm-status on command execution failure
