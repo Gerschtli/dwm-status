@@ -78,16 +78,14 @@ impl Data {
         }
     }
 
-    // FIXME: allow truncation
-    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     fn push_capacity(&self, list: &mut Vec<String>, capacity: f32) {
-        let icon = icon_by_percentage(&self.config.icons, (capacity * 100.) as u32);
+        let icon = icon_by_percentage(&self.config.icons, capacity);
 
         if let Some(icon_str) = icon {
             list.push(icon_str.to_owned());
         }
 
-        list.push(format!("{}%", capacity));
+        list.push(format!("{:.0}%", capacity));
     }
 
     fn push_time(&self, list: &mut Vec<String>, time: Time) {

@@ -60,10 +60,9 @@ impl BatteryNotifier {
         }
     }
 
-    // FIXME: allow truncation
     #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     fn notify(&mut self, battery: &DischargingBattery) {
-        let capacity = (get_raw_percent(battery.percentage) * 100.) as u64;
+        let capacity = get_raw_percent(battery.percentage) as u64;
 
         for level in &self.settings.notifier_levels {
             if *level >= capacity {
