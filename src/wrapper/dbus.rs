@@ -2,6 +2,9 @@ pub(crate) mod data;
 pub(crate) mod message;
 
 use crate::error::*;
+use dbus::ffidisp::BusType;
+use dbus::ffidisp::Connection as DbusConnection;
+use dbus::ffidisp::ConnectionItem;
 
 pub(crate) use self::data::Match;
 pub(crate) use self::message::Message;
@@ -10,12 +13,12 @@ pub(crate) use dbus::Path;
 const ERROR_NAME: &str = "dbus";
 
 pub(crate) struct Connection {
-    connection: dbus::Connection,
+    connection: DbusConnection,
 }
 
 impl Connection {
     pub(crate) fn init() -> Result<Self> {
-        let connection = dbus::Connection::get_private(dbus::BusType::System)
+        let connection = DbusConnection::get_private(BusType::System)
             .wrap_error(ERROR_NAME, "failed to connect to dbus")?;
 
         Ok(Self { connection })
@@ -33,7 +36,7 @@ impl Connection {
     {
         // 300_000 seconds timeout before sending ConnectionItem::Nothing
         for item in self.connection.iter(300_000) {
-            if let dbus::ConnectionItem::Signal(signal) = item {
+            if let ConnectionItem::Signal(signal) = item {
                 handle_signal(Message::new(signal))?;
             }
         }
