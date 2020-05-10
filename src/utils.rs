@@ -1,14 +1,15 @@
 use std::cmp;
 
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 #[cfg_attr(all(test, feature = "mocking"), mocktopus::macros::mockable)]
-pub(crate) fn icon_by_percentage(icons: &[String], percentage: u32) -> Option<&str> {
+pub(crate) fn icon_by_percentage<I: Into<f64>>(icons: &[String], percentage: I) -> Option<&str> {
     if icons.is_empty() {
         return None;
     }
 
     let length = icons.len();
     let interval = 100 / length;
-    let index = cmp::min(percentage as usize, 100) / interval;
+    let index = cmp::min(percentage.into() as usize, 100) / interval;
 
     Some(&icons[cmp::min(index, length - 1)])
 }
