@@ -65,16 +65,16 @@ mod tests {
             template: "TEMPLATE {BL} {ICO}".to_owned(),
         };
 
-        icon_by_percentage.mock_safe(|icons, value| {
+        icon_by_percentage.mock_safe(|icons, value: f32| {
             assert_that!(icons, empty());
-            assert_that!(value, is(equal_to(10)));
+            assert_that!(value, is(equal_to(10.)));
 
             MockResult::Return(None)
         });
 
         let mut object = Data::new(config);
 
-        object.update(10);
+        object.update(10.);
 
         assert_that!(object.render(), is(equal_to("TEMPLATE 10 {ICO}")));
     }
@@ -87,17 +87,17 @@ mod tests {
             template: "TEMPLATE {BL} {ICO}".to_owned(),
         };
 
-        icon_by_percentage.mock_safe(|icons, value| {
+        icon_by_percentage.mock_safe(|icons, value: f32| {
             let expected_icons = vec!["ico1".to_owned(), "ico2".to_owned()];
             assert_that!(icons, contains(expected_icons).exactly());
-            assert_that!(value, is(equal_to(10)));
+            assert_that!(value, is(equal_to(10.)));
 
             MockResult::Return(Some("ICON"))
         });
 
         let mut object = Data::new(config);
 
-        object.update(10);
+        object.update(10.);
 
         assert_that!(object.render(), is(equal_to("TEMPLATE 10 ICON")));
     }

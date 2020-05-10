@@ -85,7 +85,7 @@ mod tests {
             template: "TEMPLATE {VOL} {ICO}".to_owned(),
         };
 
-        icon_by_percentage.mock_safe(|icons, value| {
+        icon_by_percentage.mock_safe(|icons, value: u32| {
             assert_that!(icons, empty());
             assert_that!(value, is(equal_to(10)));
 
@@ -108,7 +108,7 @@ mod tests {
             template: "TEMPLATE {VOL} {ICO}".to_owned(),
         };
 
-        icon_by_percentage.mock_safe(|icons, value| {
+        icon_by_percentage.mock_safe(|icons, value: u32| {
             let expected_icons = vec!["ico1".to_owned(), "ico2".to_owned()];
             assert_that!(icons, contains(expected_icons).exactly());
             assert_that!(value, is(equal_to(10)));
