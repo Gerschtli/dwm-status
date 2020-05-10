@@ -16,6 +16,7 @@ struct DischargingBattery {
 pub(super) struct BatteryNotifier {
     libnotify: libnotify::LibNotify,
     settings: NotifierConfig,
+    capacity: Option<u64>,
 }
 
 impl BatteryNotifier {
@@ -23,6 +24,7 @@ impl BatteryNotifier {
         Ok(Self {
             libnotify: libnotify::LibNotify::init()?,
             settings,
+            capacity: None,
         })
     }
 
@@ -57,6 +59,8 @@ impl BatteryNotifier {
 
         if let Some(battery) = discharging {
             self.notify(&battery);
+        } else {
+            self.capacity = None
         }
     }
 
@@ -66,24 +70,31 @@ impl BatteryNotifier {
 
         for level in &self.settings.notifier_levels {
             if *level >= capacity {
-                self.libnotify
-                    .send_notification(
-                        &format!("Battery under {}%", level),
-                        &format!(
-                            "{:02}:{:02} remaining",
-                            get_raw_hours(battery.time_to_empty),
-                            get_raw_minutes(battery.time_to_empty),
-                        ),
-                        if *level <= self.settings.notifier_critical {
-                            libnotify::Urgency::Critical
-                        } else {
-                            libnotify::Urgency::Normal
-                        },
-                    )
-                    .show_error_and_ignore();
+                if match self.capacity {
+                    Some(value) if *level >= value => false,
+                    _ => true,
+                } {
+                    self.libnotify
+                        .send_notification(
+                            &format!("Battery under {}%", level),
+                            &format!(
+                                "{:02}:{:02} remaining",
+                                get_raw_hours(battery.time_to_empty),
+                                get_raw_minutes(battery.time_to_empty),
+                            ),
+                            if *level <= self.settings.notifier_critical {
+                                libnotify::Urgency::Critical
+                            } else {
+                                libnotify::Urgency::Normal
+                            },
+                        )
+                        .show_error_and_ignore();
+                }
 
                 break;
             }
         }
+
+        self.capacity = Some(capacity)
     }
 }
