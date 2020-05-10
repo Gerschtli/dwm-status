@@ -23,9 +23,9 @@ impl BacklightDevice {
         self.build_path("actual")
     }
 
-    pub(super) fn value(&self) -> Result<f32> {
+    pub(super) fn value(&self) -> Result<u32> {
         let current = self.get_brightness("actual")?;
-        let value = current as f32 * 100. / self.max as f32;
+        let value = current * 100 / self.max;
 
         Ok(value)
     }
