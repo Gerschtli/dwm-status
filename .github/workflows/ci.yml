@@ -106,9 +106,9 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Install nix
-        uses: Gerschtli/install-nix-action@nix-path
+        uses: cachix/install-nix-action@v10
         with:
-          NIX_PATH: nixpkgs=channel:${{ matrix.nix-channel }}
+          nix_path: nixpkgs=channel:${{ matrix.nix-channel }}
 
       - name: Show current rust version
         run: nix eval nixpkgs.rustc.version
