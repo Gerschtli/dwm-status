@@ -65,6 +65,14 @@ impl Data {
                 self.push_time(&mut list, time_to_empty);
                 list
             },
+            Battery::Unknown {
+                percentage
+            } => {
+                let capacity = get_raw_percent(percentage);
+                let mut list = vec![];
+                self.push_capacity(&mut list, capacity);
+                list
+            }
             Battery::Empty => {
                 let mut list = vec![];
                 self.push_capacity(&mut list, 0.);
