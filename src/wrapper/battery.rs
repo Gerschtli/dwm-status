@@ -14,6 +14,9 @@ pub(crate) enum Battery {
         percentage: Ratio,
         time_to_empty: Time,
     },
+    Unknown {
+        percentage: Ratio,
+    },
     Empty,
     Full,
 }
@@ -40,7 +43,18 @@ pub(crate) fn all_batteries() -> Result<Vec<Battery>> {
                 }),
                 battery::State::Empty => Some(Battery::Empty),
                 battery::State::Full => Some(Battery::Full),
-                _ => None,
+                battery::State::Unknown => Some(Battery::Unknown { 
+                    // Unknown can mean either controller returned unknown,
+                    // or not able to retrieve state due to some error.
+                    // Nevertheless, it should be possible to get the state of
+                    // charge.
+                    percentage: battery.state_of_charge()
+                }),
+                _ => {
+                    // battery::State is non-exhaustive so we should handle this case
+                    warn!("An hunandled state was reported when reading battery data");
+                    None
+                }
             },
             Err(err) => {
                 warn!("An error occurred reading battery data: {}", err);
