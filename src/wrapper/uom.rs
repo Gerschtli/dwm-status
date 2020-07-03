@@ -4,6 +4,10 @@ use uom::si::ratio::percent;
 use uom::si::time::hour;
 use uom::si::time::minute;
 
+pub(crate) fn create_ratio_by_percentage(value: f32) -> Ratio {
+    Ratio::new::<percent>(value)
+}
+
 pub(crate) fn get_raw_percent(percentage: Ratio) -> f32 {
     percentage.round::<percent>().get::<percent>()
 }
