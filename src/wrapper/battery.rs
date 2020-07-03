@@ -28,6 +28,7 @@ pub(crate) fn all_batteries() -> Result<Vec<Battery>> {
         .batteries()
         .wrap_error("battery", "error in loading battery info")?
         .flat_map(|maybe_battery| match maybe_battery {
+            #[allow(clippy::match_wildcard_for_single_variants)]
             Ok(battery) => match battery.state() {
                 battery::State::Charging => Some(Battery::Charging {
                     percentage: battery.state_of_charge(),

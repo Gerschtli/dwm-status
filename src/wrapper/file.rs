@@ -20,13 +20,13 @@ where
     P: AsRef<path::Path>,
     T: str::FromStr,
 {
-    read(&path)?.trim().parse().or_else(|_| {
-        Err(io::Error::new(
+    read(&path)?.trim().parse().map_err(|_| {
+        io::Error::new(
             io::ErrorKind::Other,
             format!(
                 "contents of file '{}' failed to parse",
                 path.as_ref().display()
             ),
-        ))
+        )
     })
 }
