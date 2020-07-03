@@ -16,10 +16,10 @@ impl LibNotify {
     pub(crate) fn send_notification(
         &self,
         summary: &str,
-        body: &str,
+        body: Option<&str>,
         urgency: Urgency,
     ) -> Result<()> {
-        let notification = libnotify::Notification::new(summary, Some(body), None);
+        let notification = libnotify::Notification::new(summary, body, None);
         notification.set_urgency(urgency);
         notification
             .show()
