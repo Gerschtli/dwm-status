@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Fixed an [issue](https://github.com/Gerschtli/dwm-status/issues/11) where only one of multiple batteries was
+  recognized
+- Fixed an [issue](https://github.com/Gerschtli/dwm-status/issues/13) where battery notification were already sent when
+  one battery is low despite the fact that at least one other battery was fully charged
 
 ## [1.7.0] - 2020-05-19
 ### Changed
