@@ -1,10 +1,5 @@
 use crate::error::*;
-use crate::features::audio;
-use crate::features::backlight;
-use crate::features::battery;
-use crate::features::cpu_load;
-use crate::features::network;
-use crate::features::time;
+use crate::features;
 use crate::wrapper::config;
 use log::warn;
 use serde_derive::*;
@@ -48,13 +43,13 @@ impl ConfigType for General {
 }
 
 macro_rules! settings {
-    ( $( $mod:ident ),* ) => {
+    ( $( $mod:ident, )* ) => {
         #[derive(Clone, Debug, Deserialize)]
         pub(crate) struct Settings {
             #[serde(flatten)]
             pub(crate) general: General,
             $(
-                pub(crate) $mod: $mod::ConfigEntry,
+                pub(crate) $mod: features::$mod::ConfigEntry,
             )*
         }
 
@@ -64,14 +59,14 @@ macro_rules! settings {
 
                 General::set_default(&mut config)?;
                 $(
-                    $mod::ConfigEntry::set_default(&mut config)?;
+                    features::$mod::ConfigEntry::set_default(&mut config)?;
                 )*
 
                 config.set_path(config_path)?;
 
                 General::set_values(&mut config)?;
                 $(
-                    $mod::ConfigEntry::set_values(&mut config)?;
+                    features::$mod::ConfigEntry::set_values(&mut config)?;
                 )*
 
                 config.try_into()
@@ -80,7 +75,14 @@ macro_rules! settings {
     }
 }
 
-settings!(audio, backlight, battery, cpu_load, network, time);
+settings!(
+    audio,
+    backlight,
+    battery,
+    cpu_load,
+    network,
+    time,
+);
 
 #[cfg(test)]
 #[cfg(feature = "mocking")]
