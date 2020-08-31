@@ -13,22 +13,22 @@ branch = "master"
 repository = "Gerschtli/dwm-status"
 
 [dependencies]
-battery = "0.7.5"
-chrono = "0.4.11"
-clap = "2.33.0"
+battery = "0.7.6"
+chrono = "0.4.15"
+clap = "2.33.3"
 config = "0.10.1"
-dbus = "0.8.2"
-inotify = "0.8.2"
+dbus = "0.8.4"
+inotify = "0.8.3"
 libnotify = "1.0.3"
-log = "0.4.8"
-serde = "1.0.110"
-serde_derive = "1.0.110"
-simplelog = "0.7.6"
-uom = { version = "0.26.0", features = ["autoconvert", "f32", "si"] }
+log = "0.4.11"
+serde = "1.0.115"
+serde_derive = "1.0.115"
+simplelog = "0.8.0"
+uom = { version = "0.29.0", features = ["autoconvert", "f32", "si"] }
 
 [dependencies.ctrlc]
 features = ["termination"]
-version = "3.1.4"
+version = "3.1.6"
 
 [dependencies.mocktopus]
 optional = true
