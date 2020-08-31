@@ -43,7 +43,7 @@ impl ConfigType for General {
 }
 
 macro_rules! settings {
-    ( $( $mod:ident, )* ) => {
+    ( $( $mod:ident ),* ) => {
         #[derive(Clone, Debug, Deserialize)]
         pub(crate) struct Settings {
             #[serde(flatten)]
@@ -75,14 +75,7 @@ macro_rules! settings {
     }
 }
 
-settings!(
-    audio,
-    backlight,
-    battery,
-    cpu_load,
-    network,
-    time,
-);
+settings!(audio, backlight, battery, cpu_load, network, time);
 
 #[cfg(test)]
 #[cfg(feature = "mocking")]
