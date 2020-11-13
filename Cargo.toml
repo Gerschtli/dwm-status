@@ -13,7 +13,7 @@ branch = "master"
 repository = "Gerschtli/dwm-status"
 
 [dependencies]
-battery = "0.7.7"
+battery = "0.7.8"
 chrono = "0.4.19"
 clap = "2.33.3"
 config = "0.10.1"
