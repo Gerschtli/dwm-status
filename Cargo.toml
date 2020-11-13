@@ -13,12 +13,12 @@ branch = "master"
 repository = "Gerschtli/dwm-status"
 
 [dependencies]
-battery = "0.7.7"
+battery = "0.7.8"
 chrono = "0.4.19"
 clap = "2.33.3"
 config = "0.10.1"
-dbus = "0.8.4"
-inotify = "0.8.3"
+dbus = "^0.8.4"
+inotify = "0.9.1"
 libnotify = "1.0.3"
 log = "0.4.11"
 serde = "1.0.117"
@@ -32,7 +32,7 @@ version = "3.1.7"
 
 [dependencies.mocktopus]
 optional = true
-version = "0.7.5"
+version = "0.7.6"
 
 [dependencies.x11]
 features = ["xlib"]
