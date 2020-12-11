@@ -22,7 +22,7 @@ inotify = "0.9.1"
 libnotify = "1.0.3"
 log = "0.4.11"
 serde = "1.0.118"
-serde_derive = "1.0.117"
+serde_derive = "1.0.118"
 simplelog = "0.8.0"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
 
