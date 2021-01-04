@@ -59,7 +59,7 @@ jobs:
             ${{ matrix.rust }}-cargo-build-target-
 
       - name: Install build dependencies
-        run: sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev
+        run: sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev libxcb-xkb-dev
 
       - name: Install tarpaulin
         if: matrix.rust == 'nightly'

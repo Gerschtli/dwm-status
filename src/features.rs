@@ -2,6 +2,7 @@ pub(super) mod audio;
 pub(super) mod backlight;
 pub(super) mod battery;
 pub(super) mod cpu_load;
+pub(super) mod keymap;
 pub(super) mod network;
 pub(super) mod time;
 
@@ -38,5 +39,6 @@ pub(super) fn create_feature(
         cpu_load,
         network,
         time,
+        keymap,
     )
 }

@@ -25,7 +25,7 @@ naersk.buildPackage {
     ./.;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
+  buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 xorg.libxcb python3 ];
 
   postInstall = ''
     # run only when building the final package

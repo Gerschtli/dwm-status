@@ -182,6 +182,7 @@ dependencies = [
  "simplelog",
  "uom",
  "x11",
+ "xcb",
 ]
 
 [[package]]
@@ -907,6 +908,16 @@ checksum = "77ecd092546cb16f25783a5451538e73afc8d32e242648d54f4ae5459ba1e773"
 dependencies = [
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "xcb"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e917a3f24142e9ff8be2414e36c649d47d6cc2ba81f16201cdef96e533e02de"
+dependencies = [
+ "libc",
+ "log",
 ]
 
 [[package]]

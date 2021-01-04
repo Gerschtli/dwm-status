@@ -158,9 +158,20 @@ Shows time in configured format and refreshes every second or minute.
 | `format`         | `"%Y-%m-%d %H:%M"`  | Time format of [chrono crate](https://github.com/chronotope/chrono). |
 | `update_seconds` | `false`             | Whether to update time feature every second or minute, automatically set by parsing `format`. |
 
+### Feature: Keymap
+
+Shows current keyboard layout. Updates get triggered by listening on xkb state notify events.
+
+#### Configuration options
+
+| name       | default                       | description                     |
+| ---------- | ----------------------------- | ------------------------------- |
+| `flags`    | `[]`                          | List of flags representing keyboard layouts.     |
+| `template` | `"{FLAG}"`                    | Text representation. Placeholder surrounded by curly braces is `{FLAG}`. |
+
 ## Contributing
 
-You need `rustup` with nightly toolchain, rustfmt, clippy and `lib{dbus,gdk-pixbuf,notify,x11}-dev`. I recommend the
+You need `rustup` with stable toolchain, rustfmt, clippy and `lib{dbus,gdk-pixbuf,notify,x11}-dev`. I recommend the
 installation of racer.
 
 If your are using [nix](https://nixos.org/nix) you can use `shell.nix` for all dependencies except the `rustup`

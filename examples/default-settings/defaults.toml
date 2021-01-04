@@ -34,3 +34,7 @@ template = "{IPv4} · {IPv6} · {ESSID}"
 [time]
 format = "%Y-%m-%d %H:%M"
 update_seconds = false
+
+[keymap]
+template = "{FLAG}"
+flags = []

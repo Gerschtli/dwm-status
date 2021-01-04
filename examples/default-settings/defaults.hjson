@@ -41,4 +41,8 @@
     format: %Y-%m-%d %H:%M
     update_seconds: false
   }
+  keymap: {
+    template: "{FLAG}"
+    icons: []
+  }
 }

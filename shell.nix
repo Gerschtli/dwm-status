@@ -12,6 +12,7 @@ pkgs.mkShell {
     libnotify
     pkgconfig
     xorg.libX11
+    xcb-xkb
 
     # run-time dependencies
     alsaUtils

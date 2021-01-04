@@ -14,3 +14,7 @@ charging = ""
 discharging = ""
 no_battery = ""
 icons = ["", "", "", "", "", "", "", "", "", "", ""]
+
+[keymap]
+template = "{FLAG}"
+flags = ["󾓦", "󾓬"]

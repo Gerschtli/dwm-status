@@ -75,7 +75,7 @@ macro_rules! settings {
     }
 }
 
-settings!(audio, backlight, battery, cpu_load, network, time);
+settings!(audio, backlight, battery, cpu_load, network, time, keymap);
 
 #[cfg(test)]
 #[cfg(feature = "mocking")]
