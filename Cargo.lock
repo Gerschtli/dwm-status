@@ -54,7 +54,7 @@ dependencies = [
  "mach",
  "nix 0.19.1",
  "num-traits 0.2.14",
- "uom",
+ "uom 0.30.0",
  "winapi",
 ]
 
@@ -180,7 +180,7 @@ dependencies = [
  "serde 1.0.118",
  "serde_derive",
  "simplelog",
- "uom",
+ "uom 0.31.0",
  "x11",
 ]
 
@@ -845,6 +845,16 @@ name = "uom"
 version = "0.30.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e76503e636584f1e10b9b3b9498538279561adcef5412927ba00c2b32c4ce5ed"
+dependencies = [
+ "num-traits 0.2.14",
+ "typenum",
+]
+
+[[package]]
+name = "uom"
+version = "0.31.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e7d9fde563bf23b9d205b775385945aa722569c4e2eae66bc2c2e11fa1cba78"
 dependencies = [
  "num-traits 0.2.14",
  "typenum",
