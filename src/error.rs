@@ -94,18 +94,12 @@ impl<T> WrapErrorExt<T> for Option<T> {
 }
 
 pub(crate) trait ResultExt<T> {
-    fn show_error(self) -> StdResult<T, ()>;
     fn show_error_and_ignore(self);
 }
 
 impl<T> ResultExt<T> for Result<T> {
-    fn show_error(self) -> StdResult<T, ()> {
-        self.map_err(Error::show_error)
-    }
-
-    #[allow(unused_must_use)]
     fn show_error_and_ignore(self) {
-        self.map_err(Error::show_error);
+        let _result = self.map_err(Error::show_error);
     }
 }
 
@@ -233,21 +227,12 @@ mod tests {
         use super::*;
 
         #[test]
-        fn show_error_when_ok() {
-            let _ = LoggerContext::new();
-
-            let result: Result<u32> = Ok(42);
-
-            assert_that!(result.show_error(), is(equal_to(Ok(42))));
-        }
-
-        #[test]
         fn show_error_when_err() {
             let logger_context = LoggerContext::new();
 
             let result: Result<u32> = Err(Error::new_custom("name", "description"));
 
-            assert_that!(result.show_error(), is(equal_to(Err(()))));
+            result.show_error_and_ignore();
 
             logger_context.assert_entry(Level::Error, "Error in name: description");
         }

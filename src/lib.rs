@@ -89,8 +89,7 @@ pub fn run(config_path: &str) -> Result<()> {
     termination::register_handler(move || {
         sender
             .send(communication::Message::Kill)
-            .show_error()
-            .unwrap()
+            .show_error_and_ignore()
     })?;
 
     let mut status_bar = StatusBar::init(features)?;

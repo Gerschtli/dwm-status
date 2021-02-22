@@ -25,7 +25,7 @@ where
             .name(self.name.to_owned())
             .spawn(move || {
                 loop {
-                    let _ = self.runnable.run().show_error();
+                    self.runnable.run().show_error_and_ignore();
                     sleep_secs(2);
                 }
             })
