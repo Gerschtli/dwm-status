@@ -106,10 +106,7 @@ impl BatteryNotifier {
 
         for level in &self.settings.notifier_levels {
             if *level >= capacity {
-                if match self.capacity {
-                    Some(value) if *level >= value => false,
-                    _ => true,
-                } {
+                if !matches!(self.capacity, Some(value) if *level >= value) {
                     self.libnotify
                         .send_notification(
                             &format!("Battery under {}%", level),

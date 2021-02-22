@@ -49,8 +49,7 @@ impl Data {
             } => {
                 let capacity = get_raw_percent(percentage);
 
-                let mut list = vec![];
-                list.push(self.config.charging.to_owned());
+                let mut list = vec![self.config.charging.to_owned()];
                 self.push_capacity(&mut list, capacity);
                 self.push_time(&mut list, time_to_full);
                 list
@@ -61,8 +60,7 @@ impl Data {
             } => {
                 let capacity = get_raw_percent(percentage);
 
-                let mut list = vec![];
-                list.push(self.config.discharging.to_owned());
+                let mut list = vec![self.config.discharging.to_owned()];
                 self.push_capacity(&mut list, capacity);
                 self.push_time(&mut list, time_to_empty);
                 list

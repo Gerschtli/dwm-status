@@ -15,6 +15,7 @@ mod updater;
 
 pub(super) const FEATURE_NAME: &str = "cpu_load";
 
+#[allow(clippy::unnecessary_wraps)]
 pub(super) fn create(
     id: usize,
     sender: &channel::Sender<communication::Message>,

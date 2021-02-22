@@ -47,12 +47,10 @@ where
     U: Updatable,
 {
     fn init_notifier(&mut self) -> Result<()> {
-        if let Some(notifier) = self.notifier.take() {
-            let thread = thread::Thread::new(self.name, notifier);
-            thread.run()
-        } else {
-            Err(Error::new_custom("feature", "can not start notifier twice"))
-        }
+        self.notifier.take().map_or_else(
+            || Err(Error::new_custom("feature", "can not start notifier twice")),
+            |notifier| thread::Thread::new(self.name, notifier).run(),
+        )
     }
 
     fn name(&self) -> &'static str {

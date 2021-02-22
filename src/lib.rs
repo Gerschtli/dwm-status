@@ -57,7 +57,7 @@ fn validate_settings(settings: &settings::Settings) -> Result<()> {
         return Err(Error::new_custom("settings", "no features enabled"));
     }
 
-    let set: HashSet<&String> = HashSet::from_iter(settings.general.order.iter());
+    let set: HashSet<&String> = settings.general.order.iter().collect();
     if set.len() < settings.general.order.len() {
         return Err(Error::new_custom(
             "settings",
