@@ -40,12 +40,12 @@ impl Updater {
         Self { data, config }
     }
 
-    fn get_if_enabled<F: Fn() -> Result<Option<String>>>(
+    fn get_if_enabled<F: Fn() -> Option<String>>(
         &self,
         enabled: bool,
         builder: F,
-    ) -> Result<Option<String>> {
-        if enabled { builder() } else { Ok(None) }
+    ) -> Option<String> {
+        if enabled { builder() } else { None }
     }
 }
 
@@ -55,9 +55,9 @@ impl feature::Updatable for Updater {
     }
 
     fn update(&mut self) -> Result<()> {
-        let ipv4 = self.get_if_enabled(self.config.show_ipv4, || ip_address(&IpAddress::V4))?;
-        let ipv6 = self.get_if_enabled(self.config.show_ipv6, || ip_address(&IpAddress::V6))?;
-        let essid = self.get_if_enabled(self.config.show_essid, essid)?;
+        let ipv4 = self.get_if_enabled(self.config.show_ipv4, || ip_address(&IpAddress::V4));
+        let ipv6 = self.get_if_enabled(self.config.show_ipv6, || ip_address(&IpAddress::V6));
+        let essid = self.get_if_enabled(self.config.show_essid, essid);
 
         self.data.update(ipv4, ipv6, essid);
 
@@ -65,16 +65,16 @@ impl feature::Updatable for Updater {
     }
 }
 
-fn essid() -> Result<Option<String>> {
+fn essid() -> Option<String> {
     let command = process::Command::new("iwgetid", &["-r"]);
     let output = command
         .output()
         .wrap_error(FEATURE_NAME, "essid {} could not be fetched");
 
-    Ok(normalize_output(output))
+    normalize_output(output)
 }
 
-fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
+fn ip_address(address_type: &IpAddress) -> Option<String> {
     let command = process::Command::new(
         "dig",
         &[
@@ -97,7 +97,7 @@ fn ip_address(address_type: &IpAddress) -> Result<Option<String>> {
         format!("ip address {} could not be fetched", address_type),
     );
 
-    Ok(normalize_output(output))
+    normalize_output(output)
 }
 
 fn normalize_output(output: Result<String>) -> Option<String> {
