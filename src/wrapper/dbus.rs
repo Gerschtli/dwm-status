@@ -1,14 +1,15 @@
-pub(crate) mod data;
-pub(crate) mod message;
-
-use crate::error::*;
 use dbus::ffidisp::BusType;
 use dbus::ffidisp::Connection as DbusConnection;
 use dbus::ffidisp::ConnectionItem;
+pub(crate) use dbus::Path;
+
+use crate::error::*;
 
 pub(crate) use self::data::Match;
 pub(crate) use self::message::Message;
-pub(crate) use dbus::Path;
+
+pub(crate) mod data;
+pub(crate) mod message;
 
 const ERROR_NAME: &str = "dbus";
 

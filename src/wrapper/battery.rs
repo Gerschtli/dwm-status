@@ -1,8 +1,9 @@
-use crate::error::*;
 use log::warn;
 use uom::si::f32::Ratio;
 use uom::si::f32::Time;
 use uom::si::time::second;
+
+use crate::error::*;
 
 #[derive(Debug)]
 pub(crate) enum Battery {

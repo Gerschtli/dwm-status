@@ -31,6 +31,13 @@
 #![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]
 #![cfg_attr(all(test, feature = "mocking"), feature(proc_macro_hygiene))]
 
+use std::collections::HashSet;
+
+use crate::error::*;
+use crate::status_bar::StatusBar;
+use crate::wrapper::channel;
+use crate::wrapper::termination;
+
 #[macro_use]
 mod macros;
 mod communication;
@@ -44,13 +51,6 @@ mod status_bar;
 mod test_utils;
 mod utils;
 mod wrapper;
-
-use crate::error::*;
-use crate::status_bar::StatusBar;
-use crate::wrapper::channel;
-use crate::wrapper::termination;
-use std::collections::HashSet;
-use std::iter::FromIterator;
 
 fn validate_settings(settings: &settings::Settings) -> Result<()> {
     if settings.general.order.is_empty() {

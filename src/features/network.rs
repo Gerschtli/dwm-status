@@ -1,8 +1,3 @@
-mod config;
-mod data;
-mod notifier;
-mod updater;
-
 use crate::communication;
 use crate::error::*;
 use crate::feature;
@@ -14,6 +9,11 @@ pub(self) use self::config::UpdateConfig;
 pub(self) use self::data::Data;
 pub(self) use self::notifier::Notifier;
 pub(self) use self::updater::Updater;
+
+mod config;
+mod data;
+mod notifier;
+mod updater;
 
 pub(super) const FEATURE_NAME: &str = "network";
 pub(self) const PLACEHOLDER_ESSID: &str = "{ESSID}";

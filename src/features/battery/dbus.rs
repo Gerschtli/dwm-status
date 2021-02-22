@@ -1,10 +1,12 @@
-use super::FEATURE_NAME;
+use std::collections::HashSet;
+
 use crate::communication;
 use crate::error::*;
 use crate::wrapper::channel;
 use crate::wrapper::dbus;
 use crate::wrapper::thread;
-use std::collections::HashSet;
+
+use super::FEATURE_NAME;
 
 const INTERFACE_DBUS_PROPERTIES: &str = "org.freedesktop.DBus.Properties";
 const INTERFACE_UPOWER: &str = "org.freedesktop.UPower";

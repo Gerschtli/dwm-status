@@ -1,6 +1,7 @@
-use super::FEATURE_NAME;
 use crate::error::*;
 use crate::wrapper::file;
+
+use super::FEATURE_NAME;
 
 pub(super) struct BacklightDevice {
     max: u32,

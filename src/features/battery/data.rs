@@ -1,11 +1,13 @@
-use super::RenderConfig;
+use uom::si::f32::Time;
+
 use crate::feature::Renderable;
 use crate::utils::icon_by_percentage;
 use crate::wrapper::battery::Battery;
 use crate::wrapper::uom::get_raw_hours;
 use crate::wrapper::uom::get_raw_minutes;
 use crate::wrapper::uom::get_raw_percent;
-use uom::si::f32::Time;
+
+use super::RenderConfig;
 
 #[derive(Debug)]
 pub(super) struct Data {

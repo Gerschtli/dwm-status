@@ -1,7 +1,8 @@
-use super::BacklightDevice;
-use super::Data;
 use crate::error::*;
 use crate::feature;
+
+use super::BacklightDevice;
+use super::Data;
 
 pub(super) struct Updater {
     data: Data,

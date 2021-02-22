@@ -1,10 +1,12 @@
 #![allow(unsafe_code)]
 
-use crate::error::*;
 use std::ffi::CString;
 use std::os::raw::c_char;
 use std::ptr;
+
 use x11::xlib;
+
+use crate::error::*;
 
 pub(crate) struct XSetRoot {
     display: *mut xlib::Display,

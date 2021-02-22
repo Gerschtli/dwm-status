@@ -1,6 +1,7 @@
-use super::RenderConfig;
 use crate::feature::Renderable;
 use crate::utils::icon_by_percentage;
+
+use super::RenderConfig;
 
 pub(super) struct Data {
     cache: String,
@@ -42,11 +43,12 @@ impl Renderable for Data {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
     #[cfg(feature = "mocking")]
     use mocktopus::mocking::*;
+
+    use super::*;
 
     #[test]
     fn render_with_default() {

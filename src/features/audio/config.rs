@@ -1,9 +1,11 @@
-use super::FEATURE_NAME;
+use serde_derive::*;
+
 use crate::error::*;
 use crate::settings::ConfigType;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
-use serde_derive::*;
+
+use super::FEATURE_NAME;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct RenderConfig {
@@ -36,10 +38,12 @@ impl ConfigType for ConfigEntry {
 #[cfg(test)]
 #[cfg(feature = "mocking")]
 mod tests {
-    use super::*;
+    use std::collections::HashMap;
+
     use crate::test_utils::config::test_set_default_err;
     use crate::test_utils::config::test_set_default_ok;
-    use std::collections::HashMap;
+
+    use super::*;
 
     #[test]
     fn config_type_set_default_when_ok() {

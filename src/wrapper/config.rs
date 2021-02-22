@@ -1,7 +1,7 @@
-use crate::error::*;
+pub(crate) use config::Value;
 use serde::Deserialize;
 
-pub(crate) use config::Value;
+use crate::error::*;
 
 const ERROR_NAME: &str = "config";
 

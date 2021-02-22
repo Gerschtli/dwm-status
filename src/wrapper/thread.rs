@@ -1,6 +1,7 @@
-use crate::error::*;
 use std::thread;
 use std::time;
+
+use crate::error::*;
 
 pub(crate) trait Runnable: Send + 'static {
     fn run(&self) -> Result<()>;

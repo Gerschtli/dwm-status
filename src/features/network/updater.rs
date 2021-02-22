@@ -1,13 +1,16 @@
 #![allow(clippy::use_self)] // is experimental in stable rust
 
-use super::Data;
-use super::UpdateConfig;
-use super::FEATURE_NAME;
+use std::fmt;
+
+use log::info;
+
 use crate::error::*;
 use crate::feature;
 use crate::wrapper::process;
-use log::info;
-use std::fmt;
+
+use super::Data;
+use super::UpdateConfig;
+use super::FEATURE_NAME;
 
 enum IpAddress {
     V4,

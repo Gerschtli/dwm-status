@@ -1,8 +1,9 @@
+use chrono::Timelike;
+
 use crate::communication;
 use crate::error::*;
 use crate::wrapper::channel;
 use crate::wrapper::thread;
-use chrono::Timelike;
 
 pub(super) struct Notifier {
     id: usize,

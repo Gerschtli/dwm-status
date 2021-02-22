@@ -1,8 +1,9 @@
-use super::BatteryNotifier;
-use super::Data;
 use crate::error::*;
 use crate::feature;
 use crate::wrapper::battery::all_batteries;
+
+use super::BatteryNotifier;
+use super::Data;
 
 pub(super) struct Updater {
     data: Data,

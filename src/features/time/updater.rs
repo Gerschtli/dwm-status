@@ -1,7 +1,8 @@
-use super::Data;
 use crate::error::*;
 use crate::feature;
 use crate::wrapper::date_time;
+
+use super::Data;
 
 pub(super) struct Updater {
     data: Data,

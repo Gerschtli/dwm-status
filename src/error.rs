@@ -1,7 +1,8 @@
-use log::error;
 use std::fmt;
-
 pub(crate) use std::result::Result as StdResult;
+
+use log::error;
+
 pub(crate) type Result<T> = StdResult<T, Error>;
 
 #[derive(Debug)]
@@ -110,11 +111,13 @@ impl<T> ResultExt<T> for Result<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::test_utils::log::Level;
-    use crate::test_utils::log::LoggerContext;
     use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
+
+    use crate::test_utils::log::Level;
+    use crate::test_utils::log::LoggerContext;
+
+    use super::*;
 
     #[derive(Debug)]
     struct ExampleError;

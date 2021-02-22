@@ -1,6 +1,6 @@
-use crate::error::*;
-
 pub(crate) use libnotify::Urgency;
+
+use crate::error::*;
 
 const ERROR_NAME: &str = "libnotify";
 

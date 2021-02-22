@@ -29,12 +29,13 @@
     clippy::wildcard_imports
 )]
 
+use std::process;
+
 use clap::Arg;
 use clap::*;
 use simplelog::Config;
 use simplelog::LevelFilter;
 use simplelog::SimpleLogger;
-use std::process;
 
 fn main() {
     let _ = SimpleLogger::init(LevelFilter::Info, Config::default());

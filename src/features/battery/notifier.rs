@@ -1,4 +1,9 @@
-use super::NotifierConfig;
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
+
+use uom::si::f32::Ratio;
+use uom::si::f32::Time;
+
 use crate::error::*;
 use crate::wrapper::battery::Battery;
 use crate::wrapper::libnotify;
@@ -6,10 +11,8 @@ use crate::wrapper::uom::create_ratio_by_percentage;
 use crate::wrapper::uom::get_raw_hours;
 use crate::wrapper::uom::get_raw_minutes;
 use crate::wrapper::uom::get_raw_percent;
-use std::cmp::Ordering;
-use std::collections::BinaryHeap;
-use uom::si::f32::Ratio;
-use uom::si::f32::Time;
+
+use super::NotifierConfig;
 
 struct SimpleBattery {
     percentage: Ratio,

@@ -1,8 +1,9 @@
+use crate::feature::Renderable;
+
 use super::RenderConfig;
 use super::PLACEHOLDER_ESSID;
 use super::PLACEHOLDER_IPV4;
 use super::PLACEHOLDER_IPV6;
-use crate::feature::Renderable;
 
 #[derive(Debug)]
 pub(super) struct Data {
@@ -46,9 +47,10 @@ impl Renderable for Data {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
+
+    use super::*;
 
     #[test]
     fn render_with_default() {

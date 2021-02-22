@@ -1,5 +1,6 @@
-use crate::error::*;
 use std::sync::mpsc;
+
+use crate::error::*;
 
 pub(crate) fn create<M: Clone>() -> (Sender<M>, Receiver<M>) {
     let (tx, rx) = mpsc::channel();
