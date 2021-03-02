@@ -1,7 +1,8 @@
 use std::collections::HashSet;
 
 use crate::communication;
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 use crate::wrapper::channel;
 use crate::wrapper::dbus;
 use crate::wrapper::thread;

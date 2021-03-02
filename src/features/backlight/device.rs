@@ -1,4 +1,5 @@
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 use crate::wrapper::file;
 
 use super::FEATURE_NAME;

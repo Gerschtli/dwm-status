@@ -6,7 +6,9 @@ use std::ptr;
 
 use x11::xlib;
 
-use crate::error::*;
+use crate::error::Error;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 
 pub(crate) struct XSetRoot {
     display: *mut xlib::Display,

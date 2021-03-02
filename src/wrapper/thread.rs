@@ -1,7 +1,9 @@
 use std::thread;
 use std::time;
 
-use crate::error::*;
+use crate::error::Result;
+use crate::error::ResultExt;
+use crate::error::WrapErrorExt;
 
 pub(crate) trait Runnable: Send + 'static {
     fn run(&self) -> Result<()>;

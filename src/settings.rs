@@ -1,8 +1,9 @@
-use crate::error::*;
+use log::warn;
+use serde_derive::Deserialize;
+
+use crate::error::Result;
 use crate::features;
 use crate::wrapper::config;
-use log::warn;
-use serde_derive::*;
 
 pub(crate) trait ConfigType {
     fn set_default(_: &mut config::Config) -> Result<()>;
@@ -80,10 +81,13 @@ settings!(audio, backlight, battery, cpu_load, network, time);
 #[cfg(test)]
 #[cfg(feature = "mocking")]
 mod tests {
-    use super::*;
     use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
     use mocktopus::mocking::*;
+
+    use crate::error::Error;
+
+    use super::*;
 
     mod general_config_type {
         use super::*;
@@ -247,9 +251,10 @@ mod tests {
         }
 
         mod set_values {
-            use super::*;
             use crate::test_utils::log::Level;
             use crate::test_utils::log::LoggerContext;
+
+            use super::*;
 
             #[test]
             fn when_get_option_failed() {

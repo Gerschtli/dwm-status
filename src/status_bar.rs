@@ -1,9 +1,11 @@
+use log::info;
+
 use crate::communication;
-use crate::error::*;
+use crate::error::Error;
+use crate::error::Result;
 use crate::feature;
 use crate::settings;
 use crate::wrapper::xsetroot;
-use log::info;
 
 pub(super) struct StatusBar {
     features: Vec<Box<dyn feature::Feature>>,

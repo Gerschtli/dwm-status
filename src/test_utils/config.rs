@@ -1,11 +1,14 @@
-use crate::error::*;
-use crate::settings;
-use crate::wrapper::config;
-use crate::wrapper::config::Value;
+use std::collections::HashMap;
+
 use hamcrest2::assert_that;
 use hamcrest2::prelude::*;
 use mocktopus::mocking::*;
-use std::collections::HashMap;
+
+use crate::error::Error;
+use crate::error::Result;
+use crate::settings;
+use crate::wrapper::config;
+use crate::wrapper::config::Value;
 
 pub(crate) fn test_set_default_ok<T: settings::ConfigType>(
     name: &'static str,

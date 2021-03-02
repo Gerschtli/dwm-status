@@ -1,4 +1,4 @@
-use crate::error::*;
+use crate::error::Result;
 use crate::wrapper::channel;
 
 #[derive(Clone, Copy, Debug)]

@@ -4,7 +4,8 @@ use std::collections::BinaryHeap;
 use uom::si::f32::Ratio;
 use uom::si::f32::Time;
 
-use crate::error::*;
+use crate::error::Result;
+use crate::error::ResultExt;
 use crate::wrapper::battery::Battery;
 use crate::wrapper::libnotify;
 use crate::wrapper::uom::create_ratio_by_percentage;

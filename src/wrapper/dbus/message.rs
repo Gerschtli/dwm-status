@@ -1,4 +1,5 @@
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 
 use super::ERROR_NAME;
 

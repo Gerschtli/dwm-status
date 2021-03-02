@@ -1,8 +1,8 @@
-use hamcrest2::assert_that;
-use hamcrest2::prelude::*;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 
+use hamcrest2::assert_that;
+use hamcrest2::prelude::*;
 pub(crate) use log::Level;
 
 static LOGGER: TestLogger = TestLogger;

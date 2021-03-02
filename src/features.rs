@@ -1,15 +1,16 @@
+use crate::communication;
+use crate::error::Error;
+use crate::error::Result;
+use crate::feature;
+use crate::settings;
+use crate::wrapper::channel;
+
 pub(super) mod audio;
 pub(super) mod backlight;
 pub(super) mod battery;
 pub(super) mod cpu_load;
 pub(super) mod network;
 pub(super) mod time;
-
-use crate::communication;
-use crate::error::*;
-use crate::feature;
-use crate::settings;
-use crate::wrapper::channel;
 
 macro_rules! features {
     ( $id:expr, $name:expr, $sender:expr, $settings:expr; $( $mod:ident, )* ) => {

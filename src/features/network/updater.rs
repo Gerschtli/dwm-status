@@ -4,7 +4,8 @@ use std::fmt;
 
 use log::info;
 
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 use crate::feature;
 use crate::wrapper::process;
 

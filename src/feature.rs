@@ -1,4 +1,5 @@
-use crate::error::*;
+use crate::error::Error;
+use crate::error::Result;
 use crate::wrapper::thread;
 
 pub(crate) trait Renderable {

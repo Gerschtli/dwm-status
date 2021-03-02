@@ -1,4 +1,5 @@
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 
 pub(crate) fn register_handler<T>(handler: T) -> Result<()>
 where

@@ -1,6 +1,6 @@
-use serde_derive::*;
+use serde_derive::Deserialize;
 
-use crate::error::*;
+use crate::error::Result;
 use crate::settings::ConfigType;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;

@@ -1,11 +1,5 @@
-mod config;
-mod data;
-mod device;
-mod notifier;
-mod updater;
-
 use crate::communication;
-use crate::error::*;
+use crate::error::Result;
 use crate::feature;
 use crate::wrapper::channel;
 
@@ -15,6 +9,12 @@ pub(self) use self::data::Data;
 pub(self) use self::device::BacklightDevice;
 pub(self) use self::notifier::Notifier;
 pub(self) use self::updater::Updater;
+
+mod config;
+mod data;
+mod device;
+mod notifier;
+mod updater;
 
 pub(super) const FEATURE_NAME: &str = "backlight";
 

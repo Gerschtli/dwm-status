@@ -1,5 +1,5 @@
 use crate::communication;
-use crate::error::*;
+use crate::error::Result;
 use crate::feature;
 use crate::wrapper::channel;
 

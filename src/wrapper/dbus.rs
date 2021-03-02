@@ -3,7 +3,8 @@ use dbus::ffidisp::Connection as DbusConnection;
 use dbus::ffidisp::ConnectionItem;
 pub(crate) use dbus::Path;
 
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 
 pub(crate) use self::data::Match;
 pub(crate) use self::message::Message;

@@ -1,6 +1,6 @@
-use serde_derive::*;
+use serde_derive::Deserialize;
 
-use crate::error::*;
+use crate::error::Result;
 use crate::settings::ConfigType;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
@@ -74,6 +74,7 @@ mod tests {
     use hamcrest2::prelude::*;
     use mocktopus::mocking::*;
 
+    use crate::error::Error;
     use crate::test_utils::config::test_set_default_err;
     use crate::test_utils::config::test_set_default_ok;
 

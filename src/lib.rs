@@ -33,7 +33,9 @@
 
 use std::collections::HashSet;
 
-use crate::error::*;
+use crate::error::Error;
+use crate::error::Result;
+use crate::error::ResultExt;
 use crate::status_bar::StatusBar;
 use crate::wrapper::channel;
 use crate::wrapper::termination;

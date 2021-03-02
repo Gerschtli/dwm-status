@@ -1,6 +1,7 @@
 pub(crate) use inotify::WatchMask;
 
-use crate::error::*;
+use crate::error::Result;
+use crate::error::WrapErrorExt;
 
 const ERROR_NAME: &str = "inotify";
 
