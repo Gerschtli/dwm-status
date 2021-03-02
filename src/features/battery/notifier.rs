@@ -110,15 +110,16 @@ impl BatteryNotifier {
                     self.libnotify
                         .send_notification(
                             &format!("Battery under {}%", level),
-                            match battery.time_to_empty {
-                                Some(time) => Some(format!(
-                                    "{:02}:{:02} remaining",
-                                    get_raw_hours(time),
-                                    get_raw_minutes(time),
-                                )),
-                                None => None,
-                            }
-                            .as_deref(),
+                            battery
+                                .time_to_empty
+                                .map(|time| {
+                                    format!(
+                                        "{:02}:{:02} remaining",
+                                        get_raw_hours(time),
+                                        get_raw_minutes(time),
+                                    )
+                                })
+                                .as_deref(),
                             if *level <= self.settings.notifier_critical {
                                 libnotify::Urgency::Critical
                             } else {
