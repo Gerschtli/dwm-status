@@ -1,5 +1,3 @@
-#![allow(clippy::use_self)] // is experimental in stable rust
-
 use std::fmt;
 
 use log::info;
