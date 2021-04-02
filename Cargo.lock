@@ -446,18 +446,18 @@ dependencies = [
 
 [[package]]
 name = "mocktopus"
-version = "0.7.10"
+version = "0.7.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aacdb26c24b2faec2c9f7e8e9609dcc62024cf4408b886a4439a961b922d4cab"
+checksum = "d1e54a5bbecd61a064cb9c6ef396f8c896aee14e5baba8d1d555f35167dfd7c3"
 dependencies = [
  "mocktopus_macros",
 ]
 
 [[package]]
 name = "mocktopus_macros"
-version = "0.7.10"
+version = "0.7.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c7a37573ee3c6277b249627b6f1fc5698ffb4cf45c3cb077384e085c803b535"
+checksum = "3048ef3680533a27f9f8e7d6a0bce44dc61e4895ea0f42709337fa1c8616fefe"
 dependencies = [
  "proc-macro2",
  "quote",
