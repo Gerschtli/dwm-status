@@ -46,7 +46,7 @@ impl StatusBar {
                 }
                 self.render(settings)?;
             },
-            _ => (),
+            communication::Message::Kill => (),
         }
 
         Ok(())
