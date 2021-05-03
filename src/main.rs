@@ -21,7 +21,6 @@
     variant_size_differences
 )]
 #![allow(
-    clippy::filter_map,
     clippy::missing_errors_doc,
     clippy::non_ascii_literal,
     clippy::redundant_pub_crate,

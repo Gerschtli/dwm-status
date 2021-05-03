@@ -29,7 +29,7 @@ pub(crate) fn all_batteries() -> Result<Vec<Battery>> {
     Ok(manager
         .batteries()
         .wrap_error("battery", "error in loading battery info")?
-        .flat_map(|maybe_battery| match maybe_battery {
+        .filter_map(|maybe_battery| match maybe_battery {
             #[allow(clippy::match_wildcard_for_single_variants)]
             Ok(battery) => match battery.state() {
                 battery::State::Charging => Some(Battery::Charging {
