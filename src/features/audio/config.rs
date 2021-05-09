@@ -15,7 +15,16 @@ pub(crate) struct RenderConfig {
 }
 
 #[derive(Clone, Debug, Deserialize)]
+pub(super) enum Backend {
+    #[serde(rename = "alsa")]
+    Alsa,
+    #[serde(rename = "pulseaudio")]
+    Pulseaudio,
+}
+
+#[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
+    pub(super) backend: Backend,
     pub(super) control: String,
     #[serde(flatten)]
     pub(super) render: RenderConfig,
@@ -26,6 +35,7 @@ impl ConfigType for ConfigEntry {
         config.set_default(
             FEATURE_NAME,
             map!(
+                "backend"  => "alsa",
                 "control"  => "Master",
                 "icons"    => Vec::<String>::new(),
                 "mute"     => "MUTE",
@@ -57,6 +67,7 @@ mod tests {
 
     fn default_map() -> HashMap<String, Value> {
         let mut map = HashMap::new();
+        map.insert("backend".to_owned(), "alsa".into());
         map.insert("control".to_owned(), "Master".into());
         map.insert("icons".to_owned(), Vec::<String>::new().into());
         map.insert("mute".to_owned(), "MUTE".into());

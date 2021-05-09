@@ -3,6 +3,7 @@ use crate::error::Result;
 use crate::feature;
 use crate::wrapper::channel;
 
+pub(self) use self::config::Backend;
 pub(crate) use self::config::ConfigEntry;
 pub(self) use self::config::RenderConfig;
 pub(self) use self::data::Data;
