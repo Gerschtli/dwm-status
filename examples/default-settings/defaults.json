@@ -3,6 +3,7 @@
   "order": [],
   "separator": " / ",
   "audio": {
+    "backend": "alsa",
     "control": "Master",
     "mute": "MUTE",
     "template": "S {VOL}%",

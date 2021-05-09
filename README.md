@@ -61,15 +61,18 @@ static const char *fonts[] = { "Ubuntu Mono Nerd Font:size=9" };
 
 ### Feature: Audio
 
-**Note:** `alsa-utils` are required.
+**Note:** For backend `alsa` `alsa-utils` are required, for `pulseaudio` the binaries `pulsemixer` and `pactl` need to
+be in `PATH`.
 
-Shows status of configured alsa control device. Listens on `alsactl monitor` for changes.
+Shows status of configured alsa control device or pulseaudio default device. Listens on `alsactl monitor` or
+`pactl subscribe` for changes.
 
 #### Configuration options
 
 | name       | default      | description                                                                     |
 | ---------- | ------------ | ------------------------------------------------------------------------------- |
-| `control`  | `"Master"`   | Alsa control device to listen for.                                              |
+| `backend`  | `"alsa"`     | Backend for audio feature (either `alsa` or `pulseaudio`).                      |
+| `control`  | `"Master"`   | Alsa control device to listen for (only relevant for `backend` `alsa`).         |
 | `icons`    | `[]`         | List of icons, which represent different stages relative to the current volume, e.g. `["LOW", "MIDDLE, "HIGH"]`.     |
 | `mute`     | `"MUTE"`     | Text representation if muted.                                                   |
 | `template` | `"S {VOL}%"` | Text representation if unmuted. (`{VOL}` gets replaced with the current volume, `{ICO}` gets replaced with the icon) |
