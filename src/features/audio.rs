@@ -27,7 +27,7 @@ pub(super) fn create(
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
-        Notifier::new(id, sender.clone()),
+        Notifier::new(id, sender.clone(), settings.backend.clone()),
         Updater::new(data, settings.clone()),
     )))
 }
