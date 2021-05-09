@@ -11,6 +11,8 @@ let
   binPath = stdenv.lib.makeBinPath (
     [
       coreutils     # audio:   stdbuf
+      pulseaudio    # audio:   pactl
+      pulsemixer    # audio:   pulsemixer
       dnsutils      # network: dig
       iproute       # network: ip
       wirelesstools # network: iwgetid

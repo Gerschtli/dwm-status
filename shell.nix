@@ -18,6 +18,8 @@ pkgs.mkShell {
     coreutils
     dnsutils
     iproute
+    pulseaudio
+    pulsemixer
     wirelesstools
 
     # dev tools
