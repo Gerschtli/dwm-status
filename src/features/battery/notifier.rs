@@ -97,7 +97,7 @@ impl BatteryNotifier {
         if let Some(battery) = fullest_battery {
             self.notify(&battery);
         } else {
-            self.capacity = None
+            self.capacity = None;
         }
     }
 
@@ -134,6 +134,6 @@ impl BatteryNotifier {
             }
         }
 
-        self.capacity = Some(capacity)
+        self.capacity = Some(capacity);
     }
 }

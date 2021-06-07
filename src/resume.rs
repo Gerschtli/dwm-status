@@ -34,7 +34,7 @@ impl thread::Runnable for Notifier {
         connection.listen_for_signals(|signal| {
             // return value is true if going to sleep, false if waking up
             if signal.is_interface(INTERFACE_LOGIN1)? && !signal.return_value::<bool>()? {
-                self.sender.send(communication::Message::UpdateAll)?
+                self.sender.send(communication::Message::UpdateAll)?;
             }
 
             Ok(())

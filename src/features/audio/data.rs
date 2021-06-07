@@ -17,7 +17,7 @@ impl Data {
     }
 
     pub(super) fn update_mute(&mut self) {
-        self.cache = self.config.mute.clone()
+        self.cache = self.config.mute.clone();
     }
 
     pub(super) fn update_volume(&mut self, volume: u32) {
