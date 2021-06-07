@@ -8,7 +8,7 @@ with pkgs;
 let
   naersk = callPackage sources.naersk { };
 
-  binPath = stdenv.lib.makeBinPath (
+  binPath = lib.makeBinPath (
     [
       coreutils     # audio:   stdbuf
       dnsutils      # network: dig
