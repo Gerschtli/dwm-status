@@ -18,11 +18,9 @@ impl<'a> Match<'a> {
     }
 
     pub(crate) fn build(self) -> String {
-        let member = if let Some(member) = self.member {
-            format!(",member='{}'", member)
-        } else {
-            String::new()
-        };
+        let member = self
+            .member
+            .map_or_else(String::new, |m| format!(",member='{}'", m));
 
         format!(
             "type='signal',path='{}',interface='{}'{}",
