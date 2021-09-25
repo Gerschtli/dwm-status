@@ -15,6 +15,7 @@ pub(crate) trait ConfigType {
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct General {
+    #[allow(dead_code)]
     pub(crate) debug: Option<bool>,
     pub(crate) order: Vec<String>,
     pub(crate) separator: String,
