@@ -15,12 +15,14 @@ pub(crate) trait ConfigType {
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct General {
+    pub(crate) debug: Option<bool>,
     pub(crate) order: Vec<String>,
     pub(crate) separator: String,
 }
 
 impl ConfigType for General {
     fn set_default(config: &mut config::Config) -> Result<()> {
+        config.set_default("debug", None::<bool>)?;
         config.set_default("order", Vec::<String>::new())?;
         config.set_default("separator", " / ")?;
 
@@ -97,11 +99,11 @@ mod tests {
             fn when_first_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
-                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
+                    config::Config::set_default::<Option<bool>>.mock_raw(|_, key, value| {
                         counter_first += 1;
 
-                        assert_that!(key, is(equal_to("order")));
-                        assert_that!(&value, is(empty()));
+                        assert_that!(key, is(equal_to("debug")));
+                        assert_that!(value, is(none()));
 
                         MockResult::Return(Err(Error::new_custom("name", "description")))
                     });
@@ -120,11 +122,11 @@ mod tests {
             fn when_second_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
-                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
+                    config::Config::set_default::<Option<bool>>.mock_raw(|_, key, value| {
                         counter_first += 1;
 
-                        assert_that!(key, is(equal_to("order")));
-                        assert_that!(&value, is(empty()));
+                        assert_that!(key, is(equal_to("debug")));
+                        assert_that!(value, is(none()));
 
                         MockResult::Return(Ok(()))
                     });
@@ -132,11 +134,11 @@ mod tests {
 
                 let mut counter_second = 0;
                 unsafe {
-                    config::Config::set_default::<&str>.mock_raw(|_, key, value| {
+                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
                         counter_second += 1;
 
-                        assert_that!(key, is(equal_to("separator")));
-                        assert_that!(value, is(equal_to(" / ")));
+                        assert_that!(key, is(equal_to("order")));
+                        assert_that!(&value, is(empty()));
 
                         MockResult::Return(Err(Error::new_custom("name", "description")))
                     });
@@ -153,11 +155,23 @@ mod tests {
             }
 
             #[test]
-            fn when_all_calls_succeed() {
+            fn when_third_call_failed() {
                 let mut counter_first = 0;
                 unsafe {
-                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
+                    config::Config::set_default::<Option<bool>>.mock_raw(|_, key, value| {
                         counter_first += 1;
+
+                        assert_that!(key, is(equal_to("debug")));
+                        assert_that!(value, is(none()));
+
+                        MockResult::Return(Ok(()))
+                    });
+                }
+
+                let mut counter_second = 0;
+                unsafe {
+                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
+                        counter_second += 1;
 
                         assert_that!(key, is(equal_to("order")));
                         assert_that!(&value, is(empty()));
@@ -166,10 +180,59 @@ mod tests {
                     });
                 }
 
-                let mut counter_second = 0;
+                let mut counter_third = 0;
                 unsafe {
                     config::Config::set_default::<&str>.mock_raw(|_, key, value| {
+                        counter_third += 1;
+
+                        assert_that!(key, is(equal_to("separator")));
+                        assert_that!(value, is(equal_to(" / ")));
+
+                        MockResult::Return(Err(Error::new_custom("name", "description")))
+                    });
+                }
+
+                let mut config = config::Config::new();
+
+                assert_that!(
+                    General::set_default(&mut config),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+                assert_that!(counter_first, is(equal_to(1)));
+                assert_that!(counter_second, is(equal_to(1)));
+                assert_that!(counter_third, is(equal_to(1)));
+            }
+
+            #[test]
+            fn when_all_calls_succeed() {
+                let mut counter_first = 0;
+                unsafe {
+                    config::Config::set_default::<Option<bool>>.mock_raw(|_, key, value| {
+                        counter_first += 1;
+
+                        assert_that!(key, is(equal_to("debug")));
+                        assert_that!(value, is(none()));
+
+                        MockResult::Return(Ok(()))
+                    });
+                }
+
+                let mut counter_second = 0;
+                unsafe {
+                    config::Config::set_default::<Vec<String>>.mock_raw(|_, key, value| {
                         counter_second += 1;
+
+                        assert_that!(key, is(equal_to("order")));
+                        assert_that!(&value, is(empty()));
+
+                        MockResult::Return(Ok(()))
+                    });
+                }
+
+                let mut counter_third = 0;
+                unsafe {
+                    config::Config::set_default::<&str>.mock_raw(|_, key, value| {
+                        counter_third += 1;
 
                         assert_that!(key, is(equal_to("separator")));
                         assert_that!(value, is(equal_to(" / ")));
@@ -183,6 +246,7 @@ mod tests {
                 assert_that!(General::set_default(&mut config), is(equal_to(Ok(()))));
                 assert_that!(counter_first, is(equal_to(1)));
                 assert_that!(counter_second, is(equal_to(1)));
+                assert_that!(counter_third, is(equal_to(1)));
             }
         }
 
