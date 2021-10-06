@@ -28,7 +28,7 @@ uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
 
 [dependencies.ctrlc]
 features = ["termination"]
-version = "3.2.0"
+version = "3.2.1"
 
 [dependencies.mocktopus]
 optional = true
