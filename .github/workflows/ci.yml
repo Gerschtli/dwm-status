@@ -111,7 +111,7 @@ jobs:
           nix_path: nixpkgs=channel:${{ matrix.nix-channel }}
 
       - name: Show current rust version
-        run: nix eval nixpkgs.rustc.version
+        run: nix eval nixpkgs.rustc.version --extra-experimental-features nix-command
 
       - name: Build package
         run: nix-build
