@@ -94,13 +94,6 @@ jobs:
   nix:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        nix-channel:
-          - nixpkgs-unstable
-          - nixos-21.05
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -108,27 +101,17 @@ jobs:
       - name: Install nix
         uses: cachix/install-nix-action@v14
         with:
-          nix_path: nixpkgs=channel:${{ matrix.nix-channel }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Setup cachix
+        uses: cachix/cachix-action@v10
+        with:
+          name: gerschtli
+          signingKey: ${{ secrets.CACHIX_SIGNING_KEY }}
 
       - name: Show current rust version
-        run: nix-instantiate --eval -E '(import <nixpkgs> { }).rustc.version'
+        run: nix develop --log-format bar-with-logs --command rustc --version
 
       - name: Build package
-        run: nix-build
-
-
-  update-nur-packages:
-    if: github.ref == 'refs/heads/master'
-    needs:
-      - rust
-      - nix
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Repository Dispatch to nur-packages
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          repository: Gerschtli/nur-packages
-          event-type: update-dwm-status
-          client-payload: '{"commit_id": "${{ github.sha }}"}'
+        run: nix build --log-format bar-with-logs
