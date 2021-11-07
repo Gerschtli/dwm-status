@@ -29,7 +29,7 @@ $ cargo install dwm-status
 
 ### [Nix](https://nixos.org/nix/) support
 
-Build:
+Build as flake:
 ```sh
 $ nix build
 ```

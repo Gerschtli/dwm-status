@@ -1,8 +1,4 @@
-let
-  sources = import ./nix/sources.nix;
-  niv = (import sources.niv { }).niv;
-  pkgs = import sources.nixpkgs { overlays = [ ]; };
-in
+{ pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
   buildInputs = with pkgs; [
@@ -23,7 +19,7 @@ pkgs.mkShell {
     # dev tools
     cargo-edit
     cargo-release
-    niv
+    nixpkgs-fmt
     rustup
 
     # tarpaulin
