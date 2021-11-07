@@ -38,7 +38,7 @@
       defaultApp.${system} = app;
       apps.${system}.${name} = app;
 
-      overlay.${system} = final: prev:
+      overlay = final: prev:
         let
           args = {
             naersk = (naersk.overlay.${system} final prev).naersk;
