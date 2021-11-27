@@ -41,7 +41,7 @@
       overlay = final: prev:
         let
           args = {
-            naersk = (naersk.overlay.${system} final prev).naersk;
+            naersk-lib = (naersk.overlay final prev).naersk;
             pkgs = prev;
           };
         in
