@@ -2,8 +2,12 @@
   description = "Highly performant and configurable DWM status service";
 
   inputs = {
-    naersk.url = "github:nmattia/naersk";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
+    naersk = {
+      url = "github:nmattia/naersk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
   };
 
   outputs = { self, naersk, nixpkgs }:
