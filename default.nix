@@ -5,10 +5,10 @@ let
     (with pkgs; [
       coreutils # audio: stdbuf
       dnsutils # network: dig
-      iproute # network: ip
+      iproute2 # network: ip
       wirelesstools # network: iwgetid
     ])
-    ++ pkgs.lib.optional (!useGlobalAlsaUtils) pkgs.alsaUtils # audio: alsactl, amixer
+    ++ pkgs.lib.optional (!useGlobalAlsaUtils) pkgs.alsa-utils # audio: alsactl, amixer
   );
 
   name = "dwm-status";
@@ -21,8 +21,8 @@ naersk-lib.buildPackage {
     (path: type: type != "directory" || baseNameOf path != "target")
     ./.;
 
-  nativeBuildInputs = with pkgs; [ makeWrapper pkgconfig ];
-  buildInputs = with pkgs; [ dbus gdk_pixbuf libnotify xorg.libX11 ];
+  nativeBuildInputs = with pkgs; [ makeWrapper pkg-config ];
+  buildInputs = with pkgs; [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
   postInstall = ''
     # run only when building the final package
