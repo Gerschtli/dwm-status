@@ -50,12 +50,11 @@ fn main() {
 }
 
 fn build_app() -> App<'static> {
-    app_from_crate!()
-        .arg(
-            Arg::new("config-file")
-                .help("Path to config file")
-                .required(true),
-        )
+    app_from_crate!().arg(
+        Arg::new("config-file")
+            .help("Path to config file")
+            .required(true),
+    )
 }
 
 #[cfg(test)]
