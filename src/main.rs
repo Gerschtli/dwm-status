@@ -39,18 +39,31 @@ use simplelog::SimpleLogger;
 fn main() {
     let _ = SimpleLogger::init(LevelFilter::Info, Config::default());
 
-    let matches = app_from_crate!()
-        .arg(
-            Arg::with_name("config-file")
-                .help("Path to config file")
-                .required(true),
-        )
-        .get_matches();
+    let matches = build_app().get_matches();
 
     let config = matches.value_of("config-file").unwrap();
 
     if let Err(error) = dwm_status::run(config) {
         error.show_error();
         process::exit(1);
+    }
+}
+
+fn build_app() -> App<'static> {
+    app_from_crate!()
+        .arg(
+            Arg::new("config-file")
+                .help("Path to config file")
+                .required(true),
+        )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn verify_app() {
+        build_app().debug_assert();
     }
 }
