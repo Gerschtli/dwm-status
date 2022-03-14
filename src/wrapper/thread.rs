@@ -18,7 +18,7 @@ impl<R> Thread<R>
 where
     R: Runnable,
 {
-    pub(crate) fn new(name: &'static str, runnable: R) -> Self {
+    pub(crate) const fn new(name: &'static str, runnable: R) -> Self {
         Self { name, runnable }
     }
 

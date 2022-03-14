@@ -33,7 +33,7 @@ where
     N: thread::Runnable,
     U: Updatable,
 {
-    pub(crate) fn new(name: &'static str, notifier: N, updater: U) -> Self {
+    pub(crate) const fn new(name: &'static str, notifier: N, updater: U) -> Self {
         Self {
             name,
             notifier: Some(notifier),
