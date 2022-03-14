@@ -49,8 +49,8 @@ fn main() {
     }
 }
 
-fn build_app() -> App<'static> {
-    app_from_crate!().arg(
+fn build_app() -> Command<'static> {
+    command!().arg(
         Arg::new("config-file")
             .help("Path to config file")
             .required(true),
