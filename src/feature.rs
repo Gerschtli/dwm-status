@@ -33,6 +33,7 @@ where
     N: thread::Runnable,
     U: Updatable,
 {
+    #[allow(clippy::missing_const_for_fn)] // not supported by stable
     pub(crate) fn new(name: &'static str, notifier: N, updater: U) -> Self {
         Self {
             name,

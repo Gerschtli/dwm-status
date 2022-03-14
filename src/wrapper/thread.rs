@@ -18,6 +18,7 @@ impl<R> Thread<R>
 where
     R: Runnable,
 {
+    #[allow(clippy::missing_const_for_fn)] // not supported by stable
     pub(crate) fn new(name: &'static str, runnable: R) -> Self {
         Self { name, runnable }
     }
