@@ -3,6 +3,7 @@
     "config:base"
   ],
   "ignoreDeps": [
+    "config",
     "dbus",
     "uom"
   ]
