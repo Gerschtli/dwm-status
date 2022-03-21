@@ -33,7 +33,7 @@ jobs:
           components: ${{ matrix.components }}
 
       - name: Cache cargo registry
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cargo/registry
           key: ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}-${{ github.sha }}
@@ -42,7 +42,7 @@ jobs:
             ${{ matrix.rust }}-cargo-registry-
 
       - name: Cache cargo index
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cargo/git
           key: ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-${{ github.sha }}
@@ -51,7 +51,7 @@ jobs:
             ${{ matrix.rust }}-cargo-index-
 
       - name: Cache cargo build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
