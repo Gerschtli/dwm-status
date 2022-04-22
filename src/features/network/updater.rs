@@ -59,6 +59,7 @@ impl feature::Updatable for Updater {
         let essid = self.get_if_enabled(self.config.show_essid, essid);
 
         self.data.update(ipv4, ipv6, essid);
+        self.data.with_status2d();
 
         Ok(())
     }

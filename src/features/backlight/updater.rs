@@ -23,6 +23,8 @@ impl feature::Updatable for Updater {
     fn update(&mut self) -> Result<()> {
         self.data.update(self.device.value()?);
 
+        self.data.with_status2d();
+
         Ok(())
     }
 }

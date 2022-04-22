@@ -26,6 +26,7 @@ impl feature::Updatable for Updater {
 
         self.notifier.update(&batteries);
         self.data.update(&batteries);
+        self.data.update_with_status2d();
 
         Ok(())
     }

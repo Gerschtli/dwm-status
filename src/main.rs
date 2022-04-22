@@ -41,7 +41,11 @@ fn main() {
 
     let matches = build_app().get_matches();
 
-    let config = matches.value_of("config-file").unwrap();
+    let default_conf_path = format!("{}{}", env!("XDG_CONFIG_HOME"), "/dwm-status/defaults.yml");
+
+    let config = matches
+        .value_of("config-file")
+        .unwrap_or(&default_conf_path);
 
     if let Err(error) = dwm_status::run(config) {
         error.show_error();
@@ -53,7 +57,7 @@ fn build_app() -> Command<'static> {
     command!().arg(
         Arg::new("config-file")
             .help("Path to config file")
-            .required(true),
+            .required(false),
     )
 }
 

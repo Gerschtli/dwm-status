@@ -1,4 +1,5 @@
 use crate::feature::Renderable;
+use crate::settings::generate_status2d_data;
 
 use super::RenderConfig;
 use super::PLACEHOLDER_ESSID;
@@ -33,6 +34,12 @@ impl Data {
             .replace(PLACEHOLDER_ESSID, &self.get_value(essid));
     }
 
+    pub(super) fn with_status2d(&mut self) {
+        if let Some(status2d) = generate_status2d_data(&self.config.status2d) {
+            self.cache = format!("{}{}", &status2d, &self.cache);
+        }
+    }
+
     fn get_value<T: Into<Option<String>>>(&self, value: T) -> String {
         value.into().unwrap_or_else(|| self.config.no_value.clone())
     }
@@ -56,6 +63,7 @@ mod tests {
         let object = Data::new(RenderConfig {
             no_value: "--".to_owned(),
             template: "{IPv4} {IPv6} {ESSID}".to_owned(),
+            status2d: vec![],
         });
 
         assert_that!(object.render(), is(equal_to("")));
@@ -66,6 +74,7 @@ mod tests {
         let mut object = Data::new(RenderConfig {
             no_value: "--".to_owned(),
             template: "{IPv4} {IPv6} {ESSID}".to_owned(),
+            status2d: vec![],
         });
 
         object.update(
@@ -82,6 +91,7 @@ mod tests {
         let mut object = Data::new(RenderConfig {
             no_value: "#".to_owned(),
             template: "{IPv4} // {ESSID}".to_owned(),
+            status2d: vec![],
         });
 
         object.update("127.0.0.1".to_owned(), "fe::1".to_owned(), None);
@@ -94,6 +104,7 @@ mod tests {
         let mut object = Data::new(RenderConfig {
             no_value: "--".to_owned(),
             template: "{IPv4} {IPv6} {ESSID}".to_owned(),
+            status2d: vec![],
         });
 
         object.update(None, None, None);

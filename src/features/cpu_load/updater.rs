@@ -34,6 +34,7 @@ impl feature::Updatable for Updater {
         let fifteen = convert_to_float(iterator.next())?;
 
         self.data.update(one, five, fifteen);
+        self.data.with_status2d();
 
         Ok(())
     }

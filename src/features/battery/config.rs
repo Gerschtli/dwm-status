@@ -1,7 +1,7 @@
 use serde_derive::Deserialize;
 
 use crate::error::Result;
-use crate::settings::ConfigType;
+use crate::settings::{ConfigType, Status2dEntry};
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
 
@@ -21,6 +21,7 @@ pub(crate) struct RenderConfig {
     pub(super) icons: Vec<String>,
     pub(super) no_battery: String,
     pub(super) separator: String,
+    pub(super) status2d: Vec<Status2dEntry>,
 }
 
 #[derive(Clone, Debug, Deserialize)]

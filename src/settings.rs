@@ -21,6 +21,40 @@ pub(crate) struct General {
     pub(crate) separator: String,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub(crate) struct Status2dEntry {
+    pub(crate) style: Option<String>,
+    pub(crate) value: Option<String>,
+}
+
+impl Status2dEntry {
+    pub(crate) fn generate(&self) -> Option<String> {
+        match (&self.style, &self.value) {
+            (Some(x), Some(y)) => Some(format!("^{}{}^", x, y)),
+            (..) => None,
+        }
+    }
+}
+
+pub(crate) fn generate_status2d_data(entries: &[Status2dEntry]) -> Option<String> {
+    if entries.is_empty() {
+        return None;
+    }
+
+    let res = entries
+        .iter()
+        .map(|entry| entry.generate())
+        .filter_map(|s| s)
+        .collect::<Vec<String>>()
+        .join("");
+
+    if res.is_empty() {
+        return None;
+    }
+
+    Some(res)
+}
+
 impl ConfigType for General {
     fn set_default(config: &mut config::Config) -> Result<()> {
         config.set_default("debug", None::<bool>)?;

@@ -1,16 +1,21 @@
-use crate::feature::Renderable;
+use crate::{
+    feature::Renderable,
+    settings::{generate_status2d_data, Status2dEntry},
+};
 
 #[derive(Debug)]
 pub(super) struct Data {
     cache: String,
     template: String,
+    status2d: Vec<Status2dEntry>,
 }
 
 impl Data {
-    pub(super) const fn new(template: String) -> Self {
+    pub(super) const fn new(template: String, status2d: Vec<Status2dEntry>) -> Self {
         Self {
             cache: String::new(),
             template,
+            status2d,
         }
     }
 
@@ -20,6 +25,12 @@ impl Data {
             .replace("{CL1}", &format!("{:.2}", one))
             .replace("{CL5}", &format!("{:.2}", five))
             .replace("{CL15}", &format!("{:.2}", fifteen));
+    }
+
+    pub(super) fn with_status2d(&mut self) {
+        if let Some(status2d) = generate_status2d_data(&self.status2d) {
+            self.cache = format!("{}{}", &status2d, &self.cache);
+        }
     }
 }
 
@@ -38,14 +49,14 @@ mod tests {
 
     #[test]
     fn render_with_default() {
-        let object = Data::new("{CL1} {CL5} {CL15}".to_owned());
+        let object = Data::new("{CL1} {CL5} {CL15}".to_owned(), vec![]);
 
         assert_that!(object.render(), is(equal_to("")));
     }
 
     #[test]
     fn render_with_update() {
-        let mut object = Data::new("{CL1} {CL5} {CL15}".to_owned());
+        let mut object = Data::new("{CL1} {CL5} {CL15}".to_owned(), vec![]);
 
         object.update(20.1234, 0.005, 5.3);
 
@@ -54,7 +65,7 @@ mod tests {
 
     #[test]
     fn render_with_update_and_missing_placeholder() {
-        let mut object = Data::new("{CL1} - {CL15}".to_owned());
+        let mut object = Data::new("{CL1} - {CL15}".to_owned(), vec![]);
 
         object.update(20.1234, 0.005, 5.3);
 

@@ -21,7 +21,7 @@ pub(super) fn create(
     sender: &channel::Sender<communication::Message>,
     settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
-    let data = Data::new(settings.template.clone());
+    let data = Data::new(settings.template.clone(), settings.status2d.clone());
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,

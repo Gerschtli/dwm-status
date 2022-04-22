@@ -1,7 +1,7 @@
 use serde_derive::Deserialize;
 
 use crate::error::Result;
-use crate::settings::ConfigType;
+use crate::settings::{ConfigType, Status2dEntry};
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
 
@@ -11,6 +11,7 @@ use super::FEATURE_NAME;
 pub(crate) struct ConfigEntry {
     pub(super) format: String,
     pub(super) update_seconds: bool,
+    pub(super) status2d: Vec<Status2dEntry>,
 }
 
 impl ConfigType for ConfigEntry {

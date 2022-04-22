@@ -1,6 +1,7 @@
 use uom::si::f32::Time;
 
 use crate::feature::Renderable;
+use crate::settings::generate_status2d_data;
 use crate::utils::icon_by_percentage;
 use crate::wrapper::battery::Battery;
 use crate::wrapper::uom::get_raw_hours;
@@ -37,6 +38,12 @@ impl Data {
                 })
                 .collect::<Vec<_>>()
                 .join(&self.config.separator)
+        }
+    }
+
+    pub(super) fn update_with_status2d(&mut self) {
+        if let Some(status2d) = generate_status2d_data(&self.config.status2d) {
+            self.cache = format!("{} {}", &status2d, &self.cache);
         }
     }
 

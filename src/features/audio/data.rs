@@ -1,4 +1,5 @@
 use crate::feature::Renderable;
+use crate::settings::generate_status2d_data;
 use crate::utils::icon_by_percentage;
 
 use super::RenderConfig;
@@ -32,6 +33,12 @@ impl Data {
 
         self.cache = rendered;
     }
+
+    pub(super) fn with_status2d(&mut self) {
+        if let Some(status2d) = generate_status2d_data(&self.config.status2d) {
+            self.cache = format!("{}{}", &status2d, &self.cache);
+        }
+    }
 }
 
 impl Renderable for Data {
@@ -55,6 +62,7 @@ mod tests {
             icons: vec![],
             mute: "MUTE".to_owned(),
             template: "TEMPLATE".to_owned(),
+            status2d: vec![],
         };
 
         let object = Data::new(config);
@@ -68,6 +76,7 @@ mod tests {
             icons: vec![],
             mute: "MUTE".to_owned(),
             template: "TEMPLATE".to_owned(),
+            status2d: vec![],
         };
 
         let mut object = Data::new(config);
@@ -84,6 +93,7 @@ mod tests {
             icons: vec![],
             mute: "MUTE".to_owned(),
             template: "TEMPLATE {VOL} {ICO}".to_owned(),
+            status2d: vec![],
         };
 
         icon_by_percentage.mock_safe(|icons, value: u32| {
@@ -107,6 +117,7 @@ mod tests {
             icons: vec!["ico1".to_owned(), "ico2".to_owned()],
             mute: "MUTE".to_owned(),
             template: "TEMPLATE {VOL} {ICO}".to_owned(),
+            status2d: vec![],
         };
 
         icon_by_percentage.mock_safe(|icons, value: u32| {

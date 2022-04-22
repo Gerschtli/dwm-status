@@ -60,6 +60,8 @@ impl feature::Updatable for Updater {
             self.data.update_volume(volume);
         }
 
+        self.data.with_status2d();
+
         Ok(())
     }
 }

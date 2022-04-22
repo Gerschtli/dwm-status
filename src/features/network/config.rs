@@ -2,6 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::error::Result;
 use crate::settings::ConfigType;
+use crate::settings::Status2dEntry;
 use crate::wrapper::config;
 use crate::wrapper::config::Value;
 
@@ -14,6 +15,7 @@ use super::PLACEHOLDER_IPV6;
 pub(crate) struct RenderConfig {
     pub(super) no_value: String,
     pub(super) template: String,
+    pub(super) status2d: Vec<Status2dEntry>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize)]

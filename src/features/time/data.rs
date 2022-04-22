@@ -1,22 +1,29 @@
 use crate::feature::Renderable;
+use crate::settings::{generate_status2d_data, Status2dEntry};
 use crate::wrapper::date_time;
 
 #[derive(Debug)]
 pub(super) struct Data {
     cache: String,
     format: String,
+    status2d: Vec<Status2dEntry>,
 }
 
 impl Data {
-    pub(super) const fn new(format: String) -> Self {
+    pub(super) const fn new(format: String, status2d: Vec<Status2dEntry>) -> Self {
         Self {
             cache: String::new(),
             format,
+            status2d,
         }
     }
 
     pub(super) fn update(&mut self, date_time: &date_time::DateTime) {
         self.cache = date_time.format(&self.format);
+
+        if let Some(status2d) = generate_status2d_data(&self.status2d) {
+            self.cache = format!("{}{}", &status2d, &self.cache);
+        }
     }
 }
 
@@ -37,7 +44,7 @@ mod tests {
 
     #[test]
     fn render_with_default() {
-        let object = Data::new("format".to_owned());
+        let object = Data::new("format".to_owned(), vec![]);
 
         assert_that!(object.render(), is(equal_to("")));
     }
