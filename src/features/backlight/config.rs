@@ -16,6 +16,7 @@ pub(crate) struct RenderConfig {
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct ConfigEntry {
     pub(super) device: String,
+    pub(super) fallback: Option<String>,
     #[serde(flatten)]
     pub(super) render: RenderConfig,
 }

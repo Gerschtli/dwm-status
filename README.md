@@ -80,11 +80,12 @@ Shows status of backlight value and watches `/sys/class/backlight` for changes.
 
 #### Configuration options
 
-| name       | default             | description                                                                  |
-| ---------- | ------------------- | ---------------------------------------------------------------------------- |
-| `device`   | `"intel_backlight"` | Backlight device in `/sys/class/backlight`.                                  |
-| `icons`    | `[]`                | List of icons, which represent different stages relative to the current value, e.g. `["LOW", "MIDDLE, "HIGH"]`.   |
-| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon) |
+| name       | default             | description                                                                                                                       |
+|------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `device`   | `"intel_backlight"` | Backlight device in `/sys/class/backlight`.                                                                                       |
+| `fallback` | `None`              | If `device` doesn't exist, pattern match (Unix shell style patterns) the first element in `/sys/class/backlight`. e.g. `amdgpu_*` |
+| `icons`    | `[]`                | List of icons, which represent different stages relative to the current value, e.g. `["LOW", "MIDDLE, "HIGH"]`.                   |
+| `template` | `"L {BL}%"`         | Text representation. (`{BL}` gets replaced with the current backlight value, `{ICO}` gets replaced with the icon)                 |
 
 ### Feature: Battery
 
