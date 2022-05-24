@@ -25,6 +25,7 @@ serde = "1.0.136"
 serde_derive = "1.0.136"
 simplelog = "0.12.0"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
+glob = "0.3"
 
 [dependencies.ctrlc]
 features = ["termination"]

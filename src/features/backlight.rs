@@ -24,7 +24,7 @@ pub(super) fn create(
     settings: &ConfigEntry,
 ) -> Result<Box<dyn feature::Feature>> {
     let data = Data::new(settings.render.clone());
-    let device = BacklightDevice::init(&settings.device)?;
+    let device = BacklightDevice::init(settings)?;
 
     Ok(Box::new(feature::Composer::new(
         FEATURE_NAME,
