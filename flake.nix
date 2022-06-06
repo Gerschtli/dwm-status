@@ -7,7 +7,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
   };
 
   outputs = { self, naersk, nixpkgs }:
@@ -29,9 +29,8 @@
       };
     in
     {
-      defaultPackage.${system} = package;
-
       packages.${system} = {
+        default = package;
         ${name} = package;
         ${nameWithGlobalAlsaUtils} = import ./. {
           inherit naersk-lib pkgs;
@@ -39,10 +38,12 @@
         };
       };
 
-      defaultApp.${system} = app;
-      apps.${system}.${name} = app;
+      apps.${system} = {
+        default = app;
+        ${name} = app;
+      };
 
-      overlay = final: prev:
+      overlays.default = final: prev:
         let
           args = {
             naersk-lib = (naersk.overlay final prev).naersk;
@@ -54,6 +55,6 @@
           ${nameWithGlobalAlsaUtils} = import ./. (args // { useGlobalAlsaUtils = true; });
         };
 
-      devShell.${system} = import ./shell.nix { inherit pkgs; };
+      devShells.${system}.default = import ./shell.nix { inherit pkgs; };
     };
 }

@@ -4,7 +4,7 @@ pkgs.mkShell {
   buildInputs = with pkgs; [
     # build dependencies
     dbus
-    gdk_pixbuf
+    gdk-pixbuf
     libnotify
     pkgconfig
     xorg.libX11
