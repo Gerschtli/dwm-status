@@ -52,7 +52,7 @@ impl feature::Updatable for Updater {
             self.data.update_mute();
         } else {
             let volume = last
-                .get(0)
+                .first()
                 .wrap_error(FEATURE_NAME, "no volume part found")?
                 .parse()
                 .wrap_error(FEATURE_NAME, "volume not parsable")?;
