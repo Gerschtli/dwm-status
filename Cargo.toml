@@ -14,22 +14,22 @@ repository = "Gerschtli/dwm-status"
 
 [dependencies]
 battery = "0.7.8"
-chrono = "0.4.19"
-clap = { version = "3.1.18", features = [ "cargo" ] }
+chrono = "0.4.22"
+clap = { version = "3.2.22", features = [ "cargo" ] }
 config = "0.11.0"
 dbus = "0.8.4"
 inotify = "0.10.0"
 libnotify = "1.0.3"
 log = "0.4.17"
-serde = "1.0.137"
-serde_derive = "1.0.137"
+serde = "1.0.145"
+serde_derive = "1.0.145"
 simplelog = "0.12.0"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
-glob = "0.3"
+glob = "0.3.0"
 
 [dependencies.ctrlc]
 features = ["termination"]
-version = "3.2.2"
+version = "3.2.3"
 
 [dependencies.mocktopus]
 optional = true
@@ -37,7 +37,7 @@ version = "0.7.11"
 
 [dependencies.x11]
 features = ["xlib"]
-version = "2.19.1"
+version = "2.20.0"
 
 [dev-dependencies]
 hamcrest2 = "0.3.0"
