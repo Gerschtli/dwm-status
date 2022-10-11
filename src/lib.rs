@@ -24,6 +24,7 @@
     clippy::missing_errors_doc,
     clippy::non_ascii_literal,
     clippy::redundant_pub_crate,
+    clippy::uninlined_format_args, // until 1.65.0 is minimum version
     clippy::unused_self,
     clippy::use_self
 )]
