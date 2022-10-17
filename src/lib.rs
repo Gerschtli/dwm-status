@@ -21,6 +21,7 @@
     variant_size_differences
 )]
 #![allow(
+    clippy::missing_const_for_fn, // seems to produce false positives
     clippy::missing_errors_doc,
     clippy::non_ascii_literal,
     clippy::redundant_pub_crate,
