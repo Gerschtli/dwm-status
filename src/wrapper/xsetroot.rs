@@ -39,6 +39,7 @@ impl XSetRoot {
             .wrap_error("render", "status text could not be converted to CString")?;
 
         unsafe {
+            #[allow(clippy::as_ptr_cast_mut)] // CString does not have as_mut_ptr
             xlib::XStoreName(
                 self.display,
                 self.root_window,
