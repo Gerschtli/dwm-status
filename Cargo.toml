@@ -29,7 +29,7 @@ glob = "0.3.0"
 
 [dependencies.ctrlc]
 features = ["termination"]
-version = "3.2.3"
+version = "3.2.4"
 
 [dependencies.mocktopus]
 optional = true
