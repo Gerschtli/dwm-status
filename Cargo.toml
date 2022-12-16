@@ -21,7 +21,7 @@ dbus = "0.8.4"
 inotify = "0.10.0"
 libnotify = "1.0.3"
 log = "0.4.17"
-serde = "1.0.147"
+serde = "1.0.151"
 serde_derive = "1.0.147"
 simplelog = "0.12.0"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
