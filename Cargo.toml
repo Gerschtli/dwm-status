@@ -21,11 +21,11 @@ dbus = "0.8.4"
 inotify = "0.10.0"
 libnotify = "1.0.3"
 log = "0.4.17"
-serde = "1.0.151"
-serde_derive = "1.0.151"
+serde = "1.0.152"
+serde_derive = "1.0.152"
 simplelog = "0.12.0"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
-glob = "0.3.0"
+glob = "0.3.1"
 
 [dependencies.ctrlc]
 features = ["termination"]
@@ -37,7 +37,7 @@ version = "0.8.0"
 
 [dependencies.x11]
 features = ["xlib"]
-version = "2.20.1"
+version = "2.21.0"
 
 [dev-dependencies]
 hamcrest2 = "0.3.0"
