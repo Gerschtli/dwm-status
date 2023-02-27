@@ -37,7 +37,7 @@ use simplelog::LevelFilter;
 use simplelog::SimpleLogger;
 
 fn main() {
-    let _ = SimpleLogger::init(LevelFilter::Info, Config::default());
+    _ = SimpleLogger::init(LevelFilter::Info, Config::default());
 
     let matches = build_app().get_matches();
 
