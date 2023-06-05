@@ -1,7 +1,6 @@
 #![allow(unsafe_code)]
 
 use std::ffi::CString;
-use std::os::raw::c_char;
 use std::ptr;
 
 use x11::xlib;
@@ -39,12 +38,7 @@ impl XSetRoot {
             .wrap_error("render", "status text could not be converted to CString")?;
 
         unsafe {
-            #[allow(clippy::as_ptr_cast_mut)] // CString does not have as_mut_ptr
-            xlib::XStoreName(
-                self.display,
-                self.root_window,
-                status_c.as_ptr() as *mut c_char,
-            );
+            xlib::XStoreName(self.display, self.root_window, status_c.as_ptr().cast_mut());
 
             xlib::XFlush(self.display);
         }
