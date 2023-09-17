@@ -4,11 +4,11 @@ use crate::feature;
 use crate::wrapper::channel;
 
 pub(crate) use self::config::ConfigEntry;
-pub(self) use self::config::RenderConfig;
-pub(self) use self::data::Data;
-pub(self) use self::device::BacklightDevice;
-pub(self) use self::notifier::Notifier;
-pub(self) use self::updater::Updater;
+use self::config::RenderConfig;
+use self::data::Data;
+use self::device::BacklightDevice;
+use self::notifier::Notifier;
+use self::updater::Updater;
 
 mod config;
 mod data;

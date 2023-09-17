@@ -18,7 +18,8 @@ impl Inotify {
 
     pub(crate) fn add_watch(&mut self, path: &str, mask: WatchMask) -> Result<()> {
         self.inotify
-            .add_watch(path, mask)
+            .watches()
+            .add(path, mask)
             .wrap_error(ERROR_NAME, format!("failed to watch '{}'", path))?;
 
         Ok(())
