@@ -89,7 +89,7 @@ jobs:
       - name: Generate and push code coverage data
         if: matrix.rust == 'nightly'
         run: |
-          RUST_BACKTRACE=full cargo tarpaulin --out Xml
+          RUST_BACKTRACE=full cargo tarpaulin --out xml
           bash <(curl -s https://codecov.io/bash)
 
 
