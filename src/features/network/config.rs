@@ -16,6 +16,7 @@ pub(crate) struct RenderConfig {
     pub(super) template: String,
 }
 
+#[allow(clippy::struct_field_names)]
 #[derive(Clone, Debug, Default, Deserialize)]
 pub(super) struct UpdateConfig {
     pub(super) show_essid: bool,
