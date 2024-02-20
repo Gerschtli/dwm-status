@@ -177,7 +177,7 @@ dependencies = [
  "lazy_static",
  "nom",
  "rust-ini",
- "serde 1.0.196",
+ "serde 1.0.197",
  "serde-hjson",
  "serde_json",
  "toml",
@@ -248,7 +248,7 @@ dependencies = [
  "libnotify",
  "log",
  "mocktopus",
- "serde 1.0.196",
+ "serde 1.0.197",
  "serde_derive",
  "simplelog",
  "uom",
@@ -814,9 +814,9 @@ checksum = "9dad3f759919b92c3068c696c15c3d17238234498bbdcc80f2c469606f948ac8"
 
 [[package]]
 name = "serde"
-version = "1.0.196"
+version = "1.0.197"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "870026e60fa08c69f064aa766c10f10b1d62db9ccd4d0abb206472bee0ce3b32"
+checksum = "3fb1c873e1b9b056a4dc4c0c198b24c3ffa059243875552b2bd0933b1aee4ce2"
 dependencies = [
  "serde_derive",
 ]
@@ -835,9 +835,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.196"
+version = "1.0.197"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33c85360c95e7d137454dc81d9a4ed2b8efd8fbe19cee57357b32b9771fccb67"
+checksum = "7eb0b34b42edc17f6b7cac84a52a1c5f0e1bb2227e997ca9011ea3dd34e8610b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -852,7 +852,7 @@ checksum = "6b420ce6e3d8bd882e9b243c6eed35dbc9a6110c9769e74b584e0d68d1f20c65"
 dependencies = [
  "itoa",
  "ryu",
- "serde 1.0.196",
+ "serde 1.0.197",
 ]
 
 [[package]]
@@ -935,7 +935,7 @@ dependencies = [
  "itoa",
  "libc",
  "num_threads",
- "serde 1.0.196",
+ "serde 1.0.197",
  "time-core",
  "time-macros",
 ]
@@ -975,7 +975,7 @@ version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4f7f0dd8d50a853a531c426359045b1998f04219d88799810762cd4ad314234"
 dependencies = [
- "serde 1.0.196",
+ "serde 1.0.197",
 ]
 
 [[package]]
