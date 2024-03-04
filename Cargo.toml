@@ -23,7 +23,7 @@ libnotify = "1.0.3"
 log = "0.4.21"
 serde = "1.0.197"
 serde_derive = "1.0.197"
-simplelog = "0.12.1"
+simplelog = "0.12.2"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
 glob = "0.3.1"
 
