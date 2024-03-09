@@ -30,7 +30,6 @@
 
 use std::process;
 
-use clap::Arg;
 use clap::*;
 use simplelog::Config;
 use simplelog::LevelFilter;
