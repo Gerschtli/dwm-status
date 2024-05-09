@@ -16,7 +16,7 @@ impl Inotify {
         Ok(Self { inotify })
     }
 
-    pub(crate) fn add_watch(&mut self, path: &str, mask: WatchMask) -> Result<()> {
+    pub(crate) fn add_watch(&self, path: &str, mask: WatchMask) -> Result<()> {
         self.inotify
             .watches()
             .add(path, mask)
