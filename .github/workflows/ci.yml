@@ -104,7 +104,7 @@ jobs:
         uses: cachix/install-nix-action@v27
 
       - name: Setup cachix
-        uses: cachix/cachix-action@v14
+        uses: cachix/cachix-action@v15
         with:
           name: gerschtli
           signingKey: ${{ secrets.CACHIX_SIGNING_KEY }}
