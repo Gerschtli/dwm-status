@@ -6,7 +6,7 @@ pkgs.mkShell {
     dbus
     gdk-pixbuf
     libnotify
-    pkgconfig
+    pkg-config
     xorg.libX11
 
     # run-time dependencies
