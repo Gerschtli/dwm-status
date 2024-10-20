@@ -1,7 +1,7 @@
+pub(crate) use dbus::Path;
 use dbus::ffidisp::BusType;
 use dbus::ffidisp::Connection as DbusConnection;
 use dbus::ffidisp::ConnectionItem;
-pub(crate) use dbus::Path;
 
 use crate::error::Result;
 use crate::error::WrapErrorExt;
