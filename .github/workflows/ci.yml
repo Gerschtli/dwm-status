@@ -107,7 +107,7 @@ jobs:
         uses: cachix/cachix-action@v15
         with:
           name: gerschtli
-          signingKey: ${{ secrets.CACHIX_SIGNING_KEY }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Check flake
         run: nix flake check --log-format bar-with-logs
