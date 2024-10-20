@@ -1,9 +1,9 @@
 use crate::feature::Renderable;
 
-use super::RenderConfig;
 use super::PLACEHOLDER_ESSID;
 use super::PLACEHOLDER_IPV4;
 use super::PLACEHOLDER_IPV6;
+use super::RenderConfig;
 
 #[derive(Debug)]
 pub(super) struct Data {
