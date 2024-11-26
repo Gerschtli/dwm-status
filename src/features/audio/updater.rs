@@ -48,7 +48,7 @@ impl feature::Updatable for Updater {
             .map(|s| s.trim_matches(FILTER))
             .collect::<Vec<_>>();
 
-        if last.get(1).map_or(false, |muted| *muted == "off") {
+        if last.get(1).is_some_and(|muted| *muted == "off") {
             self.data.update_mute();
         } else {
             let volume = last
