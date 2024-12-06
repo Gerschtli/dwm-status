@@ -64,7 +64,7 @@ fn essid() -> Option<String> {
     let command = process::Command::new("iwgetid", &["-r"]);
     let output = command
         .output()
-        .wrap_error(FEATURE_NAME, "essid {} could not be fetched");
+        .wrap_error(FEATURE_NAME, "the essid could not be fetched");
 
     normalize_output(output)
 }
