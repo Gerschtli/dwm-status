@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::io::Read;
 use std::process;
 
@@ -13,7 +14,10 @@ pub(crate) struct Command {
 }
 
 impl Command {
-    pub(crate) fn new(program: &str, args: &[&str]) -> Self {
+    pub(crate) fn new<S>(program: &str, args: &[S]) -> Self
+    where
+        S: AsRef<OsStr>,
+    {
         let mut command = process::Command::new(program);
         for arg in args {
             command.arg(arg);
