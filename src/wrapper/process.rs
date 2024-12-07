@@ -26,6 +26,14 @@ impl Command {
         Self { command }
     }
 
+    pub(crate) fn args<I, S>(&mut self, args: I)
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<OsStr>,
+    {
+        self.command.args(args);
+    }
+
     pub(crate) fn output(mut self) -> Result<String> {
         self.command
             .output()
