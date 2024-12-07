@@ -70,19 +70,20 @@ fn essid() -> Option<String> {
 }
 
 fn ip_address(address_type: &IpAddress) -> Option<String> {
-    let command = process::Command::new("dig", &[
+    let mut command = process::Command::new("dig", &[
         // decrease time and tries because commands are executed synchronously
         // TODO: make asychronous
         "+time=3",  // default: 5 seconds
         "+tries=1", // default: 3
         "@resolver1.opendns.com",
-        match address_type {
-            IpAddress::V4 => "A",
-            IpAddress::V6 => "AAAA",
-        },
         "myip.opendns.com",
         "+short",
     ]);
+
+    command.args(match address_type {
+        IpAddress::V4 => ["A", "-4"],
+        IpAddress::V6 => ["AAAA", "-6"],
+    });
 
     let output = command.output().wrap_error(
         FEATURE_NAME,
