@@ -146,7 +146,7 @@ Shows connected ESSID as well as both public and private IPv4 and IPv6 addresses
 | name       | default                       | description                     |
 | ---------- | ----------------------------- | ------------------------------- |
 | `no_value` | `"NA"`                        | Value for not defined elements. |
-| `template` | `"{IPv4} · {IPv6} · {ESSID}"` | Text representation. Placeholders surrounded by curly braces are `{IPv4}`, `{IPv6}`, `{LocalIPv4}`, `{LocalIPv6}` and `{ESSID}`. |
+| `template` | `"{LocalIPv4} · {ESSID}"` | Text representation. Placeholders surrounded by curly braces are `{IPv4}`, `{IPv6}`, `{LocalIPv4}`, `{LocalIPv6}` and `{ESSID}`. |
 
 ### Feature: Time
 

@@ -103,8 +103,10 @@ fn local_address(address_type: &IpAddress) -> Option<String> {
 
     let Ok(default_routes) = serde_json::from_str::<Vec<Route>>(&output).wrap_error(
         FEATURE_NAME,
-        "iproute2 returned badly structured json while we were querying the default \
-         {address_type} route.",
+        format!(
+            "iproute2 returned badly structured json while we were querying the default {} route.",
+            address_type
+        ),
     ) else {
         return None;
     };

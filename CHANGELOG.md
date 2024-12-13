@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added local IPv4 & IPv6 options for network feature ([#180](https://github.com/Gerschtli/dwm-status/pull/180))
 
 ## [1.8.1] - 2022-12-19
 ### Changed
