@@ -42,7 +42,7 @@ impl ConfigType for ConfigEntry {
             FEATURE_NAME,
             map!(
                 "no_value" => "NA",
-                "template" => "{IPv4} · {IPv6} · {ESSID}",
+                "template" => "{LocalIPv4} · {ESSID}",
             ),
         )
     }
@@ -103,7 +103,7 @@ mod tests {
         fn default_map() -> HashMap<String, Value> {
             let mut map = HashMap::new();
             map.insert("no_value".to_owned(), "NA".into());
-            map.insert("template".to_owned(), "{IPv4} · {IPv6} · {ESSID}".into());
+            map.insert("template".to_owned(), "{LocalIPv4} · {ESSID}".into());
 
             map
         }

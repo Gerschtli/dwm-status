@@ -29,7 +29,7 @@ update_interval = 20
 
 [network]
 no_value = "NA"
-template = "{IPv4} · {IPv6} · {ESSID}"
+template = "{LocalIPv4} · {ESSID}"
 
 [time]
 format = "%Y-%m-%d %H:%M"
