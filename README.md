@@ -139,14 +139,14 @@ Shows CPU load taken from `/proc/loadavg` in configured format and refreshes eve
 
 **Note:** The commands `ip`, `dig` and `iwgetid` need to be in `PATH`.
 
-Shows connected ESSID, public IPv4 and IPv6 address. Updates get triggered by listening on `ip monitor address link`.
+Shows connected ESSID as well as both public and private IPv4 and IPv6 addresses. Updates get triggered by listening on `ip monitor address link route`.
 
 #### Configuration options
 
 | name       | default                       | description                     |
 | ---------- | ----------------------------- | ------------------------------- |
 | `no_value` | `"NA"`                        | Value for not defined elements. |
-| `template` | `"{IPv4} · {IPv6} · {ESSID}"` | Text representation. Placeholders surrounded by curly braces are `{IPv4}`, `{IPv6}` and `{ESSID}`. |
+| `template` | `"{IPv4} · {IPv6} · {ESSID}"` | Text representation. Placeholders surrounded by curly braces are `{IPv4}`, `{IPv6}`, `{LocalIPv4}`, `{LocalIPv6}` and `{ESSID}`. |
 
 ### Feature: Time
 

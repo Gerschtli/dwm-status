@@ -1,6 +1,10 @@
 use std::fmt;
+use std::vec::Vec;
 
+use log::debug;
 use log::info;
+use log::warn;
+use serde_derive::Deserialize;
 
 use crate::error::Result;
 use crate::error::WrapErrorExt;
@@ -14,6 +18,11 @@ use super::UpdateConfig;
 enum IpAddress {
     V4,
     V6,
+}
+
+#[derive(Deserialize, Debug)]
+struct Route {
+    prefsrc: Option<String>,
 }
 
 impl fmt::Display for IpAddress {
@@ -52,9 +61,15 @@ impl feature::Updatable for Updater {
     fn update(&mut self) -> Result<()> {
         let ipv4 = self.get_if_enabled(self.config.show_ipv4, || ip_address(&IpAddress::V4));
         let ipv6 = self.get_if_enabled(self.config.show_ipv6, || ip_address(&IpAddress::V6));
+        let local_ipv4 = self.get_if_enabled(self.config.show_local_ipv4, || {
+            local_address(&IpAddress::V4)
+        });
+        let local_ipv6 = self.get_if_enabled(self.config.show_local_ipv6, || {
+            local_address(&IpAddress::V6)
+        });
         let essid = self.get_if_enabled(self.config.show_essid, essid);
 
-        self.data.update(ipv4, ipv6, essid);
+        self.data.update(ipv4, ipv6, local_ipv4, local_ipv6, essid);
 
         Ok(())
     }
@@ -67,6 +82,47 @@ fn essid() -> Option<String> {
         .wrap_error(FEATURE_NAME, "the essid could not be fetched");
 
     normalize_output(output)
+}
+
+fn local_address(address_type: &IpAddress) -> Option<String> {
+    let command = process::Command::new("ip", &[
+        match address_type {
+            IpAddress::V4 => "-4",
+            IpAddress::V6 => "-6",
+        },
+        "-j",
+        "route",
+        "show",
+        "default",
+    ]);
+
+    let output = normalize_output(command.output().wrap_error(
+        FEATURE_NAME,
+        format!("local ip address {} could not be fetched", address_type),
+    ))?;
+
+    let Ok(default_routes) = serde_json::from_str::<Vec<Route>>(&output).wrap_error(
+        FEATURE_NAME,
+        "iproute2 returned badly structured json while we were querying the default \
+         {address_type} route.",
+    ) else {
+        return None;
+    };
+
+    let Some(route) = default_routes.first() else {
+        warn!("found no default routes");
+        return None;
+    };
+
+    debug!("choosen default route: {:?}", route);
+
+    route.prefsrc.as_ref().map_or_else(
+        || {
+            warn!("found no prefered source address for protocol family {address_type}");
+            None
+        },
+        |address| Some(address.to_owned()),
+    )
 }
 
 fn ip_address(address_type: &IpAddress) -> Option<String> {

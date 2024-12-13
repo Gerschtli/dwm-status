@@ -9,6 +9,8 @@ use super::FEATURE_NAME;
 use super::PLACEHOLDER_ESSID;
 use super::PLACEHOLDER_IPV4;
 use super::PLACEHOLDER_IPV6;
+use super::PLACEHOLDER_LOCAL_IPV4;
+use super::PLACEHOLDER_LOCAL_IPV6;
 
 #[derive(Clone, Debug, Deserialize)]
 pub(crate) struct RenderConfig {
@@ -16,12 +18,14 @@ pub(crate) struct RenderConfig {
     pub(super) template: String,
 }
 
-#[allow(clippy::struct_field_names)]
+#[allow(clippy::struct_field_names, clippy::struct_excessive_bools)]
 #[derive(Clone, Debug, Default, Deserialize)]
 pub(super) struct UpdateConfig {
     pub(super) show_essid: bool,
     pub(super) show_ipv4: bool,
     pub(super) show_ipv6: bool,
+    pub(super) show_local_ipv4: bool,
+    pub(super) show_local_ipv6: bool,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -49,6 +53,8 @@ impl ConfigType for ConfigEntry {
         set_update_config(config, &template, PLACEHOLDER_ESSID, "essid")?;
         set_update_config(config, &template, PLACEHOLDER_IPV4, "ipv4")?;
         set_update_config(config, &template, PLACEHOLDER_IPV6, "ipv6")?;
+        set_update_config(config, &template, PLACEHOLDER_LOCAL_IPV4, "local_ipv4")?;
+        set_update_config(config, &template, PLACEHOLDER_LOCAL_IPV6, "local_ipv6")?;
 
         Ok(())
     }
@@ -103,6 +109,7 @@ mod tests {
         }
     }
 
+    // TODO: These should probably be generated tests
     mod config_type_set_values {
         use super::*;
 
@@ -111,27 +118,79 @@ mod tests {
 
             #[test]
             fn and_all_enabled() {
-                test_config("{IPv4} · {IPv6} · {ESSID}", true, true, true);
+                test_config(
+                    "{IPv4} · {IPv6} · {LocalIPv4} · {LocalIPv6} · {ESSID}",
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                );
             }
 
             #[test]
             fn and_essid_enabled() {
-                test_config("IPv4} · IPv6} · {ESSID}", true, false, false);
+                test_config(
+                    "IPv4} · IPv6} · LocalIPv4} · LocalIPv6} · {ESSID}",
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                );
             }
 
             #[test]
             fn and_ipv4_enabled() {
-                test_config("{IPv4} · IPv6} · ESSID}", false, true, false);
+                test_config(
+                    "{IPv4} · IPv6} · LocalIPv4} · LocalIPv6} · ESSID}",
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                );
             }
 
             #[test]
             fn and_ipv6_enabled() {
-                test_config("IPv4} · {IPv6} · ESSID}", false, false, true);
+                test_config(
+                    "IPv4} · {IPv6} · LocalIPv4} · LocalIPv6} · ESSID}",
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                );
+            }
+
+            #[test]
+            fn and_local_ipv4_enabled() {
+                test_config(
+                    "IPv4} · IPv6} · {LocalIPv4} · LocalIPv6} · ESSID}",
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                );
+            }
+
+            #[test]
+            fn and_local_ipv6_enabled() {
+                test_config(
+                    "IPv4} · IPv6} · LocalIPv4} · {LocalIPv6} · ESSID}",
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                );
             }
 
             #[test]
             fn and_nothing_enabled() {
-                test_config("schubidu", false, false, false);
+                test_config("schubidu", false, false, false, false, false);
             }
 
             fn test_config(
@@ -139,6 +198,8 @@ mod tests {
                 show_essid: bool,
                 show_ipv4: bool,
                 show_ipv6: bool,
+                show_local_ipv4: bool,
+                show_local_ipv6: bool,
             ) {
                 config::Config::get_str.mock_safe(move |_, key| {
                     assert_that!(key, is(equal_to("network.template")));
@@ -163,6 +224,16 @@ mod tests {
                         3 => {
                             assert_that!(key, is(equal_to("network.update.show_ipv6")));
                             assert_that!(value, is(equal_to(show_ipv6)));
+                            MockResult::Return(Ok(()))
+                        },
+                        4 => {
+                            assert_that!(key, is(equal_to("network.update.show_local_ipv4")));
+                            assert_that!(value, is(equal_to(show_local_ipv4)));
+                            MockResult::Return(Ok(()))
+                        },
+                        5 => {
+                            assert_that!(key, is(equal_to("network.update.show_local_ipv6")));
+                            assert_that!(value, is(equal_to(show_local_ipv6)));
                             MockResult::Return(Ok(()))
                         },
                         _ => panic!("set called to often: {} times", counter),
@@ -280,6 +351,99 @@ mod tests {
                         },
                         3 => {
                             assert_that!(key, is(equal_to("network.update.show_ipv6")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Err(Error::new_custom("name", "description")))
+                        },
+                        _ => panic!("set called to often: {} times", counter),
+                    }
+                });
+
+                let mut config = config::Config::new();
+
+                assert_that!(
+                    ConfigEntry::set_values(&mut config),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+            }
+
+            #[test]
+            fn in_fourth_set() {
+                config::Config::get_str.mock_safe(|_, key| {
+                    assert_that!(key, is(equal_to("network.template")));
+                    MockResult::Return(Ok("template".to_owned()))
+                });
+
+                let mut counter = 0;
+                config::Config::set::<bool>.mock_safe(move |_, key, value| {
+                    counter += 1;
+
+                    match counter {
+                        1 => {
+                            assert_that!(key, is(equal_to("network.update.show_essid")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        2 => {
+                            assert_that!(key, is(equal_to("network.update.show_ipv4")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        3 => {
+                            assert_that!(key, is(equal_to("network.update.show_ipv6")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        4 => {
+                            assert_that!(key, is(equal_to("network.update.show_local_ipv4")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Err(Error::new_custom("name", "description")))
+                        },
+                        _ => panic!("set called to often: {} times", counter),
+                    }
+                });
+
+                let mut config = config::Config::new();
+
+                assert_that!(
+                    ConfigEntry::set_values(&mut config),
+                    is(equal_to(Err(Error::new_custom("name", "description"))))
+                );
+            }
+
+            #[test]
+            fn in_fifth_set() {
+                config::Config::get_str.mock_safe(|_, key| {
+                    assert_that!(key, is(equal_to("network.template")));
+                    MockResult::Return(Ok("template".to_owned()))
+                });
+
+                let mut counter = 0;
+                config::Config::set::<bool>.mock_safe(move |_, key, value| {
+                    counter += 1;
+
+                    match counter {
+                        1 => {
+                            assert_that!(key, is(equal_to("network.update.show_essid")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        2 => {
+                            assert_that!(key, is(equal_to("network.update.show_ipv4")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        3 => {
+                            assert_that!(key, is(equal_to("network.update.show_ipv6")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        4 => {
+                            assert_that!(key, is(equal_to("network.update.show_local_ipv4")));
+                            assert_that!(value, is(equal_to(false)));
+                            MockResult::Return(Ok(()))
+                        },
+                        5 => {
+                            assert_that!(key, is(equal_to("network.update.show_local_ipv6")));
                             assert_that!(value, is(equal_to(false)));
                             MockResult::Return(Err(Error::new_custom("name", "description")))
                         },
