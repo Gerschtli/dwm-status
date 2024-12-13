@@ -19,6 +19,8 @@ pub(super) const FEATURE_NAME: &str = "network";
 const PLACEHOLDER_ESSID: &str = "{ESSID}";
 const PLACEHOLDER_IPV4: &str = "{IPv4}";
 const PLACEHOLDER_IPV6: &str = "{IPv6}";
+const PLACEHOLDER_LOCAL_IPV4: &str = "{LocalIPv4}";
+const PLACEHOLDER_LOCAL_IPV6: &str = "{LocalIPv6}";
 
 #[allow(clippy::unnecessary_wraps)]
 pub(super) fn create(
