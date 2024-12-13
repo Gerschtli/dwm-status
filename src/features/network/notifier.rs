@@ -17,7 +17,7 @@ impl Notifier {
 
 impl thread::Runnable for Notifier {
     fn run(&self) -> Result<()> {
-        let command = process::Command::new("ip", &["monitor", "address", "link"]);
+        let command = process::Command::new("ip", &["monitor", "address", "link", "route"]);
 
         command.listen_stdout(|| {
             // check 2 times for updates with a 2 seconds delay
