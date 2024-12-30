@@ -10,5 +10,5 @@ normalize_doc_attributes = true
 reorder_impl_items = true
 use_field_init_shorthand = true
 use_try_shorthand = true
-version = "Two"
+style_edition = "2021"
 wrap_comments = true

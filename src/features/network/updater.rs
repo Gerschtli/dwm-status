@@ -12,8 +12,8 @@ use crate::feature;
 use crate::wrapper::process;
 
 use super::Data;
-use super::FEATURE_NAME;
 use super::UpdateConfig;
+use super::FEATURE_NAME;
 
 enum IpAddress {
     V4,
@@ -27,10 +27,14 @@ struct Route {
 
 impl fmt::Display for IpAddress {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "IPv{}", match self {
-            IpAddress::V4 => 4,
-            IpAddress::V6 => 6,
-        })
+        write!(
+            f,
+            "IPv{}",
+            match self {
+                IpAddress::V4 => 4,
+                IpAddress::V6 => 6,
+            }
+        )
     }
 }
 
@@ -49,7 +53,11 @@ impl Updater {
         enabled: bool,
         builder: F,
     ) -> Option<String> {
-        if enabled { builder() } else { None }
+        if enabled {
+            builder()
+        } else {
+            None
+        }
     }
 }
 
@@ -85,16 +93,19 @@ fn essid() -> Option<String> {
 }
 
 fn local_address(address_type: &IpAddress) -> Option<String> {
-    let command = process::Command::new("ip", &[
-        match address_type {
-            IpAddress::V4 => "-4",
-            IpAddress::V6 => "-6",
-        },
-        "-j",
-        "route",
-        "show",
-        "default",
-    ]);
+    let command = process::Command::new(
+        "ip",
+        &[
+            match address_type {
+                IpAddress::V4 => "-4",
+                IpAddress::V6 => "-6",
+            },
+            "-j",
+            "route",
+            "show",
+            "default",
+        ],
+    );
 
     let output = normalize_output(command.output().wrap_error(
         FEATURE_NAME,
@@ -128,15 +139,18 @@ fn local_address(address_type: &IpAddress) -> Option<String> {
 }
 
 fn ip_address(address_type: &IpAddress) -> Option<String> {
-    let mut command = process::Command::new("dig", &[
-        // decrease time and tries because commands are executed synchronously
-        // TODO: make asychronous
-        "+time=3",  // default: 5 seconds
-        "+tries=1", // default: 3
-        "@resolver1.opendns.com",
-        "myip.opendns.com",
-        "+short",
-    ]);
+    let mut command = process::Command::new(
+        "dig",
+        &[
+            // decrease time and tries because commands are executed synchronously
+            // TODO: make asychronous
+            "+time=3",  // default: 5 seconds
+            "+tries=1", // default: 3
+            "@resolver1.opendns.com",
+            "myip.opendns.com",
+            "+short",
+        ],
+    );
 
     command.args(match address_type {
         IpAddress::V4 => ["A", "-4"],
