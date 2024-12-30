@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs }:
 
 pkgs.mkShell {
   buildInputs = with pkgs; [
@@ -10,10 +10,10 @@ pkgs.mkShell {
     xorg.libX11
 
     # run-time dependencies
-    alsaUtils
+    alsa-utils
     coreutils
     dnsutils
-    iproute
+    iproute2
     wirelesstools
 
     # dev tools
