@@ -1,10 +1,11 @@
 { pkgs }:
 
-pkgs.mkShell {
+let
   buildInputs = with pkgs; [
     # build dependencies
     dbus
     gdk-pixbuf
+    glib
     libnotify
     pkg-config
     xorg.libX11
@@ -27,6 +28,12 @@ pkgs.mkShell {
     openssl
     zlib
   ];
+in
+
+pkgs.mkShell {
+  inherit buildInputs;
+
+  LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}";
 
   # RUST_BACKTRACE = 1;
 }
