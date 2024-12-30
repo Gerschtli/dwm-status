@@ -16,7 +16,7 @@ jobs:
           - stable
           - beta
           - nightly
-          - 1.72.0
+          - 1.82.0
         include:
           - rust: nightly
             components: clippy, rustfmt
