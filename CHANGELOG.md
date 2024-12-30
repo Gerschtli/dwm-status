@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.9.0] - 2024-12-30
 ### Added
 - Added local IPv4 & IPv6 options for network feature ([#180](https://github.com/Gerschtli/dwm-status/pull/180))
 
@@ -222,7 +224,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Audio, backlight, battery and time features
   - Travis config with cargo fmt, build and test checks
 
-[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.8.1...HEAD
+[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.9.0...HEAD
+[1.9.0]: https://github.com/Gerschtli/dwm-status/compare/1.8.1...1.9.0
 [1.8.1]: https://github.com/Gerschtli/dwm-status/compare/1.8.0...1.8.1
 [1.8.0]: https://github.com/Gerschtli/dwm-status/compare/1.7.3...1.8.0
 [1.7.3]: https://github.com/Gerschtli/dwm-status/compare/1.7.2...1.7.3
