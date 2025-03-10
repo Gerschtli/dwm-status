@@ -104,7 +104,7 @@ jobs:
         uses: cachix/install-nix-action@v30
 
       - name: Setup cachix
-        uses: cachix/cachix-action@v15
+        uses: cachix/cachix-action@v16
         with:
           name: gerschtli
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
