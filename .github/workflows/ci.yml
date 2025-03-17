@@ -27,36 +27,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install rust
-        uses: hecrj/setup-rust-action@v1
+        uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          rust-version: ${{ matrix.rust }}
+          toolchain: ${{ matrix.rust }}
           components: ${{ matrix.components }}
-
-      - name: Cache cargo registry
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/registry
-          key: ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}-${{ github.sha }}
-          restore-keys: |
-            ${{ matrix.rust }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}-
-            ${{ matrix.rust }}-cargo-registry-
-
-      - name: Cache cargo index
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/git
-          key: ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-${{ github.sha }}
-          restore-keys: |
-            ${{ matrix.rust }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}-
-            ${{ matrix.rust }}-cargo-index-
-
-      - name: Cache cargo build
-        uses: actions/cache@v4
-        with:
-          path: target
-          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ matrix.rust }}-cargo-build-target-
 
       - name: Install build dependencies
         run: |
