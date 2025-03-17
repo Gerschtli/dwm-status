@@ -21,12 +21,9 @@ where
     T: str::FromStr,
 {
     read(&path)?.trim().parse().map_err(|_| {
-        io::Error::new(
-            io::ErrorKind::Other,
-            format!(
-                "contents of file '{}' failed to parse",
-                path.as_ref().display()
-            ),
-        )
+        io::Error::other(format!(
+            "contents of file '{}' failed to parse",
+            path.as_ref().display()
+        ))
     })
 }
