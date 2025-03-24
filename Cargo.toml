@@ -14,19 +14,19 @@ repository = "Gerschtli/dwm-status"
 
 [dependencies]
 battery = "0.7.8"
-chrono = "0.4.40"
+chrono = "0.4.39"
 clap = { version = "3.2.25", features = [ "cargo" ] }
 config = "0.11.0"
 dbus = "0.8.4"
 inotify = "0.11.0"
 libnotify = "1.0.3"
-log = "0.4.26"
-serde = "1.0.219"
-serde_derive = "1.0.219"
+log = "0.4.22"
+serde = "1.0.217"
+serde_derive = "1.0.217"
 simplelog = "0.12.2"
 uom = { version = "0.30.0", features = ["autoconvert", "f32", "si"] }
 glob = "0.3.2"
-serde_json = "1.0.140"
+serde_json = "1.0.134"
 
 [dependencies.ctrlc]
 features = ["termination"]
