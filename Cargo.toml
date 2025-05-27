@@ -15,7 +15,7 @@ repository = "Gerschtli/dwm-status"
 [dependencies]
 battery = "0.7.8"
 chrono = "0.4.39"
-clap = { version = "3.2.25", features = [ "cargo" ] }
+clap = { version = "4.5.38", features = [ "derive" ] }
 config = "0.11.0"
 dbus = "0.8.4"
 inotify = "0.11.0"

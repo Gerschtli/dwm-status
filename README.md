@@ -17,10 +17,10 @@ Example status bar:
 
 ```sh
 $ # dev mode
-$ cargo run -- <config-file>
+$ cargo run -- <config-file> [--quiet]
 $ # release mode
 $ cargo build --release
-$ ./target/release/dwm-status <config-file>
+$ ./target/release/dwm-status <config-file> [--quiet]
 ```
 Or install globally to `~/.cargo/bin`:
 ```sh
@@ -36,7 +36,7 @@ $ nix build
 
 And run:
 ```sh
-$ ./result/bin/dwm-status <config-file>
+$ ./result/bin/dwm-status <config-file> [--quiet]
 ```
 
 ## Configuration

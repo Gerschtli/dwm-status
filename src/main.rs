@@ -35,33 +35,30 @@ use simplelog::Config;
 use simplelog::LevelFilter;
 use simplelog::SimpleLogger;
 
+#[derive(Parser, Debug)]
+#[command(version, about)]
+struct Args {
+    /// Path to config file
+    config_file: String,
+
+    /// Quiet mode (disables INFO logs)
+    #[arg(short, long, default_value_t = false)]
+    quiet: bool,
+}
+
 fn main() {
-    _ = SimpleLogger::init(LevelFilter::Info, Config::default());
+    let args = Args::parse();
 
-    let matches = build_app().get_matches();
+    let log_level = if args.quiet {
+        LevelFilter::Warn
+    } else {
+        LevelFilter::Info
+    };
 
-    let config = matches.value_of("config-file").unwrap();
+    _ = SimpleLogger::init(log_level, Config::default());
 
-    if let Err(error) = dwm_status::run(config) {
+    if let Err(error) = dwm_status::run(&args.config_file) {
         error.show_error();
         process::exit(1);
-    }
-}
-
-fn build_app() -> Command<'static> {
-    command!().arg(
-        Arg::new("config-file")
-            .help("Path to config file")
-            .required(true),
-    )
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn verify_app() {
-        build_app().debug_assert();
     }
 }
