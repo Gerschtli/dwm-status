@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.10.0] - 2025-05-27
 ### Added
 - Added `--quiet` flag to disable verbose INFO logs ([#197](https://github.com/Gerschtli/dwm-status/issues/197))
 
@@ -226,7 +228,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Audio, backlight, battery and time features
   - Travis config with cargo fmt, build and test checks
 
-[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.9.0...HEAD
+[Unreleased]: https://github.com/Gerschtli/dwm-status/compare/1.10.0...HEAD
+[1.10.0]: https://github.com/Gerschtli/dwm-status/compare/1.9.0...1.10.0
 [1.9.0]: https://github.com/Gerschtli/dwm-status/compare/1.8.1...1.9.0
 [1.8.1]: https://github.com/Gerschtli/dwm-status/compare/1.8.0...1.8.1
 [1.8.0]: https://github.com/Gerschtli/dwm-status/compare/1.7.3...1.8.0
