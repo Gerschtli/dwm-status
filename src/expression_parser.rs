@@ -65,8 +65,8 @@ mod tests {
     fn evaluate_percentage() {
         let vars = get_test_vars();
 
-        let evaluated = evaluate_expression("{B/C*100}%", &vars);
+        let evaluated = evaluate_expression("{B/C*100}% {A}", &vars);
 
-        assert_that!(evaluated, is(equal_to("10.00%")));
+        assert_that!(evaluated, is(equal_to("10.00% 0.20")));
     }
 }
