@@ -132,8 +132,10 @@ Shows CPU load taken from `/proc/loadavg` in configured format and refreshes eve
 
 | name              | default                | description                 |
 | ----------------- | ---------------------- | --------------------------- |
-| `template`        | `"{CL1} {CL5} {CL15}"` | Text representation. (`{CLx}` gets replaced with the load of last `x` minutes for `x` in `{1, 5, 15}`) |
+| `template`        | `"{CL1} {CL5} {CL15}"` | Text representation. (`{CLx}` gets replaced with the load of last `x` minutes for `x` in `{1, 5, 15}`), `{NPROC}` shows the number of processors. |
 | `update_interval` | `20`                   | Update interval in seconds. |
+
+You can also do math allowing for templates like `"{CL1/NPROC*100}%` to display the load of the last minute in percent.
 
 ### Feature: Network
 

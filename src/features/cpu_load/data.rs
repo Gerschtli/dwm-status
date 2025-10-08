@@ -1,4 +1,6 @@
 use crate::feature::Renderable;
+use crate::expression_parser::*;
+use evalexpr::*;
 
 #[derive(Debug)]
 pub(super) struct Data {
@@ -14,12 +16,15 @@ impl Data {
         }
     }
 
-    pub(super) fn update(&mut self, one: f32, five: f32, fifteen: f32) {
-        self.cache = self
-            .template
-            .replace("{CL1}", &format!("{:.2}", one))
-            .replace("{CL5}", &format!("{:.2}", five))
-            .replace("{CL15}", &format!("{:.2}", fifteen));
+    pub(super) fn update(&mut self, one: f32, five: f32, fifteen: f32, nproc: u32) {
+        let context : HashMapContext<DefaultNumericTypes> = context_map! {
+            "CL1" => Value::from_float(one.into()),
+            "CL5" => Value::from_float(five.into()),
+            "CL15" => Value::from_float(fifteen.into()),
+            "NPROC" => Value::from_int(nproc.into()),
+        }.unwrap();
+
+        self.cache = evaluate_expression(&self.template, &context);
     }
 }
 
@@ -47,7 +52,7 @@ mod tests {
     fn render_with_update() {
         let mut object = Data::new("{CL1} {CL5} {CL15}".to_owned());
 
-        object.update(20.1234, 0.005, 5.3);
+        object.update(20.1234, 0.005, 5.3, 2);
 
         assert_that!(object.render(), is(equal_to("20.12 0.00 5.30")));
     }
@@ -56,8 +61,17 @@ mod tests {
     fn render_with_update_and_missing_placeholder() {
         let mut object = Data::new("{CL1} - {CL15}".to_owned());
 
-        object.update(20.1234, 0.005, 5.3);
+        object.update(20.1234, 0.005, 5.3, 2);
 
         assert_that!(object.render(), is(equal_to("20.12 - 5.30")));
+    }
+
+    #[test]
+    fn render_with_update_and_math() {
+        let mut object = Data::new("{CL1/NPROC*100}% {CL5} {CL15}".to_owned());
+
+        object.update(20.1234, 0.005, 5.3, 2);
+
+        assert_that!(object.render(), is(equal_to("1006.17% 0.00 5.30")));
     }
 }
