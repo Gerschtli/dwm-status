@@ -6,7 +6,12 @@ use crate::wrapper::file;
 use super::Data;
 use super::FEATURE_NAME;
 
+use regex::Regex;
+
 const PATH_LOADAVG: &str = "/proc/loadavg";
+const PATH_NPROC: &str = "/proc/cpuinfo";
+
+const NPROC_REGEX: &str = r"processor\s+: \d+";
 
 pub(super) struct Updater {
     data: Data,
@@ -33,7 +38,14 @@ impl feature::Updatable for Updater {
         let five = convert_to_float(iterator.next())?;
         let fifteen = convert_to_float(iterator.next())?;
 
-        self.data.update(one, five, fifteen);
+
+        let nproc_content = file::read(PATH_NPROC)
+            .wrap_error(FEATURE_NAME, format!("failed to read {}", PATH_NPROC))?;
+
+        let re = Regex::new(NPROC_REGEX).unwrap();
+        let nproc = re.find_iter(&nproc_content).count() as u32;
+
+        self.data.update(one, five, fifteen, nproc);
 
         Ok(())
     }
