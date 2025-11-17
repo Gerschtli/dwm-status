@@ -42,7 +42,7 @@ impl feature::Updatable for Updater {
             .wrap_error(FEATURE_NAME, format!("failed to read {}", PATH_NPROC))?;
 
         let re = Regex::new(NPROC_REGEX).unwrap();
-        let nproc = re.find_iter(&nproc_content).count() as u32;
+        let nproc = u32::try_from(re.find_iter(&nproc_content).count()).unwrap();
 
         self.data.update(one, five, fifteen, nproc);
 

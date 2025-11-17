@@ -1,4 +1,4 @@
-use evalexpr::*;
+use evalexpr::{eval_with_context, DefaultNumericTypes, HashMapContext, Value};
 use regex::Captures;
 use regex::Regex;
 
@@ -8,20 +8,20 @@ pub(crate) fn evaluate_expression(
 ) -> String {
     let re = Regex::new(r"\{([^}]+)\}").unwrap();
 
-    return re
-        .replace_all(template, |caps: &Captures<'_>| {
-            let expr = &caps[1];
-            match eval_with_context(expr, vars) {
-                Ok(Value::Float(f)) => format!("{:.2}", f),
-                Ok(s) => s.to_string(),
-                Err(_) => format!("{{{}}}", expr),
-            }
-        })
-        .into_owned();
+    re.replace_all(template, |caps: &Captures<'_>| {
+        let expr = &caps[1];
+        match eval_with_context(expr, vars) {
+            Ok(Value::Float(f)) => format!("{:.2}", f),
+            Ok(s) => s.to_string(),
+            Err(_) => format!("{{{}}}", expr),
+        }
+    })
+    .into_owned()
 }
 
 #[cfg(test)]
 mod tests {
+    use evalexpr::context_map;
     use hamcrest2::assert_that;
     use hamcrest2::prelude::*;
 
