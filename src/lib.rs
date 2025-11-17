@@ -45,12 +45,12 @@ use crate::wrapper::termination;
 mod macros;
 mod communication;
 mod error;
+mod expression_parser;
 mod feature;
 mod features;
 mod resume;
 mod settings;
 mod status_bar;
-mod expression_parser;
 #[cfg(test)]
 mod test_utils;
 mod utils;

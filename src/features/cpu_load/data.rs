@@ -1,5 +1,5 @@
-use crate::feature::Renderable;
 use crate::expression_parser::*;
+use crate::feature::Renderable;
 use evalexpr::*;
 
 #[derive(Debug)]
@@ -17,12 +17,13 @@ impl Data {
     }
 
     pub(super) fn update(&mut self, one: f32, five: f32, fifteen: f32, nproc: u32) {
-        let context : HashMapContext<DefaultNumericTypes> = context_map! {
+        let context: HashMapContext<DefaultNumericTypes> = context_map! {
             "CL1" => Value::from_float(one.into()),
             "CL5" => Value::from_float(five.into()),
             "CL15" => Value::from_float(fifteen.into()),
             "NPROC" => Value::from_int(nproc.into()),
-        }.unwrap();
+        }
+        .unwrap();
 
         self.cache = evaluate_expression(&self.template, &context);
     }
