@@ -1,6 +1,6 @@
-use crate::expression_parser::*;
+use crate::expression_parser::evaluate_expression;
 use crate::feature::Renderable;
-use evalexpr::*;
+use evalexpr::{context_map, DefaultNumericTypes, HashMapContext, Value};
 
 #[derive(Debug)]
 pub(super) struct Data {
