@@ -38,7 +38,6 @@ impl feature::Updatable for Updater {
         let five = convert_to_float(iterator.next())?;
         let fifteen = convert_to_float(iterator.next())?;
 
-
         let nproc_content = file::read(PATH_NPROC)
             .wrap_error(FEATURE_NAME, format!("failed to read {}", PATH_NPROC))?;
 
