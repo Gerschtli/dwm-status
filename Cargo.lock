@@ -344,9 +344,9 @@ dependencies = [
 
 [[package]]
 name = "evalexpr"
-version = "13.0.0"
+version = "13.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27e614886ef76024b107796be5f9a6860472ace012aaa33bd177743382ff77da"
+checksum = "25929004897f2bbab309121a60400d36992f6d911d09baa6c172f6cc55706601"
 
 [[package]]
 name = "futures-core"
