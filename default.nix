@@ -22,7 +22,7 @@ naersk-lib.buildPackage {
     ./.;
 
   nativeBuildInputs = with pkgs; [ makeWrapper pkg-config ];
-  buildInputs = with pkgs; [ dbus gdk-pixbuf libnotify xorg.libX11 ];
+  buildInputs = with pkgs; [ dbus gdk-pixbuf libnotify libx11 ];
 
   postInstall = ''
     # run only when building the final package

@@ -8,7 +8,7 @@ let
     glib
     libnotify
     pkg-config
-    xorg.libX11
+    libx11
 
     # run-time dependencies
     alsa-utils
