@@ -33,7 +33,7 @@ impl feature::Updatable for Updater {
                 FEATURE_NAME,
                 format!(
                     "amixer info for control '{}' could not be fetched",
-                    &self.settings.control,
+                    self.settings.control,
                 ),
             )?;
 
