@@ -13,11 +13,11 @@
   outputs = { self, naersk, nixpkgs }:
     let
       system = "x86_64-linux";
-      naersk-lib = naersk.lib.${system};
       pkgs = nixpkgs.legacyPackages.${system};
+      naersk' = pkgs.callPackage naersk {};
 
       package = import ./. {
-        inherit naersk-lib pkgs;
+        inherit naersk' pkgs;
       };
 
       name = package.pname;
@@ -33,7 +33,7 @@
         default = package;
         ${name} = package;
         ${nameWithGlobalAlsaUtils} = import ./. {
-          inherit naersk-lib pkgs;
+          inherit naersk' pkgs;
           useGlobalAlsaUtils = true;
         };
       };
@@ -46,7 +46,7 @@
       overlays.default = final: prev:
         let
           args = {
-            naersk-lib = (naersk.overlay final prev).naersk;
+            naersk' = prev.callPackage naersk {};
             pkgs = prev;
           };
         in

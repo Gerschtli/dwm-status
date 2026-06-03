@@ -1,4 +1,4 @@
-{ naersk-lib, pkgs, useGlobalAlsaUtils ? false }:
+{ naersk', pkgs, useGlobalAlsaUtils ? false }:
 
 let
   binPath = pkgs.lib.makeBinPath (
@@ -14,7 +14,7 @@ let
   name = "dwm-status";
 in
 
-naersk-lib.buildPackage {
+naersk'.buildPackage {
   pname = name;
 
   src = builtins.filterSource
