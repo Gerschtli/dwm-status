@@ -30,7 +30,6 @@
     clippy::use_self
 )]
 #![cfg_attr(all(test, feature = "mocking"), allow(trivial_casts, unsafe_code))]
-#![cfg_attr(all(test, feature = "mocking"), feature(proc_macro_hygiene))]
 
 use std::collections::HashSet;
 
