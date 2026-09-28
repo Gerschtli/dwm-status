@@ -43,7 +43,7 @@ features = ["xlib"]
 version = "2.21.0"
 
 [dev-dependencies]
-hamcrest2 = "0.3.0"
+hamcrest2 = "1.0.0"
 
 [features]
 mocking = ["mocktopus"]
