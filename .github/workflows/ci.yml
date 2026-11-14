@@ -35,7 +35,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libdbus-1-dev libgdk-pixbuf2.0-dev libglib2.0-dev libnotify-dev
+          sudo apt-get install libdbus-1-dev libgdk-pixbuf-xlib-2.0-dev libglib2.0-dev libnotify-dev
 
       - name: Install tarpaulin
         if: matrix.rust == 'nightly'
